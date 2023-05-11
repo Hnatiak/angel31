@@ -1,0 +1,685 @@
+
+
+@bot.message_handler(commands=['від'])
+def hug_or_kiss(message):
+    command = message.text.lower()
+    reply_user = message.reply_to_message.from_user
+
+    if command == '/від обняти':
+        bot.send_message(message.chat.id, f"{message.from_user.first_name} обняв {reply_user.first_name}")
+        photo_choices = ['static/hugs/hugs_one.jpg', 'static/hugs/hugs_two.jpg', 'static/hugs/hugs_three.jpg', 'static/hugs/hugs_four.jpg', 'static/hugs/hugs_five.jpg', 'static/hugs/hugs_six.jpg', 'static/hugs/hugs_seven.jpg', 'static/hugs/hugs_eight.jpg', 'static/hugs/hugs_nine.jpg']
+        photo = open(random.choice(photo_choices), 'rb')
+        bot.send_photo(message.chat.id, photo)
+    elif command == '/від поцілувати':
+        bot.send_message(message.chat.id, f"{message.from_user.first_name} поцілував {reply_user.first_name}")
+        photo_choices = ['static/kisses/kiss_one.jpg', 'static/kisses/kiss_two.jpg', 'static/kisses/kiss_three.jpg', 'static/kisses/kiss_four.jpg', 'static/kisses/kiss_one.jpg', 'static/kisses/kiss_five.jpg', 'static/kisses/kiss_six.jpg', 'static/kisses/kiss_seven.jpg']
+        photo = open(random.choice(photo_choices), 'rb')
+        bot.send_photo(message.chat.id, photo)
+
+
+
+
+#@bot.message_handler(commands=['від'])
+#def hug(message):
+#    if message.text.lower() == '/від обняти':
+#        reply_user = message.reply_to_message.from_user
+#        bot.send_message(message.chat.id, f"{message.from_user.first_name} обняв {reply_user.first_name}")
+
+#    photo_choices = ['static/hugs/hugs_one.jpg']
+#    photo = open(random.choice(photo_choices), 'rb')
+#    bot.send_photo(message.chat.id, photo)
+
+# @bot.message_handler(commands=['від'])
+# def kiss(message):
+#    if message.text.lower() == '/від поцілувати':
+#        reply_user = message.reply_to_message.from_user
+#        bot.send_message(message.chat.id, f"{message.from_user.first_name} поцілував {reply_user.first_name}")
+
+#    photo_choices = ['static/kisses/kiss_one.jpg', 'static/kisses/kiss_two.jpg']
+#    photo = open(random.choice(photo_choices), 'rb')
+#    bot.send_photo(message.chat.id, photo)
+
+
+
+# @bot.message_handler(content_types=['text'])
+# def check_for_vid_obnyati(message):
+#     words = message.text.lower().split()    
+#	if '/від' in words:
+        
+ #       bot.send_message(message.chat.id, f"{message.from_user.first_name} обняв {bot.get_me().first_name}")
+    #else:
+    #   bot.send_message(message.chat.id,
+    #                   "Помилка, команда неправильно прописана - перевірте її правильність для допомоги пропишіть /help")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@bot.message_handler(commands=['вдарити'])
+def slap(message):
+    if message.reply_to_message:
+        reply_user = message.reply_to_message.from_user
+        bot.send_message(message.chat.id, f"{message.from_user.first_name} вдарив {reply_user.first_name}")
+        photo_choices = ['static/slap/slap_one.jpg', 'static/slap/slap_two.jpg']
+        photo = open(random.choice(photo_choices), 'rb')
+        bot.send_photo(message.chat.id, photo)
+    else:
+        bot.send_message(message.chat.id, "Хтось повинен бути обраний, щоб ти міг вдарити його!")
+
+@bot.message_handler(commands=['образа'])
+def insult(message):
+    if message.reply_to_message:
+        reply_user = message.reply_to_message.from_user
+        insults = ['треба було бігати за автобусом', 'в тебе носик як у свинки', 'твої батьки неправильно виховали тебе']
+        bot.send_message(message.chat.id, f"{message.from_user.first_name}: {random.choice(insults)} {reply_user.first_name}")
+    else:
+        bot.send_message(message.chat.id, "Хтось повинен бути обраний, щоб ти міг образити його!")
+
+@bot.message_handler(commands=['чмок'])
+def kiss(message):
+    if message.reply_to_message:
+        reply_user = message.reply_to_message.from_user
+        bot.send_message(message.chat.id, f"{message.from_user.first_name} чмокнув {reply_user.first_name}")
+        photo_choices = ['static/kisses/kiss_one.jpg', 'static/kisses/kiss_two.jpg']
+        photo = open(random.choice(photo_choices), 'rb')
+        bot.send_photo(message.chat.id, photo)
+    else:
+        bot.send_message(message.chat.id, "Хтось повинен бути обраний, щоб ти міг чмокнути його!")
+
+@bot.message_handler(commands=['шлеп'])
+def slap(message):
+    if message.reply_to_message:
+        reply_user = message.reply_to_message.from_user
+        bot.send_message(message.chat.id, f"{message.from_user.first_name} шлепнув {reply_user.first_name}")
+        photo_choices = ['static/slap/slap_one.jpg', 'static/slap/slap_two.jpg']
+        photo = open(random.choice(photo_choices), 'rb')
+        bot.send_photo(message.chat.id, photo)
+    else:
+        bot.send_message(message.chat.id, "Хтось повинен бути обраний, щоб ти міг шлепнути його!")
+
+
+
+
+
+
+
+
+
+
+
+
+
+@bot.message_handler(commands=['від'])
+def handle_vid_command(message):
+    words = message.text.lower().split()
+
+    if len(words) < 2:
+        bot.send_message(message.chat.id, "Помилка, команда неправильно прописана - перевірте її правильність для допомоги пропишіть /help")
+        return
+
+    action = words[1]
+
+    if action == 'обняти':
+        reply_user = message.reply_to_message.from_user
+        bot.send_message(message.chat.id, f"{message.from_user.first_name} обняв {reply_user.first_name}")
+        photo_choices = ['static/hugs/hugs_one.jpg']
+        photo = open(random.choice(photo_choices), 'rb')
+        bot.send_photo(message.chat.id, photo)
+
+    elif action == 'поцілувати':
+        reply_user = message.reply_to_message.from_user
+        bot.send_message(message.chat.id, f"{message.from_user.first_name} поцілував {reply_user.first_name}")
+        photo_choices = ['static/kisses/kiss_one.jpg', 'static/kisses/kiss_two.jpg']
+        photo = open(random.choice(photo_choices), 'rb')
+        bot.send_photo(message.chat.id, photo)
+
+    elif action == 'вдарити':
+        reply_user = message.reply_to_message.from_user
+        bot.send_message(message.chat.id, f"{message.from_user.first_name} вдарив {reply_user.first_name}")
+        photo_choices = ['static/hits/hit_one.jpg', 'static/hits/hit_two.jpg']
+        photo = open(random.choice(photo_choices), 'rb')
+        bot.send_photo(message.chat.id, photo)
+
+    elif action == 'образити':
+        reply_user = message.reply_to_message.from_user
+        bot.send_message(message.chat.id, f"{message.from_user.first_name} образив {reply_user.first_name}")
+        photo_choices = ['static/insults/insult_one.jpg']
+        photo = open(random.choice(photo_choices), 'rb')
+        bot.send_photo(message.chat.id, photo)
+
+    elif action == 'чмокнути':
+        reply_user = message.reply_to_message.from_user
+        bot.send_message(message.chat.id, f"{message.from_user.first_name} чмокнув {reply_user.first_name}")
+        photo_choices = ['static/kisses/kiss_one.jpg', 'static/kisses/kiss_two.jpg']
+        photo = open(random.choice(photo_choices), 'rb')
+        bot.send_photo(message.chat.id, photo)
+
+    elif action == 'шлепнути':
+        reply_user = message.reply_to_message.from_user
+        bot.send_message(message.chat.id, f"{message.from_user.first_name} шлепнув {reply_user.first_name}")
+        photo_choices = ['static/slaps/slap_one.jpg', 'static/slaps/slap_two.jpg']
+        photo = open(random.choice(photo_choices), 'rb')
+        bot.send_photo(message.chat.id, photo)
+
+    else:
+        bot.send_message(message.chat.id, "Помилка, команда неправильно прописана - перевірте її правильність для допомоги пропишіть /help")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@bot.message_handler(content_types=['text'])
+def check_for_vid_command(message):
+    words = message.text.lower().split()
+    if '/від' in words:
+        if 'обняти' in words:
+            reply_user = message.reply_to_message.from_user
+            bot.send_message(message.chat.id, f"{message.from_user.first_name} обняв {reply_user.first_name}")
+            photo_choices = ['static/hugs/hugs_one.jpg', 'static/hugs/hugs_two.jpg', 'static/hugs/hugs_three.jpg', 'static/hugs/hugs_four.jpg', 'static/hugs/hugs_five.jpg', 'static/hugs/hugs_six.jpg', 'static/hugs/hugs_seven.jpg', 'static/hugs/hugs_eight.jpg', 'static/hugs/hugs_nine.jpg']
+            photo = open(random.choice(photo_choices), 'rb')
+            bot.send_photo(message.chat.id, photo)
+        elif 'поцілувати' in words:
+            reply_user = message.reply_to_message.from_user
+            bot.send_message(message.chat.id, f"{message.from_user.first_name} поцілував {reply_user.first_name}")
+            photo_choices = ['static/kisses/kiss_one.jpg', 'static/kisses/kiss_two.jpg', 'static/kisses/kiss_three.jpg', 'static/kisses/kiss_four.jpg', 'static/kisses/kiss_one.jpg', 'static/kisses/kiss_five.jpg', 'static/kisses/kiss_six.jpg', 'static/kisses/kiss_seven.jpg']
+            photo = open(random.choice(photo_choices), 'rb')
+            bot.send_photo(message.chat.id, photo)
+        else:
+            bot.send_message(message.chat.id, "Помилка, неправильна команда - перевірте її правильність для допомоги пропишіть /help")
+
+
+
+
+
+
+
+
+@bot.message_handler(commands=['від'])
+def handle_vid_command(message):
+    words = message.text.lower().split()
+
+    if len(words) < 2:
+        bot.send_message(message.chat.id, "Помилка, команда неправильно прописана - перевірте її правильність для допомоги пропишіть /help")
+        return
+
+    action = words[1]
+
+    if action == 'обняти':
+        reply_user = message.reply_to_message.from_user
+        bot.send_message(message.chat.id, f"{message.from_user.first_name} обняв {reply_user.first_name}")
+        photo_choices = ['static/hugs/hugs_one.jpg']
+        photo = open(random.choice(photo_choices), 'rb')
+        bot.send_photo(message.chat.id, photo)
+
+    elif action == 'поцілувати':
+        reply_user = message.reply_to_message.from_user
+        bot.send_message(message.chat.id, f"{message.from_user.first_name} поцілував {reply_user.first_name}")
+        photo_choices = ['static/kisses/kiss_one.jpg', 'static/kisses/kiss_two.jpg']
+        photo = open(random.choice(photo_choices), 'rb')
+        bot.send_photo(message.chat.id, photo)
+
+    elif action == 'вдарити':
+        reply_user = message.reply_to_message.from_user
+        bot.send_message(message.chat.id, f"{message.from_user.first_name} вдарив {reply_user.first_name}")
+        #photo_choices = ['static/hits/hit_one.jpg', 'static/hits/hit_two.jpg']
+        #photo = open(random.choice(photo_choices), 'rb')
+        #bot.send_photo(message.chat.id, photo)
+
+    elif action == 'образити':
+        reply_user = message.reply_to_message.from_user
+        bot.send_message(message.chat.id, f"{message.from_user.first_name} образив {reply_user.first_name}")
+        #photo_choices = ['static/insults/insult_one.jpg']
+        #photo = open(random.choice(photo_choices), 'rb')
+        #bot.send_photo(message.chat.id, photo)
+
+    elif action == 'чмокнути':
+        reply_user = message.reply_to_message.from_user
+        bot.send_message(message.chat.id, f"{message.from_user.first_name} чмокнув {reply_user.first_name}")
+        #photo_choices = ['static/kisses/kiss_one.jpg', 'static/kisses/kiss_two.jpg']
+        #photo = open(random.choice(photo_choices), 'rb')
+        #bot.send_photo(message.chat.id, photo)
+
+    elif action == 'шлепнути':
+        reply_user = message.reply_to_message.from_user
+        bot.send_message(message.chat.id, f"{message.from_user.first_name} шлепнув {reply_user.first_name}")
+        #photo_choices = ['static/slaps/slap_one.jpg', 'static/slaps/slap_two.jpg']
+        #photo = open(random.choice(photo_choices), 'rb')
+        #bot.send_photo(message.chat.id, photo)
+
+    else:
+        bot.send_message(message.chat.id, "Помилка, команда неправильно прописана - перевірте її правильність для допомоги пропишіть /help_bot")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@bot.message_handler(commands=['від'])
+def hug_or_kiss(message):
+    words = message.text.lower().split()
+    if len(words) < 3:
+        bot.reply_to(message, "Виберіть користувача щоб виконати цю команду")
+    else:
+        action = words[1]
+        target = message.reply_to_message.from_user if message.reply_to_message else None
+        if not target:
+            bot.reply_to(message, "Виберіть користувача щоб виконати цю команду")
+        else:
+            reply_text = ""
+            photo_choices = []
+            if action == 'обняти':
+                reply_text = f"{message.from_user.first_name} обняв {target.first_name}"
+                photo_choices = ['static/hugs/hugs_one.jpg']
+
+
+
+@bot.message_handler(commands=['від'])
+def hug_or_kiss(message):
+    words = message.text.lower().split()
+    if len(words) < 3:
+        bot.reply_to(message, "Виберіть користувача щоб виконати цю команду")
+    else:
+        action = words[1]
+        target = message.reply_to_message.from_user if message.reply_to_message else None
+        if not target:
+            bot.reply_to(message, "Виберіть користувача щоб виконати цю команду")
+        else:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@bot.message_handler(commands=['від'])
+def hug_or_kiss(message):
+    words = message.text.lower().split()
+    if len(words) < 3:
+        bot.reply_to(message, "Виберіть користувача щоб виконати цю команду")
+    else:
+        action = words[1]
+        target = message.reply_to_message.from_user if message.reply_to_message else None
+        if not target:
+            bot.reply_to(message, "Виберіть користувача щоб виконати цю команду")
+        else:
+            reply_text = ""
+            photo_choices = []
+            if action == 'обняти':
+                reply_text = f"{message.from_user.first_name} обняв {target.first_name}"
+                photo_choices = ['static/hugs/hugs_one.jpg']
+            elif action == 'поцілувати':
+                reply_text = f"{message.from_user.first_name} поцілував {target.first_name}"
+                photo_choices = ['static/kisses/kiss_one.jpg', 'static/kisses/kiss_two.jpg']
+            elif action == 'вдарити':
+                reply_text = f"{message.from_user.first_name} вдарив {target.first_name}"
+                #photo_choices = ['static/hits/hit_one.jpg', 'static/hits/hit_two.jpg']
+            elif action == 'образити':
+                reply_text = f"{message.from_user.first_name} образив {target.first_name}"
+                #photo_choices = ['static/insults/insult_one.jpg']
+            elif action == 'чмок':
+                reply_text = f"{message.from_user.first_name} чмокнув {target.first_name}"
+                #photo_choices = ['static/kisses/kiss_one.jpg', 'static/kisses/kiss_two.jpg']
+            elif action == 'шлеп':
+                reply_text = f"{message.from_user.first_name} шлепнув {target.first_name}"
+                #photo_choices = ['static/slaps/slap_one.jpg', 'static/slaps/slap_two.jpg']
+            else:
+                bot.reply_to(message, "Помилка, невідома команда - перевірте її правильність для допомоги пропишіть /help")
+                return
+
+            if not photo_choices:
+                bot.send_message(message.chat.id, reply_text)
+            else:
+                photo = open(random.choice(photo_choices), 'rb')
+                bot.send_photo(message.chat.id, photo, reply_to_message_id=message.reply_to_message.message_id)
+                bot.send_message(message.chat.id, reply_text)
+
+
+
+
+
+
+@bot.message_handler(commands=['від'])
+def hug_or_kiss(message):
+    words = message.text.lower().split()
+    if len(words) < 3:
+        bot.reply_to(message, "Виберіть користувача щоб виконати цю команду")
+    else:
+        action = words[1]
+        target = message.reply_to_message.from_user if message.reply_to_message else None
+        if not target:
+            bot.reply_to(message, "Виберіть користувача щоб виконати цю команду")
+            return
+        if action not in ['обняти', 'поцілувати', 'вдарити', 'образити', 'чмок', 'шлеп']:
+            bot.reply_to(message, "Помилка, невідома команда - перевірте її правильність для допомоги пропишіть /help_bot")
+            return
+        reply_text = ""
+        photo_choices = []
+
+
+
+        if not target:
+            if len(words) == 3 and words[2][0] == '@':
+                target_username = words[2][1:]
+                try:
+                    target = bot.get_chat_member(message.chat.id, target_username).user
+                except telebot.apihelper.ApiException as e:
+                    bot.reply_to(message, f"Користувач з username {target_username} не знайдений")
+                    return
+            else:
+                bot.reply_to(message, "Виберіть користувача щоб виконати цю команду")
+                return
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@bot.message_handler(commands=['від'])
+def hug_or_kiss(message):
+    words = message.text.lower().split()
+    if len(words) < 3:
+        bot.reply_to(message, "Виберіть користувача щоб виконати цю команду")
+    else:
+        if not all([word.startswith('@') for word in words[2:]]):
+            bot.reply_to(message, "Помилка, невідома команда - перевірте її правильність для допомоги пропишіть /help_bot")
+            return
+        action = words[1]
+        target = message.reply_to_message.from_user if message.reply_to_message else None
+        if not target:
+            if len(words) == 3 and words[2][0] == '@':
+                target_username = words[2][1:]
+                try:
+                    target = bot.get_chat_member(message.chat.id, target_username).user
+                except telebot.apihelper.ApiException as e:
+                    bot.reply_to(message, f"Користувач з username {target_username} не знайдений")
+                    return
+            else:
+                bot.reply_to(message, "Виберіть користувача щоб виконати цю команду")
+                return
+        if action not in ['обняти', 'поцілувати', 'вдарити', 'образити', 'чмок', 'шлеп']:
+            bot.reply_to(message, "Помилка, невідома команда - перевірте її правильність для допомоги пропишіть /help_bot")
+            return
+        reply_text = ""
+        photo_choices = []
+        if action == 'обняти':
+            reply_text = f"{message.from_user.first_name} обняв {target.first_name}"
+            photo_choices = ['static/hugs/hugs_one.jpg']
+        elif action == 'поцілувати':
+            reply_text = f"{message.from_user.first_name} поцілував {target.first_name}"
+            photo_choices = ['static/kisses/kiss_one.jpg', 'static/kisses/kiss_two.jpg']
+        elif action == 'вдарити':
+            reply_text = f"{message.from_user.first_name} вдарив {target.first_name}"
+            # photo_choices = ['static/hits/hit_one.jpg', 'static/hits/hit_two.jpg']
+        elif action == 'образити':
+            reply_text = f"{message.from_user.first_name} образив {target.first_name}"
+            # photo_choices = ['static/insults/insult_one.jpg']
+        elif action == 'чмок':
+            reply_text = f"{message.from_user.first_name} чмокнув {target.first_name}"
+            # photo_choices = ['static/kisses/kiss_one.jpg', 'static/kisses/kiss_two.jpg']
+        elif action == 'шлеп':
+            reply_text = f"{message.from_user.first_name} шлепнув {target.first_name}"
+            # photo_choices = ['static/slaps/slap_one.jpg', 'static/slaps/slap_two.jpg']
+
+        if not photo_choices:
+            bot.send_message(message.chat.id, reply_text)
+        else:
+            photo = open(random.choice(photo_choices), 'rb')
+            bot.send_photo(message.chat.id, photo, reply_to_message_id=message.reply_to_message.message_id)
+            bot.send_message(message.chat.id, reply_text)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@bot.message_handler(commands=['від'])
+def hug_or_kiss(message):
+    words = message.text.lower().split()
+    if len(words) < 2:
+        bot.reply_to(message, "Виберіть дію щоб виконати цю команду")
+    else:
+        action = words[1]
+        target = message.reply_to_message.from_user if message.reply_to_message else None
+        if not target:
+            bot.reply_to(message, "Виберіть користувача щоб виконати цю команду")
+            return
+        reply_user = message.reply_to_message.from_user
+        photo_choices = []
+        if action == 'обняти':
+            bot.send_message(message.chat.id, f"{message.from_user.first_name} обняв {reply_user.first_name}")
+            photo_choices = ['static/hugs/hugs_one.jpg', 'static/hugs/hugs_two.jpg', 'static/hugs/hugs_three.jpg',
+                             'static/hugs/hugs_four.jpg', 'static/hugs/hugs_five.jpg', 'static/hugs/hugs_six.jpg',
+                             'static/hugs/hugs_seven.jpg', 'static/hugs/hugs_eight.jpg', 'static/hugs/hugs_nine.jpg']
+            photo = open(random.choice(photo_choices), 'rb')
+            bot.send_photo(message.chat.id, photo)
+        elif action == 'поцілувати':
+            bot.send_message(message.chat.id, f"{message.from_user.first_name} поцілував {reply_user.first_name}")
+            photo_choices = ['static/kisses/kiss_one.jpg', 'static/kisses/kiss_two.jpg', 'static/kisses/kiss_three.jpg',
+                             'static/kisses/kiss_four.jpg', 'static/kisses/kiss_one.jpg', 'static/kisses/kiss_five.jpg',
+                             'static/kisses/kiss_six.jpg', 'static/kisses/kiss_seven.jpg']
+            photo = open(random.choice(photo_choices), 'rb')
+            bot.send_photo(message.chat.id, photo)
+        elif action == 'вдарити':
+            bot.send_message(message.chat.id, f"{message.from_user.first_name} вдарив {reply_user.first_name}")
+            # photo_choices = ['static/hits/hit_one.jpg', 'static/hits/hit_two.jpg']
+        elif action == 'образити':
+            bot.send_message(message.chat.id, f"{message.from_user.first_name} образив {reply_user.first_name}")
+            # photo_choices = ['static/insults/insult_one.jpg']
+        elif action == 'чмок':
+            bot.send_message(message.chat.id, f"{message.from_user.first_name} чмокнув {reply_user.first_name}")
+            # photo_choices = ['static/kisses/kiss_one.jpg', 'static/kisses/kiss_two.jpg']
+        elif action == 'шлеп':
+            bot.send_message(message.chat.id, f"{message.from_user.first_name} шльопнув {reply_user.first_name}")
+            # photo_choices = ['static/slaps/slap_one.jpg', 'static/slaps/slap_two.jpg']
+
+#        if not photo_choices:
+#            bot.send_message(message.chat.id, reply_text)
+ #       else:
+#            photo = open(random.choice(photo_choices), 'rb')
+ #           bot.send_photo(message.chat.id, photo, reply_to_message_id=message.reply_to_message.message_id)
+ #           bot.send_message(message.chat.id, reply_text)
+
+
+
+
+user_choices = {}
+
+@bot.message_handler(commands=['моя_стать'])
+def handle_gender_choice(message):
+    user_id = message.from_user.id
+    if user_choices.get(user_id) is not None:
+        bot.send_message(chat_id=message.chat.id, text='Ваша стать уже була обрана, для того щоб її змінити пропишіть /змінити_стать')
+        return
+    markup = types.InlineKeyboardMarkup(row_width=2)
+    male_button = types.InlineKeyboardButton(text='Чоловіча', callback_data='male')
+    female_button = types.InlineKeyboardButton(text='Жіноча', callback_data='female')
+    markup.add(male_button, female_button)
+    bot.send_message(chat_id=message.chat.id, text='Виберіть свою стать:', reply_markup=markup)
+    user_choices[user_id] = None
+
+@bot.callback_query_handler(func=lambda call: True)
+def handle_gender_callback(call):
+    user_id = call.from_user.id
+    if user_choices.get(user_id) is not None:
+        bot.send_message(chat_id=call.message.chat.id, text='Ваша стать уже була обрана, для того щоб її змінити пропишіть /змінити_стать')
+        return
+    user_choices[user_id] = call.data
+    if call.data == 'male':
+        bot.send_message(chat_id=call.message.chat.id, text='Ваша стать обрана: Чоловіча')
+    elif call.data == 'female':
+        bot.send_message(chat_id=call.message.chat.id, text='Ваша стать обрана: Жіноча')

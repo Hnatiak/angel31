@@ -15,20 +15,45 @@ from telebot import TeleBot, types
 #from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 #from telegram.ext import CallbackContext
 from datetime import datetime, timedelta, time
-import json
+#import json
+import re
+#import yagmail
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
-
-try:
-    with open('friendships.json', 'r') as f:
-        friendships = json.load(f)
-except FileNotFoundError:
-    friendships = {}
+#try:
+ #   with open('friendships.json', 'r') as f:
+  #      friendships = json.load(f)
+#except FileNotFoundError:
+  #  friendships = {}
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 bot = telebot.TeleBot(config.TOKEN)
+
+
+@bot.message_handler(commands=['написати_власнику'])
+def send_email(message):
+    bot.send_message(message.chat.id, "Будь ласка введіть ваше повідомлення:")
+    bot.register_next_step_handler(message, send_email_message)
+
+def send_email_message(message):
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login('romanhnatiak@gmail.com', config.email_password)
+        to_email = 'romanhnatiak@gmail.com'
+        subject = 'Повідомлення від користувача'
+        email_text = f"Від: {message.from_user.username}\nСмс: {message.text}"
+        message = 'Subject: {}\n\n{}'.format(subject, email_text)
+        server.sendmail('angel31@gmail.com', to_email, message)
+        server.quit()
+        bot.send_message(message.chat.id, "Чудово, ваш лист надіслано!")
+    except:
+        bot.send_message(message.chat.id, "На жаль щось пішло не так, повторіть операцію пізніше.")
 
 
 
@@ -238,6 +263,8 @@ def greeting(message):
 
 user_choices = {}
 
+gender = ""
+
 @bot.message_handler(commands=['стать'])
 def handle_gender_choice(message):
     user_id = message.from_user.id
@@ -251,6 +278,7 @@ def handle_gender_choice(message):
     bot.send_message(chat_id=message.chat.id, text='Виберіть свою стать:', reply_markup=markup)
     user_choices[user_id] = None
 
+
 @bot.callback_query_handler(func=lambda call: True)
 def handle_gender_callback(call):
     user_id = call.from_user.id
@@ -262,6 +290,7 @@ def handle_gender_callback(call):
         bot.send_message(chat_id=call.message.chat.id, text='Ваша стать обрана: Чоловіча')
     elif call.data == 'Жіноча':
         bot.send_message(chat_id=call.message.chat.id, text='Ваша стать обрана: Жіноча')
+
 
 @bot.message_handler(commands=['змінити_стать'])
 def handle_change_gender(message):
@@ -281,6 +310,42 @@ def handle_gender(message):
         bot.send_message(chat_id=message.chat.id, text=f'Ваша стать обрана: {gender}')
     else:
         bot.send_message(chat_id=message.chat.id, text='Ви ще не обрали свою стать, для того щоб її обрати пропишіть    /стать')
+
+
+
+#@bot.message_handler(commands=['від'])
+#def handle_greeting_after_gender_choice(message):
+  #  user_id = message.from_user.id
+  #  gender = user_choices.get(user_id)
+   # if gender is None:
+   #     bot.reply_to(message, "Для виконання цієї команди, вам потрібно обрати вашу стать, будь ласка оберіть спочатку вашу стать командою /стать")
+   #     return
+   # if not message.reply_to_message:
+    #    bot.reply_to(message, "Для виконання цієї команди, ви повинні відповісти на повідомлення користувача, якого хочете привітати або обійняти")
+   #     return
+  #  target_name = message.reply_to_message.from_user.first_name
+  #  reason = ' '.join(message.text.split(' ')[2:]) if len(message.text.split(' ')) > 2 else ''
+  #  if gender == 'обняти':
+    #    if message.from_user.gender == "Чоловіча":
+     #       bot.reply_to(message, f"😘 {message.from_user.first_name} обняв {target_name}\n{reason}")
+     ##   elif message.from_user.gender == "Жіноча":
+      #      bot.reply_to(message, f"😘 {message.from_user.first_name} обняла {target_name}\n{reason}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @bot.message_handler(commands=['від'])
@@ -309,7 +374,7 @@ def hug_or_kiss(message):
                              'static/kisses/kiss_four.jpg', 'static/kisses/kiss_one.jpg', 'static/kisses/kiss_five.jpg',
                              'static/kisses/kiss_six.jpg', 'static/kisses/kiss_seven.jpg', 'static/kisses/kiss_one.gif']
         elif action == 'вдарити':
-            bot.send_message(message.chat.id, f" 🤜🤕 {message.from_user.first_name} вдарив(-ла) {reply_user.first_name}\nПричина: {reason}")
+            bot.send_message(message.chat.id, f" 🤜🤕 {message.from_user.first_name} вдарив(-ла) {reply_user.first_name}\n{reason}")
             photo_choices = ['static/bully/bully_one.gif', 'static/bully/bully_two.gif', 'static/bully/bully_three.gif',
                              'static/bully/bully_four.gif', 'static/bully/bully_five.gif', 'static/bully/bully_six.gif',
                              'static/bully/bully_seven.gif', 'static/bully/bully_eight.gif', 'static/bully/bully_nine.gif'
@@ -342,7 +407,7 @@ def hug_or_kiss(message):
             bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} вдочерив(-ла) {reply_user.first_name}\n{reason}")
             photo_choices = ['static/ideas/ideas_one.gif']
         elif action == 'онанізм':
-            bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} зайнявся самозадоволенням\n{reason}")
+            bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} зайнявся(-лася) самозадоволенням\n{reason}")
             photo_choices = ['static/onanism/onanizm_one.jpg']
         elif action == 'пробач_люба':
             bot.send_message(message.chat.id, f"🥺 {message.from_user.first_name} просить пробачення у своєї половинки {reply_user.first_name}\n{reason}")
@@ -451,215 +516,6 @@ def hug(message):
         bot.send_message(chat_id=message.chat.id, text='Не можу зрозуміти твою стать, спочатку обери її командою /стать')
 
 
-user_choices = {}
-
-def get_user_gender(user_id):
-    gender = user_choices.get(user_id)
-    if gender == 'Чоловіча':
-        return 'male'
-    elif gender == 'Жіноча':
-        return 'female'
-    else:
-        return None
-
-@bot.message_handler(commands=['стать'])
-def handle_gender_choice(message):
-    user_id = message.from_user.id
-    if user_choices.get(user_id) is not None:
-        bot.send_message(chat_id=message.chat.id, text='Ваша стать уже була обрана, для того щоб її змінити пропишіть /змінити_стать, якщо ти хочеш переглянути свою стать то пропиши /моя_стать')
-        return
-    markup = types.InlineKeyboardMarkup(row_width=2)
-    male_button = types.InlineKeyboardButton(text='Чоловіча', callback_data='male')
-    female_button = types.InlineKeyboardButton(text='Жіноча', callback_data='female')
-    markup.add(male_button, female_button)
-    bot.send_message(chat_id=message.chat.id, text='Виберіть свою стать:', reply_markup=markup)
-    user_choices[user_id] = None
-
-@bot.callback_query_handler(func=lambda call: True)
-def handle_gender_callback(call):
-    user_id = call.from_user.id
-    if user_choices.get(user_id) is not None:
-        bot.send_message(chat_id=call.message.chat.id, text='Ваша стать уже була обрана, для того щоб її змінити пропишіть /змінити_стать')
-        return
-    user_choices[user_id] = call.data
-    if call.data == 'male':
-        bot.send_message(chat_id=call.message.chat.id, text='Ваша стать обрана: Чоловіча')
-    elif call.data == 'female':
-        bot.send_message(chat_id=call.message.chat.id, text='Ваша стать обрана: Жіноча')
-
-@bot.message_handler(commands=['обняти'])
-def hug(update, context):
-    user_id = update.message.from_user.id
-    gender = get_user_gender(user_id)
-    if gender == 'male':
-        update.message.reply_text('Ти обіймаєшся з хлопцем. ❤️')
-    elif gender == 'female':
-        update.message.reply_text('Ти обіймаєшся з дівчиною. ❤️')
-    else:
-        update.message.reply_text('Ти обіймаєшся зі створінням. ❤️')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-proposals = {}
-
-@bot.message_handler(func=lambda message: message.text.startswith('/одружитися'))
-def handle_all_messages(message):
-    chat_id = message.chat.id
-    reply_user = message.reply_to_message.from_user if message.reply_to_message else None
-    text = message.text
-
-    if text == '/start_Angel32':
-        bot.send_message(chat_id,
-                        'Привіт! Я бот для одруження. Я можу допомогти вам одружитися, просто напишіть /одружитися, щоб запропонувати руку і серце комусь.')
-
-    elif text == '/одружитися' and reply_user:
-        proposals[reply_user.id] = {
-            'from_user_id': message.from_user.id,
-            'chat_id': chat_id
-        }  # збереження інформації про пропозицію одруження
-        keyboard = types.InlineKeyboardMarkup()
-        button_accept = types.InlineKeyboardButton(text='Так', callback_data='accept')
-        button_decline = types.InlineKeyboardButton(text='Ні', callback_data='decline')
-        keyboard.row(button_accept, button_decline)
-        bot.send_message(chat_id,
-                         f"Сьогодні {message.from_user.first_name} хоче одружитися з {reply_user.first_name}, чи приймаєш ти його пропозицію руки і серця?",
-                         reply_markup=keyboard)
-
-    else:
-         bot.send_message(chat_id, "Я не розумію, що ви хочете сказати.")
-
-
-@bot.callback_query_handler(func=lambda call: True)
-def handle_callback(call):
-   print(call.data)
-   chat_id = call.message.chat.id
-   user_id = call.from_user.id
-   proposal = proposals.get(user_id)
-   if proposal is None or proposal['chat_id'] != chat_id or proposal['reply_user_id'] is None:
-       bot.answer_callback_query(call.id, text="Ви не можете відповісти на цю пропозицію.", show_alert=True)
-       return
-   reply_user_id = proposal['reply_user_id']
-   reply_user = bot.get_chat_member(chat_id, reply_user_id).user
-   if call.data == 'accept':
-       bot.send_message(chat_id,
-                        f"{reply_user.first_name}, {call.from_user.first_name} погодився одружитися з вами! ❤️")
-   elif call.data == 'decline':
-       bot.send_message(chat_id, f"{reply_user.first_name}, {call.from_user.first_name} відхилив вашу пропозицію. 😔")
-   del proposals[user_id]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def handle_friend_request(update, context):
-    query = update.callback_query
-    user_id = query.from_user.id
-    user_data = context.user_data[user_id]
-    user_name = user_data.get('user_name')
-    friend_name = user_data.get('friend_name')
-
-    if user_name != friend_name:
-        query.answer(text="Це запит не для вас!", show_alert=True)
-        return
-
-    current_time = datetime.datetime.now()
-    request_time = user_data.get('request_time')
-    time_diff = (current_time - request_time).total_seconds()
-    if time_diff > 60:
-        query.answer(text="Час відповісти на запит минув!", show_alert=True)
-        return
-
-    user_answer = query.data
-
-    if user_answer == 'yes':
-        friends = user_data.get('friends')
-        friends.append((user_name, friend_name, current_time.strftime('%Y-%m-%d %H:%M:%S')))
-        user_data['friends'] = friends
-        query.answer(text="Ви тепер друзі!", show_alert=True)
-    else:
-        query.answer(text="Ваш запит на дружбу відхилений.", show_alert=True)
-
-    del context.user_data[user_id]['friend_name']
-    del context.user_data[user_id]['request_time']
-
-    query.edit_message_text(text=f"Ви запросили користувача {friend_name} на дружбу.")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#@bot.message_handler(commands=['вдуш'])
-#def handle_shower_command(message):
-#    current_time = datetime.utcnow()
-#    if current_time.time() >= time(19, 0) and current_time.time() <= time(23, 30):
-#        bot.send_message(message.chat.id, "мут 1 час", reply_to_message_id=message.message_id)
-#        bot.restrict_chat_member(message.chat.id, message.from_user.id, until_date=int(time.time() + timedelta(hours=1).total_seconds()))
-#    else:
-#        bot.reply_to(message, 'Ця команда доступна лише з 19:00 до 19:30')
-
-@bot.message_handler(commands=['вдуш'])
-def handle_shower_command(message):
-    current_time = datetime.utcnow()
-    if current_time.time() >= time(19, 0) and current_time.time() <= time(23, 30):
-        bot.send_message(message.chat.id, "заткнуть 1 час", reply_to_message_id=message.message_id)
-        bot.restrict_chat_member(message.chat.id, message.from_user.id, until_date=int((datetime.now() + timedelta(hours=1)).timestamp()))
-    else:
-        bot.reply_to(message, 'Ця команда доступна лише з 19:00 до 19:30')
-
-
 @bot.message_handler(func=lambda message: message.text.lower() in ['купити адмінку', 'купити рекламу', 'купити піар', 'піар'])
 def handle_buy_command(message):
     bot.send_message(message.chat.id, 'ОУУУ чудова ідея, тоді ось тоюбі інформація:\n'
@@ -678,14 +534,26 @@ def handle_buy_command(message):
 
 
 angel = ['ангелятко', 'ангел', 'ангелику', 'ангелочок']
+insult = {'дурак', 'ідіот', 'лох', 'дибілка', 'ідіотка', 'дура', 'дурна', 'гей', 'лесбіянка', 'лисбіянка', 'самий уйобний бот', 'иди нахуй'}
 
+@bot.message_handler(func=lambda message: any(word in message.text.lower() for word in insult) and any(word in message.text.lower() for word in ["ангел ти", "особа ти"]))
+def handle_insult(message):
+    try:
+        bot.restrict_chat_member(message.chat.id, message.from_user.id, until_date=int((datetime.now() + timedelta(minutes=1)).timestamp()))
+        user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
+        bot.send_message(message.chat.id, f"мут 1 хвилину {user_mention}", reply_to_message_id=message.message_id)
+        bot.reply_to(message, "Тепер подумай над своєю поведінкою")
+    except Exception as e:
+        print(e)
+        bot.send_message(message.chat.id, "Мені взагаліто обідно")
 
 
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
     text = message.text.lower()
+    answered_question = False
     for keyword in angel:
-        if text == keyword or text == f"{keyword} представся" or text == f"{keyword} представлення" or text == f"{keyword} хто ти" or text == f"{keyword} команди":
+        if text == f"{keyword} представся" or text == f"{keyword} представлення" or text == f"{keyword} хто ти" or text == f"{keyword} команди" or text == f"{keyword} що вмієш":
             bot.send_message(message.chat.id, 'Привіт, я ангел, я можу спілкуватися з вами або ж виконувати команди такі як:'
                                               '\n\n<b>/від вдарити</b>, \n<b>/від обняти</b>, \n<b>/від поцілувати</b> \n<b>/від образити</b>'
                                               '\n<b>/від чмок</b>\n<b>/від шльоп</b>\n<b>/від сильнийшльоп</b>\n<b>/від кекс або ж /від секс</b>\n<b>/від онанізм</b>'
@@ -700,9 +568,9 @@ def handle_message(message):
             photo_choices = ['static/01.jpg']
             photo = open(random.choice(photo_choices), 'rb')
             bot.send_photo(message.chat.id, photo)
-        elif text in [f"{keyword} Привіт", f"{keyword} привет", f"{keyword} хай", f"{keyword} здоров"]:
+        elif text in [f"{keyword} привіт", f"{keyword} привет", f"{keyword} хай", f"{keyword} здоров"]:
             bot.send_message(message.chat.id, 'Привіт')
-        elif text in [f"{keyword} як ти", f"{keyword} як справи", f"{keyword} ти як", f"{keyword} як ти?"]:
+        elif text in [f"{keyword} як ти", f"{keyword} як справи", f"{keyword} ти як", f"{keyword} як ти?", f"{keyword}, ти як", f"{keyword}, ти як?"]:
             bot.send_message(message.chat.id, 'Усе гаразд, а ти як?')
         elif text == f"{keyword} дякую" or text == f"дякую {keyword}":
             bot.send_message(message.chat.id, 'Завжди прошу, моє кошенятко 😘')
@@ -714,6 +582,8 @@ def handle_message(message):
         #    bot.send_message(message.chat.id, 'Моя порада: будь завжди веселим і позитивним!')
         elif text == f"{keyword} до побачення" or text == f"{keyword} бувай":
             bot.send_message(message.chat.id, 'До зустрічі! Бувай ❤')
+        elif text == f"{keyword} на добраніч" or text == f"{keyword} спокійної ночі" or text == f"{keyword} надобраніч":
+            bot.send_message(message.chat.id, 'На добраніч моє кошеня 😘❤')
         elif text == f"{keyword} вірш" or text == f"{keyword} поезія":
             bot.send_message(message.chat.id, 'А ось і мій вірш:\nТи мій ангел, що з неба злетів,\nЩоб мені допомогти в біді,\nЗавжди поруч, коли я сам,\nТи мій ангел, мій друг і мій брат.')
 #=================================================================================================================
@@ -726,10 +596,14 @@ def handle_message(message):
     #elif message.reply_to_message is not None and message.text.lower() == 'ангел скажи наскільки вона дурна?':
     #    bot.send_message(message.chat.id, f"Небеса кажуть що вона дурна на {random.randint(0, 100)}%")
 #======================================================================================================================
-        elif text.startswith(f"{keyword}") and '?' in text:
+        elif text.startswith(f"{keyword} ") and '?' in text:
             bot.send_message(message.chat.id, random.choice(['Так', 'Ні']))
         elif text.startswith(f"{keyword}") and 'хто' in text:
             bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто']))
+        elif re.search(r"\bангел\b.*\bскільки\b.*\bразів\b.*\bтиждень\b.*[.?!]", text, re.IGNORECASE) and not answered_question:
+            bot.send_message(message.chat.id, 'Десь ' + str(random.randint(1, 10)))
+            answered_question = True
+
 
 
         elif text == f"{keyword} ти умнічка" or text == f"{keyword} ти молодець" or text == f"{keyword} розумниця" or text == f"{keyword} умнічка" or text == f"{keyword} молодець":
