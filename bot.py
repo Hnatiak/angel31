@@ -534,7 +534,7 @@ def handle_buy_command(message):
 
 
 angel = ['ангелятко', 'ангел', 'ангелику', 'ангелочок']
-insult = {'дурак', 'ідіот', 'лох', 'дибілка', 'ідіотка', 'дура', 'дурна', 'гей', 'лесбіянка', 'лисбіянка', 'самий уйобний бот', 'иди нахуй'}
+insult = {'дурак', 'ідіот', 'лох', 'дибілка', 'ідіотка', 'дура', 'дибіл', 'дебіл', 'дебілка', 'дура', 'дурна', 'гей', 'лесбіянка', 'лисбіянка', 'самий уйобний бот', 'иди нахуй'}
 
 @bot.message_handler(func=lambda message: any(word in message.text.lower() for word in insult) and any(word in message.text.lower() for word in ["ангел ти", "особа ти"]))
 def handle_insult(message):
