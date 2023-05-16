@@ -454,7 +454,6 @@ def handle_insult(message):
 
 
 
-
 @bot.message_handler(commands=['вдуш'])
 def handle_shower_command(message):
     global is_shower_time
@@ -464,6 +463,10 @@ def handle_shower_command(message):
         return
 
     current_time = datetime.utcnow().time()
+
+    if current_time < time(19, 0) or current_time > time(19, 30):
+        bot.reply_to(message, 'Ні, я ще не йду купатися, тому розслабся.')
+        return
 
     if current_time >= time(19, 0) and current_time <= time(19, 30):
         is_shower_time = True
