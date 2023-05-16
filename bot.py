@@ -436,7 +436,6 @@ def handle_buy_command(message):
 
 angel = ['ангелятко', 'ангел', 'ангелику', 'ангелочок']
 insult = {'дурак', 'ідіот', 'лох', 'дибілка', 'ідіотка', 'дура', 'дибіл', 'дебіл', 'дебілка', 'дура', 'дурна', 'гей', 'лесбіянка', 'лисбіянка', 'самий уйобний бот', 'иди нахуй'}
-is_shower_time = False
 
 
 @bot.message_handler(func=lambda message: any(word in message.text.lower() for word in insult) and any(word in message.text.lower() for word in ["ангел ти", "особа ти"]))
@@ -452,7 +451,7 @@ def handle_insult(message):
 
 
 
-
+is_shower_time = False
 
 @bot.message_handler(commands=['вдуш'])
 def handle_shower_command(message):
@@ -472,7 +471,7 @@ def handle_shower_command(message):
         is_shower_time = True
         bot.reply_to(message, 'Я відійшла в душ')
         timers.sleep(1800)  # Почекати 30 хвилин (1800 секунд)
-        bot.send_message(chat_id, 'Фух, все я прийняла душ, отже що тепер робитимемо?')
+        bot.send_message(message.chat.id, 'Фух, все я прийняла душ, отже що тепер робитимемо?')
         is_shower_time = False
     elif current_time >= timers.time(13, 0) and current_time <= timers.time(19, 30):
         bot.reply_to(message, 'Гей, перестань!')
