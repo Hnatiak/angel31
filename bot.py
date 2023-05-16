@@ -518,7 +518,7 @@ def hug(message):
 
 @bot.message_handler(func=lambda message: message.text.lower() in ['купити адмінку', 'купити рекламу', 'купити піар', 'піар'])
 def handle_buy_command(message):
-    bot.send_message(message.chat.id, 'ОУУУ чудова ідея, тоді ось тоюбі інформація:\n'
+    bot.send_message(message.chat.id, 'ОУУУ чудова ідея, тоді ось тобі інформація:\n'
                                       'Молодший адмін - 20 грн\n'
                                       'Старший 50 грн\n'
                                       'Також ти можеш придбати дозвіл на опублікування реклами у цій групі, '
