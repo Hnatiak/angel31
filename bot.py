@@ -22,13 +22,6 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-#try:
- #   with open('friendships.json', 'r') as f:
-  #      friendships = json.load(f)
-#except FileNotFoundError:
-  #  friendships = {}
-
-
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -193,50 +186,6 @@ def remove_friendship(message):
         bot.send_message(user_id, "Ви ще не в стосунках. Для того, щоб бути в стосунках, введіть /стосунки @імя_користувача.")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @bot.message_handler(commands=['help_bot', 'start'])
 def greeting(message):
     bot.send_message(message.chat.id, "У мене доступні такі команди як:\n\n<b>/від вдарити</b>, \n<b>/від обняти</b>, "
@@ -247,18 +196,6 @@ def greeting(message):
                                       "\n\nТакож я маю звичайні команди як:\n\n<b>показати ніжки</b>\n\n<b>А також я можу надавати інформацію про те як купити "
                                       "піар або адмінку, просто пропиши: купити піар, або купити адмінку</b>", parse_mode='html', disable_web_page_preview=True)
     bot.send_photo(message.chat.id, open('static/01.jpg', 'rb'))
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 user_choices = {}
@@ -310,42 +247,6 @@ def handle_gender(message):
         bot.send_message(chat_id=message.chat.id, text=f'Ваша стать обрана: {gender}')
     else:
         bot.send_message(chat_id=message.chat.id, text='Ви ще не обрали свою стать, для того щоб її обрати пропишіть    /стать')
-
-
-
-#@bot.message_handler(commands=['від'])
-#def handle_greeting_after_gender_choice(message):
-  #  user_id = message.from_user.id
-  #  gender = user_choices.get(user_id)
-   # if gender is None:
-   #     bot.reply_to(message, "Для виконання цієї команди, вам потрібно обрати вашу стать, будь ласка оберіть спочатку вашу стать командою /стать")
-   #     return
-   # if not message.reply_to_message:
-    #    bot.reply_to(message, "Для виконання цієї команди, ви повинні відповісти на повідомлення користувача, якого хочете привітати або обійняти")
-   #     return
-  #  target_name = message.reply_to_message.from_user.first_name
-  #  reason = ' '.join(message.text.split(' ')[2:]) if len(message.text.split(' ')) > 2 else ''
-  #  if gender == 'обняти':
-    #    if message.from_user.gender == "Чоловіча":
-     #       bot.reply_to(message, f"😘 {message.from_user.first_name} обняв {target_name}\n{reason}")
-     ##   elif message.from_user.gender == "Жіноча":
-      #      bot.reply_to(message, f"😘 {message.from_user.first_name} обняла {target_name}\n{reason}")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 @bot.message_handler(commands=['від'])
@@ -535,6 +436,8 @@ def handle_buy_command(message):
 
 angel = ['ангелятко', 'ангел', 'ангелику', 'ангелочок']
 insult = {'дурак', 'ідіот', 'лох', 'дибілка', 'ідіотка', 'дура', 'дибіл', 'дебіл', 'дебілка', 'дура', 'дурна', 'гей', 'лесбіянка', 'лисбіянка', 'самий уйобний бот', 'иди нахуй'}
+is_shower_time = False
+
 
 @bot.message_handler(func=lambda message: any(word in message.text.lower() for word in insult) and any(word in message.text.lower() for word in ["ангел ти", "особа ти"]))
 def handle_insult(message):
@@ -546,6 +449,36 @@ def handle_insult(message):
     except Exception as e:
         print(e)
         bot.send_message(message.chat.id, "Мені взагаліто обідно")
+
+
+
+
+
+
+@bot.message_handler(commands=['вдуш'])
+def handle_shower_command(message):
+    global is_shower_time
+
+    if is_shower_time:
+        bot.reply_to(message, 'Пробач, я зараз в душі і не можу це виконати.')
+        return
+
+    current_time = datetime.utcnow().time()
+
+    if current_time >= time(19, 0) and current_time <= time(19, 30):
+        is_shower_time = True
+        bot.reply_to(message, 'Я відійшла в душ')
+        time.sleep(1800)  # Почекати 30 хвилин (1800 секунд)
+        bot.send_message(chat_id, 'Фух, все я прийняла душ, отже що тепер робитимемо?')
+        is_shower_time = False
+    elif current_time >= time(19, 0) and current_time <= time(19, 45):
+        bot.reply_to(message, 'Гей, перестань!')
+    else:
+        bot.reply_to(message, 'Сталася помилка')
+
+
+
+
 
 
 @bot.message_handler(func=lambda message: True)
