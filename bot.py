@@ -464,7 +464,7 @@ def handle_shower_command(message):
 
     current_time = datetime.utcnow().time()
 
-    if current_time < time(19, 0) or current_time > time(12, 30):
+    if current_time < time(19, 0) or current_time < time(12, 30):
         bot.reply_to(message, 'Ні, я ще не йду купатися, тому розслабся.')
         return
 
