@@ -451,6 +451,9 @@ def handle_insult(message):
 
 
 
+        
+is_shower_time = False
+
 @bot.message_handler(commands=['вдуш'])
 def handle_shower_command(message):
     global is_shower_time
