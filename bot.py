@@ -451,42 +451,31 @@ def handle_insult(message):
 
 
         
-# is_shower_time = False
+is_shower_time = False
 
-@bot.message_handler(commands=['shower'])
+@bot.message_handler(commands=['вдуш'])
 def handle_shower_command(message):
-    current_time = datetime.now().time()
-    target_time_start = time(19, 0)
-    target_time_end = time(19, 30)
-    
-    if target_time_start <= current_time <= target_time_end:
-        bot.reply_to(message, "Душ доступний.")
+    global is_shower_time
+
+    current_time = datetime.utcnow().time()
+
+    if current_time >= time(19, 0) and current_time <= time(19, 30):
+        is_shower_time = True
+        bot.reply_to(message, 'Я відійшла в душ')
+        time.sleep(1800)  # Почекати 30 хвилин (1800 секунд)
+        bot.send_message(message.chat.id, 'Фух, все я прийняла душ, отже що тепер робитимемо?')
+        is_shower_time = False
+    elif current_time < time(19, 0) and current_time > time(19, 30):
+        try:
+            bot.restrict_chat_member(message.chat.id, message.from_user.id, until_date=int((datetime.now() + timedelta(minutes=1)).timestamp()))
+            user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
+            bot.send_message(message.chat.id, f"мут 1 хвилину {user_mention}", reply_to_message_id=message.message_id)
+            bot.reply_to(message, "Не гарно підглядати за дівчиною в душі! Тепер подумай як воно!")
+        except Exception as e:
+            print(e)
+            bot.send_message(message.chat.id, "Гей, перестань, мені не приємно!")
     else:
-        bot.reply_to(message, "Душ не доступний.")
-
-# @bot.message_handler(commands=['вдуш'])
-# def handle_shower_command(message):
-#     global is_shower_time
-
-#     current_time = datetime.utcnow().time()
-
-#     if current_time >= datetime.time(19, 0) and current_time <= datetime.time(19, 30):
-#         is_shower_time = True
-#         bot.reply_to(message, 'Я відійшла в душ')
-#         time.sleep(1800)  # Почекати 30 хвилин (1800 секунд)
-#         bot.send_message(message.chat.id, 'Фух, все я прийняла душ, отже що тепер робитимемо?')
-#         is_shower_time = False
-#     elif current_time < datetime.time(19, 0) or current_time > datetime.time(19, 30):
-#         try:
-#             bot.restrict_chat_member(message.chat.id, message.from_user.id, until_date=int((datetime.now() + timedelta(minutes=1)).timestamp()))
-#             user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
-#             bot.send_message(message.chat.id, f"мут 1 хвилину {user_mention}", reply_to_message_id=message.message_id)
-#             bot.reply_to(message, "Не гарно підглядати за дівчиною в душі! Тепер подумай, як воно!")
-#         except Exception as e:
-#             print(e)
-#             bot.send_message(message.chat.id, "Гей, перестань, мені не приємно!")
-#     else:
-#         bot.reply_to(message, 'Ця команда доступна лише з 19:00 до 19:30')
+        bot.reply_to(message, 'Ця команда доступна лише з 19:00 до 19:30')
 
 
 # @bot.message_handler(commands=['вдуш'])
