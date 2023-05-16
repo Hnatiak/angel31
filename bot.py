@@ -468,13 +468,13 @@ def handle_shower_command(message):
         bot.reply_to(message, 'Ні, я ще не йду купатися, тому розслабся.')
         return
 
-    if current_time >= time(13, 0) and current_time <= time(19, 30):
+    if current_time >= time(13, 0, 0) and current_time <= time(19, 30, 0):
         is_shower_time = True
         bot.reply_to(message, 'Я відійшла в душ')
         time.sleep(1800)  # Почекати 30 хвилин (1800 секунд)
         bot.send_message(chat_id, 'Фух, все я прийняла душ, отже що тепер робитимемо?')
         is_shower_time = False
-    elif current_time >= time(19, 0) and current_time <= time(19, 45):
+    elif current_time >= time(13, 0) and current_time <= time(19, 30):
         bot.reply_to(message, 'Гей, перестань!')
     else:
         bot.reply_to(message, 'Сталася помилка')
