@@ -470,7 +470,7 @@ def handle_shower_command(message):
         time.sleep(1800)  # Почекати 30 хвилин (1800 секунд)
         bot.send_message(chat_id, 'Фух, все я прийняла душ, отже що тепер робитимемо?')
         is_shower_time = False
-    elif current_time < time(19, 0) or current_time > time(19, 30):
+    elif current_time < time(19, 0) and current_time > time(19, 30):
         try:
             bot.restrict_chat_member(message.chat.id, message.from_user.id, until_date=int((datetime.now() + timedelta(minutes=1)).timestamp()))
             user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
