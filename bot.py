@@ -456,7 +456,7 @@ is_shower_time = False
 def handle_shower_command(message):
     global is_shower_time
 
-    current_time = datetime.datetime.utcnow().time()
+    current_time = datetime.utcnow().time()
 
     if current_time >= datetime.time(19, 0) and current_time <= datetime.time(19, 30):
         is_shower_time = True
