@@ -478,6 +478,8 @@ def handle_shower_command(message):
     except Exception as e:
         print(e)
         bot.send_message(message.chat.id, "Гей, перестань, мені не приємно!")
+    else:
+        bot.reply_to(message, 'Ця команда доступна лише з 19:00 до 19:30')
 
 
 
