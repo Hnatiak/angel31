@@ -464,11 +464,11 @@ def handle_shower_command(message):
 
     current_time = datetime.utcnow().time()
 
-    if current_time < time(19, 0) or current_time < time(12, 30):
+    if current_time < time(13, 0) or current_time > time(19, 30):
         bot.reply_to(message, 'Ні, я ще не йду купатися, тому розслабся.')
         return
 
-    if current_time >= time(19, 0) and current_time <= time(19, 30):
+    if current_time >= time(13, 0) and current_time <= time(19, 30):
         is_shower_time = True
         bot.reply_to(message, 'Я відійшла в душ')
         time.sleep(1800)  # Почекати 30 хвилин (1800 секунд)
