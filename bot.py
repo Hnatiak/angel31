@@ -460,13 +460,13 @@ def handle_shower_command(message):
 
     current_time = datetime.utcnow().time()
 
-    if current_time >= datetime.time(19, 0) and current_time <= datetime.time(20, 0):
+    if current_time >= time(19, 0) and current_time <= time(20, 0):
         is_shower_time = True
         bot.reply_to(message, 'Я відійшла в душ')
         time.sleep(1800)  # Почекати 30 хвилин (1800 секунд)
         bot.send_message(message.chat.id, 'Фух, все, я прийняла душ. Отже, що тепер робитимемо?')
         is_shower_time = False
-    elif current_time < datetime.time(19, 0) or current_time > datetime.time(20, 0):
+    elif current_time < time(19, 0) or current_time > time(20, 0):
         try:
             bot.restrict_chat_member(
                 message.chat.id, message.from_user.id,
