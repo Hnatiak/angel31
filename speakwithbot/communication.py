@@ -79,7 +79,7 @@ def handle_commands(bot, message):
                            re.IGNORECASE) and not answered_question:
                 bot.send_message(message.chat.id, 'Десь ' + str(random.randint(1, 10)))
                 answered_question = True
-            elif text == f"{keyword} ти умнічка" or text == f"{keyword} ти молодець" or text == f"{keyword} розумниця" or text == f"{keyword} умнічка" or text == f"{keyword} молодець":
+            elif text == f"{keyword} ти умнічка" or text == f"{keyword} ти молодець" or text == f"{keyword} розумниця" or text == f"{keyword} умнічка" or text == f"{keyword} молодець" or text == f"{keyword} найкраща" or text == f"{keyword} найкраща!" or text == f"{keyword} - найкраща!" or text == f"{keyword} - найкраща" or text == f"{keyword} ти найкраща" or text == f"{keyword} ти найкраща!":
                 bot.send_message(message.chat.id, 'Дякую кошеннятко моє 😍 😘, мені приємно це знати')
             elif text == f"{keyword}" or text == f"{keyword} ти тут" or text == f"{keyword} ти де":
                 bot.send_message(message.chat.id, 'Так я тут, пробач що затримала')
