@@ -18,11 +18,12 @@ def handle_commands(bot, message):
     how_are_you_found = any(re.search(pattern, text) for pattern in how_are_you_patterns)
     dorechi_found = re.search(dorechi_pattern, text)
 
-    if hello_found and (how_are_you_found or dorechi_found):
-        bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
-    elif hello_found:
-        bot.send_message(message.chat.id, "Привіт хлопче!")
-    elif how_are_you_found:
+    if hello_found:
+        if how_are_you_found or dorechi_found:
+            bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
+        else:
+            bot.send_message(message.chat.id, "Привіт хлопче!")
+    elif how_are_you_found or dorechi_found:
         bot.send_message(message.chat.id, "Усе добре, а в тебе?")
     else:
         text = message.text.lower()
