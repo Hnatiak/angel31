@@ -15,7 +15,7 @@ def handle_commands(bot, message):
 
     if any(command in text for command in hello):
         bot.send_message(message.chat.id, "Привіт хлопче!")
-    elif any(command in text for command in how_are_you):
+    if any(command in text for command in how_are_you):
         if "доречі привіт" in text or "привіт, ти як" in text:
             bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
         else:
