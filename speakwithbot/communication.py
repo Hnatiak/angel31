@@ -18,18 +18,23 @@ def handle_commands(bot, message):
 #     how_are_you_found = any(re.search(pattern, text) for pattern in how_are_you_patterns)
 #     dorechi_found = re.search(dorechi_pattern, text)
 
-    text = message.text.lower()
+    text = re.sub(r'[?!.,:]', '', message.text.lower())  # Видаляємо знаки пунктуації з тексту
 
-    hello = {"ангел привіт", "ангел здоров", "ангел хай"}
-    how_are_you = {"ангел як справи", "ангел ти як"}
+    hello_patterns = [r"ангел[и]?к?", r"салют", r"хелоу", r"хай", r"здоров"]
+    how_are_you_patterns = [r"ти як", r"як ти", r"як справи", r"як твої справи"]
+    dorechi_pattern = r"доречі"
 
-    if any(command in text for command in hello):
-        bot.send_message(message.chat.id, "Привіт хлопче!")
-    elif any(command in text for command in how_are_you):
-        if "доречі привіт" in text:
+    hello_found = any(re.search(pattern, text) for pattern in hello_patterns)
+    how_are_you_found = any(re.search(pattern, text) for pattern in how_are_you_patterns)
+    dorechi_found = re.search(dorechi_pattern, text)
+
+    if hello_found:
+        if how_are_you_found or dorechi_found:
             bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
         else:
-            bot.send_message(message.chat.id, "Усе добре, а в тебе?")
+            bot.send_message(message.chat.id, "Привіт хлопче!")
+    elif how_are_you_found:
+        bot.send_message(message.chat.id, "Все добре, а в тебе?")
     else:
         text = message.text.lower()
         answered_question = False
