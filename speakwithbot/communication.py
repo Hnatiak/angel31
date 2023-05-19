@@ -84,6 +84,15 @@ def handle_commands(bot, message):
                 bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто з вас', 'Він', 'Ви обоє']))
             elif text.startswith(f"{keyword}") and 'вона чи я' in text:
                 bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто з вас', 'Вона', 'Ви обоє']))
+            elif re.search(r"\bангел число від (\d+) до (\d+)\b", text, re.IGNORECASE):
+                match = re.search(r"\bангел число від (\d+) до (\d+)\b", text, re.IGNORECASE)
+                start_num = int(match.group(1))
+                end_num = int(match.group(2))
+
+                if start_num <= end_num:
+                    bot.send_message(message.chat.id, str(random.randint(start_num, end_num)))
+                else:
+                    bot.send_message(message.chat.id, "Перепрошую, але наступне число, яке ви вказали, не є більше " + str(start_num))
             elif re.search(r"\bангел\b.*\bскільки\b.*\bразів\b.*\bтиждень\b", text, re.IGNORECASE) and not answered_question:
                 bot.send_message(message.chat.id, 'Десь ' + str(random.randint(1, 10)) + ' разів на тиждень')
                 answered_question = True
