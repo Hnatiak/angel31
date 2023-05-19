@@ -231,9 +231,9 @@ def guess_number(message):
         bot.send_message(chat_id=message.chat.id, text='Вітаю! Ви вгадали число!')
         del game_numbers[user_id]
     elif guess < number:
-        bot.send_message(chat_id=message.chat.id, text='Загадане число більше. Якщо ви бажаєте закінчити гру, пропишіть /закінчити_гру')
+        bot.send_message(chat_id=message.chat.id, text='Загадане число більше.\nЯкщо ви бажаєте закінчити гру, пропишіть /закінчити_гру', parse_mode='html', disable_web_page_preview=True)
     else:
-        bot.send_message(chat_id=message.chat.id, text='Загадане число менше. Якщо ви бажаєте закінчити гру, пропишіть /закінчити_гру')
+        bot.send_message(chat_id=message.chat.id, text='Загадане число менше.\nЯкщо ви бажаєте закінчити гру, пропишіть /закінчити_гру', parse_mode='html', disable_web_page_preview=True)
 
 
 @bot.message_handler(commands=['закінчити_гру'])
@@ -242,9 +242,9 @@ def end_number_game(message):
 
     if user_id in game_numbers:
         del game_numbers[user_id]
-        bot.send_message(chat_id=message.chat.id, text='Гра була закінчена.')
+        bot.send_message(chat_id=message.chat.id, text='Гра була закінчена.\nДля того щоб знову її зіграти пропишіть /гра_в_цифри', parse_mode='html', disable_web_page_preview=True)
     else:
-        bot.send_message(chat_id=message.chat.id, text='Ви не брали участі в жодній грі.')
+        bot.send_message(chat_id=message.chat.id, text='Ви не брали участі в жодній грі.\nДля того щоб знову прийняти участь пропишіть /гра_в_цифри', parse_mode='html', disable_web_page_preview=True)
 
 
 @bot.message_handler(commands=['стать'])
