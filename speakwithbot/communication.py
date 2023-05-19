@@ -8,35 +8,18 @@ bot = telebot.TeleBot(config.TOKEN)
 angel = ['ангелятко', 'ангел', 'ангелику', 'ангелочок']
 
 def handle_commands(bot, message):
-#     text = message.text.lower()
+   text = message.text.lower()
 
-#     hello_patterns = [r"ангел[и]?к?", r"хелоу", r"привіт", r"здоров", r"салют"]
-#     how_are_you_patterns = [r"як справи", r"ти як", r"як ти"]
-#     dorechi_pattern = r"доречі"
+    hello = {"ангел привіт", "ангел здоров", "ангел хай"}
+    how_are_you = {"ангел як справи", "ангел ти як"}
 
-#     hello_found = any(re.search(pattern, text) for pattern in hello_patterns)
-#     how_are_you_found = any(re.search(pattern, text) for pattern in how_are_you_patterns)
-#     dorechi_found = re.search(dorechi_pattern, text)
-
-    text = re.sub(r'[?!.,:]', '', message.text.lower())  # Видаляємо знаки пунктуації з тексту
-
-    hello_patterns = [r"ангел[и]?к?", r"салют", r"хелоу", r"хай", r"здоров"]
-    how_are_you_patterns = [r"ти як", r"як ти", r"як справи", r"як твої справи"]
-    dorechi_pattern = r"доречі"
-
-    hello_found = any(re.search(pattern, text) for pattern in hello_patterns)
-    how_are_you_found = any(re.search(pattern, text) for pattern in how_are_you_patterns)
-    dorechi_found = re.search(dorechi_pattern, text)
-
-    if hello_found:
-        if how_are_you_found or dorechi_found:
+    if any(command in text for command in hello):
+        bot.send_message(message.chat.id, "Привіт хлопче!")
+    elif any(command in text for command in how_are_you):
+        if "доречі привіт" in text:
             bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
         else:
-            bot.send_message(message.chat.id, "Привіт хлопче!")
-    elif how_are_you_found:
-        bot.send_message(message.chat.id, "Все добре, а в тебе?")
-    elif any(command in text for command in how_are_you):
-        bot.send_message(message.chat.id, "Все добре, а в тебе?")
+            bot.send_message(message.chat.id, "Усе добре, а в тебе?")
     else:
         text = message.text.lower()
         answered_question = False
