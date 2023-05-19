@@ -35,6 +35,8 @@ def handle_commands(bot, message):
             bot.send_message(message.chat.id, "Привіт хлопче!")
     elif how_are_you_found:
         bot.send_message(message.chat.id, "Все добре, а в тебе?")
+    elif any(command in text for command in how_are_you):
+        bot.send_message(message.chat.id, "Все добре, а в тебе?")
     else:
         text = message.text.lower()
         answered_question = False
