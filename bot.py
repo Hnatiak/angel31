@@ -231,9 +231,9 @@ def guess_number(message):
         bot.send_message(chat_id=message.chat.id, text='Вітаю! Ви вгадали число!')
         del game_numbers[user_id]
     elif guess < number:
-        bot.send_message(chat_id=message.chat.id, text='Загадане число більше.')
+        bot.send_message(chat_id=message.chat.id, text='Загадане число більше. Якщо ви бажаєте закінчити гру, пропишіть /закінчити_гру')
     else:
-        bot.send_message(chat_id=message.chat.id, text='Загадане число менше.')
+        bot.send_message(chat_id=message.chat.id, text='Загадане число менше. Якщо ви бажаєте закінчити гру, пропишіть /закінчити_гру')
 
 
 @bot.message_handler(commands=['закінчити_гру'])
