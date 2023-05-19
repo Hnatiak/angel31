@@ -8,7 +8,7 @@ bot = telebot.TeleBot(config.TOKEN)
 angel = ['ангелятко', 'ангел', 'ангелику', 'ангелочок']
 
 def handle_commands(bot, message):
-    text = re.sub(r'[?!.,:]', '', message.text.lower())
+    text = re.sub(r'[?!.,:]', '', message.text.lower())  # Видаляємо знаки пунктуації з тексту
 
     hello = {"ангел привіт", "ангел здоров", "ангел хай"}
     how_are_you = {"ангел як справи", "ангел ти як"}
@@ -16,7 +16,7 @@ def handle_commands(bot, message):
     if any(command in text for command in hello):
         bot.send_message(message.chat.id, "Привіт хлопче!")
     elif any(command in text for command in how_are_you):
-        if "доречі привіт" in text:
+        if any(phrase in text for phrase in hello):
             bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
         else:
             bot.send_message(message.chat.id, "Усе добре, а в тебе?")
