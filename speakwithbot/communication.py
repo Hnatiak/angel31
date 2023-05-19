@@ -80,9 +80,8 @@ def handle_commands(bot, message):
                 bot.send_message(message.chat.id, random.choice(['Так', 'Ні']))
             elif text.startswith(f"{keyword}") and 'хто' in text:
                 bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто', 'Він/Вона']))
-            elif re.search(r"\bангел\b.*\bскільки\b.*\bразів\b.*\bтиждень\b.*[.?!]", text,
-                           re.IGNORECASE) and not answered_question:
-                bot.send_message(message.chat.id, 'Десь ' + str(random.randint(1, 10)) + 'разів на тиждень')
+            elif re.search(r"\bангел\b.*\bскільки\b.*\bразів\b.*\bтиждень\b", text, re.IGNORECASE) and not answered_question:
+                bot.send_message(message.chat.id, 'Десь ' + str(random.randint(1, 10)) + ' разів на тиждень')
                 answered_question = True
             elif text == f"{keyword} ти умнічка" or text == f"{keyword} ти молодець" or text == f"{keyword} розумниця" or text == f"{keyword} умнічка" or text == f"{keyword} молодець" or text == f"{keyword} найкраща" or text == f"{keyword} найкраща!" or text == f"{keyword} - найкраща!" or text == f"{keyword} - найкраща" or text == f"{keyword} ти найкраща" or text == f"{keyword} ти найкраща!":
                 bot.send_message(message.chat.id, 'Дякую кошеннятко моє 😍 😘, мені приємно це знати')
