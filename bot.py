@@ -200,6 +200,32 @@ user_choices = {}
 
 gender = ""
 
+@bot.message_handler(commands=['гра_в_цифри'])
+number = random.randint(1, 100)
+
+# Флаг для перевірки, чи вгадано число
+guessed = False
+
+# Головний цикл гри
+while not guessed:
+    guess = input("Вгадайте число (від 1 до 100): ")
+
+    # Перевіряємо, чи введено число
+    if guess.isdigit():
+        guess = int(guess)
+
+        # Перевіряємо, чи вгадано число
+        if guess == number:
+            print("Вітаю! Ви вгадали число!")
+            guessed = True
+        elif guess < number:
+            print("Більше!")
+        else:
+            print("Менше!")
+    else:
+        print("Будь ласка, введіть ціле число.")
+
+
 @bot.message_handler(commands=['стать'])
 def handle_gender_choice(message):
     user_id = message.from_user.id
