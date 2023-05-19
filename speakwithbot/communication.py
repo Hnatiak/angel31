@@ -8,7 +8,7 @@ bot = telebot.TeleBot(config.TOKEN)
 angel = ['ангелятко', 'ангел', 'ангелику', 'ангелочок']
 
 @bot.message_handler(func=lambda message: any(keyword in message.text.lower() for keyword in angel))
-def handle_commands(message):
+def handle_commands(bot, message):
     text = message.text.lower()
 
     hello = {"ангел привіт", "ангел здоров", "ангел хай"}
