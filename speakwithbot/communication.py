@@ -7,7 +7,7 @@ bot = telebot.TeleBot(config.TOKEN)
 
 angel = ['ангелятко', 'ангел', 'ангелику', 'ангелочок']
 
-def process_message(message):
+def process_message(bot, message):
     text = message.text.lower()
 
     hello_commands = ["привіт", "добрий день", "доброго дня"]
