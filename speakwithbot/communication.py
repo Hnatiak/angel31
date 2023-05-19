@@ -99,3 +99,18 @@ def handle_commands(bot, message):
                 photo_path = random.choice(photo_choices)
                 with open(photo_path, 'rb') as photo_file:
                     bot.send_photo(message.chat.id, photo_file)
+
+
+def reply_message(update, context):
+    user_message = update.message.text.lower()
+    
+    if 'привіт' in user_message:
+        reply_text = "Привіт!"
+    elif 'як справи' in user_message:
+        reply_text = "У мене все добре, а в тебе?"
+    elif 'розкажи щось про себе' in user_message:
+        reply_text = "Я бот, створений для розмови із користувачами. Я можу відповісти на запитання та надати інформацію."
+    else:
+        reply_text = "Вибач, не розумію, що саме ви маєте на увазі."
+
+    update.message.reply_text(reply_text)
