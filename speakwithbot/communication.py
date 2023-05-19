@@ -19,16 +19,10 @@ def handle_commands(bot, message):
     elif any(command in text for command in how_are_you):
         if "доречі привіт" in text:
             bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
+        elif any(command in text for command in hello + how_are_you_second):
+            bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
         else:
             bot.send_message(message.chat.id, "Усе добре, а в тебе?")
-    elif any(command in text for command in hello + how_are_you_second):
-        # Додайте винятки та відповіді для них
-#         if "ангел привіт, ти як?" or "ангел привіт, як ти" in text:
-            bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
-#         elif "ангел допоможи" in text:
-#             bot.send_message(message.chat.id, "Звичайно, що допоможу. Я тут, щоб тобі допомогти!")
-#         else:
-#             bot.send_message(message.chat.id, "На жаль, я не розумію цю команду.")
     else:
         text = message.text.lower()
         answered_question = False
