@@ -30,6 +30,8 @@ logger = logging.getLogger(__name__)
 
 bot = telebot.TeleBot(config.TOKEN)
 
+game_numbers = {}
+
 @bot.message_handler(commands=['написати_власнику'])
 def send_email(message):
     bot.send_message(message.chat.id, "Будь ласка введіть ваше повідомлення:")
@@ -201,29 +203,48 @@ user_choices = {}
 gender = ""
 
 @bot.message_handler(commands=['гра_в_цифри'])
-number = random.randint(1, 100)
+def start_number_game(message):
+    user_id = message.from_user.id
 
-# Флаг для перевірки, чи вгадано число
-guessed = False
+    if user_id in game_numbers:
+        bot.send_message(chat_id=message.chat.id, text='Ви вже граєте в гру. Спробуйте закінчити попередню гру, прописавши команду /закінчити_гру.')
+        return
 
-# Головний цикл гри
-while not guessed:
-    guess = input("Вгадайте число (від 1 до 100): ")
+    number = random.randint(1, 100)
+    game_numbers[user_id] = number
 
-    # Перевіряємо, чи введено число
-    if guess.isdigit():
-        guess = int(guess)
+    bot.send_message(chat_id=message.chat.id, text='Гра "Вгадай число" розпочата. Вгадайте число від 1 до 100.')
 
-        # Перевіряємо, чи вгадано число
-        if guess == number:
-            print("Вітаю! Ви вгадали число!")
-            guessed = True
-        elif guess < number:
-            print("Більше!")
-        else:
-            print("Менше!")
+
+@bot.message_handler(func=lambda message: message.text.isdigit())
+def guess_number(message):
+    user_id = message.from_user.id
+
+    if user_id not in game_numbers:
+        bot.send_message(chat_id=message.chat.id, text='Ви ще не почали гру. Почніть гру командою /гра_в_цифри.')
+        return
+
+    number = game_numbers[user_id]
+    guess = int(message.text)
+
+    if guess == number:
+        bot.send_message(chat_id=message.chat.id, text='Вітаю! Ви вгадали число!')
+        del game_numbers[user_id]
+    elif guess < number:
+        bot.send_message(chat_id=message.chat.id, text='Загадане число більше.')
     else:
-        print("Будь ласка, введіть ціле число.")
+        bot.send_message(chat_id=message.chat.id, text='Загадане число менше.')
+
+
+@bot.message_handler(commands=['закінчити_гру'])
+def end_number_game(message):
+    user_id = message.from_user.id
+
+    if user_id in game_numbers:
+        del game_numbers[user_id]
+        bot.send_message(chat_id=message.chat.id, text='Гра була закінчена.')
+    else:
+        bot.send_message(chat_id=message.chat.id, text='Ви не брали участі в жодній грі.')
 
 
 @bot.message_handler(commands=['стать'])
