@@ -7,19 +7,22 @@ bot = telebot.TeleBot(config.TOKEN)
 
 angel = ['ангелятко', 'ангел', 'ангелику', 'ангелочок']
 
+
 def handle_commands(bot, message):
     text = message.text.lower()
 
-    hello = r"ангел[^\w]*привіт"
-    how_are_you = r"ангел[^\w]*ти[^\w]*як"
+    hello_patterns = [r"ангел[и]?к?", r"хелоу", r"привіт", r"здоров", r"салют"]
+    how_are_you_patterns = [r"як справи", r"ти як", r"як ти"]
 
-    if re.search(hello, text):
+    hello_found = any(re.search(pattern, text) for pattern in hello_patterns)
+    how_are_you_found = any(re.search(pattern, text) for pattern in how_are_you_patterns)
+
+    if hello_found and how_are_you_found:
+        bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
+    elif hello_found:
         bot.send_message(message.chat.id, "Привіт хлопче!")
-    elif re.search(how_are_you, text):
-        if re.search(r"доречі[^\w]*привіт", text) or re.search(r"привіт[^\w]*ти[^\w]*як", text):
-            bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
-        else:
-            bot.send_message(message.chat.id, "Усе добре, а в тебе?")
+    elif how_are_you_found:
+        bot.send_message(message.chat.id, "Усе добре, а в тебе?")
     else:
         text = message.text.lower()
         answered_question = False
