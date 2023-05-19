@@ -244,7 +244,7 @@ def end_number_game(message):
         del game_numbers[user_id]
         bot.send_message(chat_id=message.chat.id, text='Гра була закінчена.\nДля того щоб знову її зіграти пропишіть /гра_в_цифри', parse_mode='html', disable_web_page_preview=True)
     else:
-        bot.send_message(chat_id=message.chat.id, text='Ви не брали участі в жодній грі.\nДля того щоб знову прийняти участь пропишіть /гра_в_цифри', parse_mode='html', disable_web_page_preview=True)
+        bot.send_message(chat_id=message.chat.id, text='Ви не брали участі в жодній грі.\nДля того щоб прийняти участь у грі пропишіть /гра_в_цифри', parse_mode='html', disable_web_page_preview=True)
 
 
 @bot.message_handler(commands=['стать'])
