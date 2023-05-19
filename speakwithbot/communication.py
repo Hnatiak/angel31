@@ -7,7 +7,8 @@ bot = telebot.TeleBot(config.TOKEN)
 
 angel = ['ангелятко', 'ангел', 'ангелику', 'ангелочок']
 
-def handle_commands(bot, message):
+@bot.message_handler(func=lambda message: any(keyword in message.text.lower() for keyword in angel))
+def handle_commands(message):
     text = message.text.lower()
 
     hello = {"ангел привіт", "ангел здоров", "ангел хай"}
@@ -23,7 +24,7 @@ def handle_commands(bot, message):
             bot.send_message(message.chat.id, "Усе добре, а в тебе?")
     elif any(command in text for command in hello | how_are_you_second):
         bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
-    else: 
+    else:
 # else
         text = message.text.lower()
         answered_question = False
