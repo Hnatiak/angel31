@@ -21,10 +21,9 @@ def handle_commands(bot, message):
     if hello_found:
         if how_are_you_found or dorechi_found:
             bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
-        else:
+        elif
             bot.send_message(message.chat.id, "Привіт хлопче!")
-    if hello_found:
-        elif how_are_you_found or dorechi_found:
+        else: how_are_you_found or dorechi_found:
             bot.send_message(message.chat.id, "Усе добре, а в тебе?")
     else:
         text = message.text.lower()
