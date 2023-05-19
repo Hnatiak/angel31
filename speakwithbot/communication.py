@@ -21,7 +21,7 @@ def handle_commands(bot, message):
             bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
         else:
             bot.send_message(message.chat.id, "Усе добре, а в тебе?")
-    elif any(command in text for command in hello + how_are_you_second):
+    elif any(command in text for command in hello | how_are_you_second):
         bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
     else:
         text = message.text.lower()
