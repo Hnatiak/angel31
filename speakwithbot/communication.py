@@ -24,17 +24,16 @@ def handle_commands(bot, message):
             bot.send_message(message.chat.id, "Усе добре, а в тебе?")
 #     elif any(command in text for command in hello | how_are_you_second):
 #         bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
-    else:
-        if re.search(r"\bангел число від (\d+) до (\d+)\b", text, re.IGNORECASE):
-            match = re.search(r"\bангел число від (\d+) до (\d+)\b", text, re.IGNORECASE)
-            start_num = int(match.group(1))
-            end_num = int(match.group(2))
+    if re.search(r"\bангел число від (\d+) до (\d+)\b", text, re.IGNORECASE):
+        match = re.search(r"\bангел число від (\d+) до (\d+)\b", text, re.IGNORECASE)
+        start_num = int(match.group(1))
+        end_num = int(match.group(2))
 
-            if start_num <= end_num:
-                bot.send_message(message.chat.id, str(random.randint(start_num, end_num)))
-            else:
-                bot.send_message(message.chat.id, "Перепрошую, але наступне число, яке ви вказали, не є більше " + str(start_num))
-     else:
+        if start_num <= end_num:
+            bot.send_message(message.chat.id, str(random.randint(start_num, end_num)))
+        else:
+            bot.send_message(message.chat.id, "Перепрошую, але наступне число, яке ви вказали, не є більше " + str(start_num))
+    else:
 # else
         text = message.text.lower()
         answered_question = False
