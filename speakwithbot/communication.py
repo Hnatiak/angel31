@@ -15,15 +15,16 @@ def handle_commands(bot, message):
     how_are_you = {"ангел як справи", "ангел ти як"}
     how_are_you_second = {"як справи", "ти як", "як ти", "як ся маєш", "як", "", ""}
 
-    if any(command in text for command in hello):
-        bot.send_message(message.chat.id, "Привіт хлопче!")
-    elif any(command in text for command in how_are_you):
-        if "доречі привіт" in text:
+    if:
+        if any(command in text for command in hello):
+            bot.send_message(message.chat.id, "Привіт!")
+        elif any(command in text for command in how_are_you):
+            if "доречі привіт" in text:
+                bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
+            else:
+                bot.send_message(message.chat.id, "Усе добре, а в тебе?")
+        elif any(command in text for command in hello | how_are_you_second):
             bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
-        else:
-            bot.send_message(message.chat.id, "Усе добре, а в тебе?")
-#     elif any(command in text for command in hello | how_are_you_second):
-#         bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
     else:
 # else
         text = message.text.lower()
