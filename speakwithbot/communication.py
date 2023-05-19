@@ -84,7 +84,7 @@ def handle_commands(bot, message):
                 bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто з вас', 'Він', 'Ви обоє']))
             elif text.startswith(f"{keyword}") and 'вона чи я' in text:
                 bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто з вас', 'Вона', 'Ви обоє']))
-            elif re.search(r"\bангел число від (\d+) до (\d+)\b", text, re.IGNORECASE):
+            elif text.startswith(r"\bангел число від (\d+) до (\d+)\b", text, re.IGNORECASE):
                 match = re.search(r"\bангел число від (\d+) до (\d+)\b", text, re.IGNORECASE)
                 start_num = int(match.group(1))
                 end_num = int(match.group(2))
