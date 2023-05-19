@@ -189,7 +189,7 @@ def handle_commands(bot, message):
                                  'static/legs/legs_(22).jpg', 'static/legs/legs_(23).jpg', 'static/legs/legs_(24).jpg',
                                  'static/legs/legs_(25).jpg', 'static/legs/legs_(26).jpg', 'static/legs/legs_(27).jpg',
                                  'static/legs/legs_(28).jpg', 'static/legs/legs_(29).jpg', 'static/legs/legs_(30).jpg',
-                                 'static/legs/legs_(31).jpg', 'static/legs/legs_(32).jpg'])
+                                 'static/legs/legs_(31).jpg', 'static/legs/legs_(32).jpg']
                 photo = open(random.choice(photo_choices), 'rb')
                 bot.send_photo(message.chat.id, photo)
             elif text == f"{keyword} купити піар" or text == f"{keyword} купити адмінку":
