@@ -7,26 +7,23 @@ bot = telebot.TeleBot(config.TOKEN)
 
 angel = ['ангелятко', 'ангел', 'ангелику', 'ангелочок']
 
-@bot.message_handler(func=lambda message: any(keyword in message.text.lower() for keyword in angel))
-def process_message(bot, message):
+# @bot.message_handler(func=lambda message: any(keyword in message.text.lower() for keyword in angel))
+def handle_commands(bot, message):
     text = message.text.lower()
 
-    hello_commands = ["привіт", "добрий день", "доброго дня"]
-    how_are_you_commands = ["як справи", "як ти", "як життя"]
-    how_are_you_second_commands = ["доречі привіт"]
+    hello = {"ангел привіт", "ангел здоров", "ангел хай"}
+    how_are_you = {"ангел як справи", "ангел ти як"}
+    how_are_you_second = {"як справи", "ти як", "як ти", "як ся маєш", "як", "", ""}
 
-    if any(command in text for command in hello_commands) or \
-            any(command in text for command in how_are_you_commands) or \
-            any(command in text for command in hello_commands + how_are_you_second_commands):
-        if any(command in text for command in hello_commands):
-            bot.send_message(message.chat.id, "Привіт!")
-        elif any(command in text for command in how_are_you_commands):
-            if "доречі привіт" in text:
-                bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
-            else:
-                bot.send_message(message.chat.id, "Усе добре, а в тебе?")
-        else:
+    if any(command in text for command in hello):
+        bot.send_message(message.chat.id, "Привіт!")
+    elif any(command in text for command in how_are_you):
+        if "доречі привіт" in text:
             bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
+        else:
+            bot.send_message(message.chat.id, "Усе добре, а в тебе?")
+#     elif any(command in text for command in hello | how_are_you_second):
+#         bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
     else:
 # else
         text = message.text.lower()
