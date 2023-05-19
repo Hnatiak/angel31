@@ -88,6 +88,7 @@ def handle_commands(bot, message):
                 match = re.search(r"\bангел число від (\d+) до (\d+)\b", text, re.IGNORECASE)
                 start_num = int(match.group(1))
                 end_num = int(match.group(2))
+
                 if start_num <= end_num:
                     bot.send_message(message.chat.id, str(random.randint(start_num, end_num)))
                 else:
