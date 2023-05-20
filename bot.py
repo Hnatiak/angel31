@@ -273,75 +273,88 @@ def guess_number(message):
             
             
             
+
+# Обробник команди /гра_в_цифри_батл
 @bot.message_handler(commands=['гра_в_цифри_батл'])
-def start_battle_game(message):
+def handle_battle_start(message):
+    chat_id = message.chat.id
+
+    # Перевіряємо, чи батл уже активний в даному чаті
+    if chat_id in battles:
+        bot.send_message(chat_id, 'Батл вже активний!')
+        return
+
+    # Створюємо клавіатуру з кнопкою "Прийняти батл"
+    markup = types.InlineKeyboardMarkup()
+    accept_button = types.InlineKeyboardButton(text='Прийняти батл', callback_data='прийняти_батл')
+    markup.add(accept_button)
+
+    # Надсилаємо повідомлення в груповий чат з кнопкою "Прийняти батл"
+    bot.send_message(chat_id, 'Хто готовий до батлу?', reply_markup=markup)
+
+    # Зберігаємо інформацію про батл
+    battles[chat_id] = {'players': [], 'accepted_players': []}
+
+# Обробник події кліку на кнопку "Прийняти батл"
+@bot.callback_query_handler(func=lambda call: call.data == 'прийняти_батл')
+def handle_battle_accept(call):
+    chat_id = call.message.chat.id
+    user_id = call.from_user.id
+
+    # Перевіряємо, чи батл активний в даному чаті
+    if chat_id not in battles:
+        bot.send_message(chat_id, 'Батл вже завершено!')
+        return
+
+    # Перевіряємо, чи гравець не прийняв батл раніше
+    if user_id in battles[chat_id]['accepted_players']:
+        bot.send_message(chat_id, 'Ви вже прийняли батл!')
+        return
+
+    # Додаємо гравця до списку прийнятих гравців
+    battles[chat_id]['accepted_players'].append(user_id)
+
+    # Перевіряємо, чи є ще мінімум два прийнятих гравці
+    if len(battles[chat_id]['accepted_players']) >= 2:
+        start_battle(chat_id)
+
+# Функція початку батлу
+def start_battle(chat_id):
+    # Видаляємо кнопку "Прийняти батл" з групового чату
+    bot.edit_message_reply_markup(chat_id, message_id=bot_message_id, reply_markup=None)
+
+    # Відправляємо приватне повідомлення обом гравцям
+    players = battles[chat_id]['accepted_players']
+    for player in players:
+        bot.send_message(player, 'Загадайте будь-яке число від 1 до 100')
+
+# Обробник приватного повідомлення з загаданим числом
+@bot.message_handler(func=lambda message: message.chat.type == 'private')
+def handle_private_message(message):
     user_id = message.from_user.id
+    chat_id = message.chat.id
 
-    if user_id in battles:
-        bot.send_message(chat_id=message.chat.id, text='Ви вже приймаєте участь в батлі. Зачекайте на противника або закінчіть поточний батл, прописавши команду /закінчити_батл.')
-        return
+    # Перевіряємо, чи є гравець у списку прийнятих гравців
+    if chat_id not in battles or user_id not in battles[chat_id]['accepted_players']:
+        bot.send_message(user_id, 'Ви не можете грати у батл!')
 
-    battles[user_id] = {
-        'challenger': None,
-        'opponent': None
-    }
+    # Отримуємо загадане число гравця
+    guessed_number = int(message.text)
 
-    bot.send_message(chat_id=message.chat.id, text='Батл "Вгадай число" розпочато. Щоб прийняти участь, напишіть команду /прийняти_батл.')
+    # Отримуємо числа других гравців
+    other_players = [player for player in battles[chat_id]['accepted_players'] if player != user_id]
 
+    # Вгадуємо числа других гравців
+    for player in other_players:
+        opponent_number = random.randint(1, 100)
 
-@bot.message_handler(commands=['прийняти_батл'])
-def accept_battle(message):
-    user_id = message.from_user.id
-
-    if user_id not in battles:
-        bot.send_message(chat_id=message.chat.id, text='Ви не приймаєте участь в батлі. Почніть новий батл, прописавши команду /гра_в_цифри_батл.')
-        return
-
-    battle = battles[user_id]
-
-    if battle['challenger'] is None:
-        bot.send_message(chat_id=message.chat.id, text='Наразі немає жодного противника. Зачекайте, поки хтось викличе вас на батл.')
-        return
-
-    if battle['opponent'] is not None:
-        bot.send_message(chat_id=message.chat.id, text='Батл вже прийнятий двома учасниками. Зачекайте на наступний батл.')
-        return
-
-    battle['opponent'] = user_id
-
-    bot.send_message(chat_id=battle['challenger'], text='Противник з приємністю прийняв ваш виклик. Напишіть цифру, яку хочете загадати.')
-    bot.send_message(chat_id=battle['opponent'], text='Противник викликав вас на батл. Напишіть цифру, яку хочете загадати.')
-
-
-@bot.message_handler(func=lambda message: message.text.isdigit())
-def guess_battle_number(message):
-    user_id = message.from_user.id
-
-    if user_id not in battles:
-        bot.send_message(chat_id=message.chat.id, text='Ви не берете участь в батлі. Почніть новий батл, прописавши команду /гра_в_цифри_батл.')
-        return
-
-    battle = battles[user_id]
-
-    if battle['challenger'] == user_id:
-        opponent_id = battle['opponent']
-        bot.send_message(chat_id=opponent_id, text='Ваш противник відгадує цифру...')
-    elif battle['opponent'] == user_id:
-        opponent_id = battle['challenger']
-        bot.send_message(chat_id=opponent_id, text='Ваш противник відгадує цифру...')
-    else:
-        bot.send_message(chat_id=message.chat.id, text='Наразі немає жодного противника. Зачекайте, поки хтось викличе вас на батл.')
-        return
-
-    number = int(message.text)
-    guessed_number = random.randint(1, 100)
-
-    if number == guessed_number:
-        bot.send_message(chat_id=message.chat.id, text='Вітаємо! Ви вгадали число противника. Ви перемогли!')
-        bot.send_message(chat_id=opponent_id, text='Ваш противник вгадав ваше число. Ви програли.')
-    else:
-        bot.send_message(chat_id=message.chat.id, text='Ви не вгадали число противника. Продовжуйте спробувати!')
-        bot.send_message(chat_id=opponent_id, text='Ваш противник не вгадав ваше число. Продовжуйте спробувати!')
+        # Порівнюємо числа і визначаємо переможця
+        if opponent_number == guessed_number:
+            bot.send_message(chat_id, f"Гравець {user_id} вгадав число противника {opponent_number}. Вітаємо з перемогою!")
+        elif abs(opponent_number - guessed_number) < abs(guessed_number - opponent_number):
+            bot.send_message(chat_id, f"Гравець {user_id} наблизився до числа противника {opponent_number}.")
+        else:
+            bot.send_message(chat_id, f"Гравець {user_id} віддалився від числа противника {opponent_number}.")
 
 
 @bot.message_handler(commands=['закінчити_батл'])
