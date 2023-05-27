@@ -469,6 +469,8 @@ def hug_or_kiss(message):
         elif action == 'образити':
             bot.send_message(message.chat.id, f"😒 {message.from_user.first_name} образив(-ла) {reply_user.first_name}\nПричина: {reason}")
             photo_choices = []
+        elif action in ['потиснути руку', 'пожати руку', 'пожати']:
+            bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} пожав руку {reply_user.first_name}\n{reason}")
         elif action == 'чмок':
             bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} чмокнув(-ла) {reply_user.first_name}\n{reason}")
             photo_choices = ['static/kisses/kiss_one.jpg', 'static/kisses/kiss_two.jpg', 'static/kisses/kiss_three.jpg', 'static/kisses/kiss_four.jpg', 'static/kisses/kiss_one.jpg', 'static/kisses/kiss_five.jpg', 'static/kisses/kiss_six.jpg', 'static/kisses/kiss_seven.jpg']
