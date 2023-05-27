@@ -499,6 +499,8 @@ def hug_or_kiss(message):
         elif action == 'пробач_люба':
             bot.send_message(message.chat.id, f"🥺 {message.from_user.first_name} просить пробачення у своєї половинки {reply_user.first_name}\n{reason}")
             photo_choices = []
+        elif action == 'пожати_руку':
+            bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} пожав руку {reply_user.first_name}\n{reason}")
         else:
             bot.reply_to(message, "Помилка, команда неправильно прописана - перевірте її правильність. Для допомоги пропишіть /help_bot")
             return
