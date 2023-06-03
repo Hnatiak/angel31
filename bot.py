@@ -11,7 +11,7 @@ import time
 #from telebot import types
 #import sqlite3
 #from sqlite3 import Error
-from telebot import TeleBot, types
+# from telebot import TeleBot, types ///////////////////////////////////////////////////////////////////
 #from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 #from telegram.ext import CallbackContext
 # from datetime import datetime, timedelta, time
