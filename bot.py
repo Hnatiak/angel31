@@ -78,6 +78,7 @@ def translate_russian_to_ukrainian(word):
         'канеш': 'звісно',
         'канешно': 'звісно',
         'только': 'тільки/лише',
+        'ладно': 'гаразд/окей',
         # Додайте сюди інші слова та їх переклади
     }
     return translation_dict.get(word, word)
