@@ -13,6 +13,8 @@ def translate_russian_to_ukrainian(word):
         'бистро': 'швидко',
         'больше': 'більше',
         'боюсь': 'боюся',
+        'бес': 'біс',
+        'бесит': 'бісить',
         
 # В
         'вопрос': 'питання/запитання',
@@ -53,6 +55,7 @@ def translate_russian_to_ukrainian(word):
         'канеш': 'звісно',
         'канешно': 'звісно',
         'когда': 'коли',
+        'красивый': 'красивий',
 
 # Л
         'ладно': 'гаразд/окей',
@@ -61,6 +64,7 @@ def translate_russian_to_ukrainian(word):
         'мать': 'мати',
         'меня': 'мене',
         'мы': 'ми',
+        'мой': 'мій',
         'мне': 'мені',
         'молчи': 'мовчи',
         
@@ -74,7 +78,7 @@ def translate_russian_to_ukrainian(word):
         'но': 'але',
         
 # О
-        'от': 'від/з',
+        'от': 'від/з/ось',
         
 # П
         'понятно': 'зрозуміло',
@@ -82,6 +86,7 @@ def translate_russian_to_ukrainian(word):
         'почему': 'чому',
         'почти': 'майже',
         'писать': 'писати',
+        'привык': 'привик/звик',
         
 
 # Р
@@ -103,6 +108,7 @@ def translate_russian_to_ukrainian(word):
         'тяжело': 'важко/тяжко',
 
 # У
+        'уже': 'вже',
 
 # Ф
         'франсузком': 'французькій',
@@ -113,11 +119,12 @@ def translate_russian_to_ukrainian(word):
 # Ц
 
 # Ч
-        
+        'час': 'година',
+        'часов': 'годин',
         'чево': 'чого',
         'чего': 'чого',
         'чиво': 'чого',
-        'чо': 'що',
+        'чо': 'що/чого',
         'что': 'що',
 
 # Ш
@@ -159,23 +166,8 @@ def handle_message(bot, message):
     if translated_words:
         reply = ""
         for word_pair in translated_words:
-            reply += f"{word_pair[0]} "
+            reply += f"{word_pair[0]}, "
         reply += "немає в українській мові, правильно "
         for word_pair in translated_words:
             reply += f"{word_pair[1]} "
         bot.reply_to(message, reply)
-
-# @bot.message_handler(func=lambda message: True)
-# def handle_message(message):
-#     text = message.text.lower()
-#     words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
-
-#     for word in words:
-#         ukrainian_word = translate_russian_to_ukrainian(word)
-#         if word != ukrainian_word:
-#             reply = f"{word} немає в українській мові, правильно {ukrainian_word}"
-#             bot.reply_to(message, reply)
-#             break
-
-
-# bot.polling(none_stop=True)
