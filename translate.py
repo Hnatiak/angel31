@@ -101,7 +101,7 @@ def handle_message(message):
     if translated_words:
         reply = ""
         for word_pair in translated_words:
-            reply += f"{word_pair[0]}"
+            reply += f"{word_pair[0]} "
         reply += "немає в українській мові, правильно "
         for word_pair in translated_words:
             reply += f"{word_pair[1]} "
