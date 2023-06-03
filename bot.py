@@ -24,7 +24,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import speakwithbot.communication as communication
-import translate as translate
+import translate
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -810,13 +810,14 @@ def handle_shower_command(message):
 #             break
 
 
-@bot.message_handler(func=lambda message: True)
-def handle_all_commands(message):
-    communication.handle_commands(bot, message)
+# @bot.message_handler(func=lambda message: True)
+# def handle_all_commands(message):
+#     communication.handle_commands(bot, message)
     
 @bot.message_handler(func=lambda message: True)
 def handle_all_commands(message):
-    translate.handle_commands(bot, message)
+    communication.handle_commands(bot, message)
+    translate.handle_message(bot, message)
 
 
 
