@@ -61,3 +61,6 @@ def handle_message(message):
             reply = f"{word} немає в українській мові, правильно {ukrainian_word}"
             bot.reply_to(message, reply)
             break
+
+
+bot.polling(none_stop=True)
