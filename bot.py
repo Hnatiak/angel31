@@ -85,6 +85,8 @@ def translate_russian_to_ukrainian(word):
         'хотел': 'здоров',
         'иди': 'йди/іди',
         'мать': 'мати',
+        'почему': 'чому',
+        'почти': 'майже',
         # Додайте сюди інші слова та їх переклади
     }
     return translation_dict.get(word, word)
