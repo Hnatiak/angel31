@@ -100,26 +100,21 @@ def translate_russian_to_ukrainian(word):
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
     text = message.text.lower()
-    words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
 
-    for word in words:
+    # Перевіряємо наявність слів зі списку
+    words_to_translate = re.findall(r'\b\w+\b', text)
+    translated_words = []
+
+    for word in words_to_translate:
         ukrainian_word = translate_russian_to_ukrainian(word)
         if word != ukrainian_word:
-            reply = f"{word} немає в українській мові, правильно {ukrainian_word}"
-            bot.reply_to(message, reply)
-            break
+            translated_words.append((word, ukrainian_word))
 
-    pairs = re.findall(r'(\b\w+\b) (\b\w+\b)', text)  # Знаходимо пари слів у реченні
-
-    for pair in pairs:
-        russian_word1 = pair[0]
-        russian_word2 = pair[1]
-        ukrainian_word1 = translate_russian_to_ukrainian(russian_word1)
-        ukrainian_word2 = translate_russian_to_ukrainian(russian_word2)
-        if russian_word1 != ukrainian_word1 or russian_word2 != ukrainian_word2:
-            reply = f"{russian_word1}, {russian_word2} немає в українській мові, правильно {ukrainian_word1}, {ukrainian_word2}"
-            bot.reply_to(message, reply)
-            break
+    if translated_words:
+        reply = ""
+        for word_pair in translated_words:
+            reply += f"{word_pair[0]}, {word_pair[1]} немає в українській мові, є {word_pair[0]}, {word_pair[1]}\n"
+        bot.reply_to(message, reply)
 
 
 bot.polling(none_stop=True)
