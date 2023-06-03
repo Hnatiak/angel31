@@ -34,6 +34,11 @@ bot = telebot.TeleBot(config.TOKEN)
 game_numbers = {}
 battles = {}
 
+
+@bot.message_handler(func=lambda message: True)
+def handle_all_commands(message):
+    translate.handle_message(bot, message)
+
 @bot.message_handler(commands=['написати_власнику'])
 def send_email(message):
     bot.send_message(message.chat.id, "Будь ласка введіть ваше повідомлення:")
@@ -813,10 +818,6 @@ def handle_shower_command(message):
 @bot.message_handler(func=lambda message: True)
 def handle_all_commands(message):
     communication.handle_commands(bot, message)
-
-@bot.message_handler(func=lambda message: True)
-def handle_all_commands(message):
-    translate.handle_message(bot, message)
     
 # @bot.message_handler(func=lambda message: True)
 # def handle_all_commands(message):
