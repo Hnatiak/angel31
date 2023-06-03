@@ -93,6 +93,7 @@ def translate_russian_to_ukrainian(word):
         'ему': 'йому',
         'меня': 'мене',
         'ты': 'ти',
+        'бистро': 'швидко',
         # Додайте сюди інші слова та їх переклади
     }
     return translation_dict.get(word, word)
