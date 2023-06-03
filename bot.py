@@ -11,7 +11,7 @@ import time
 #from telebot import types
 #import sqlite3
 #from sqlite3 import Error
-# from telebot import TeleBot, types ///////////////////////////////////////////////////////////////////
+from telebot import TeleBot, types
 #from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 #from telegram.ext import CallbackContext
 # from datetime import datetime, timedelta, time
@@ -831,8 +831,9 @@ def handle_shower_command(message):
 
 @bot.message_handler(func=lambda message: True)
 def handle_all_commands(message):
-    communication.handle_commands(bot, message)
     translate.handle_message(bot, message)
+    communication.handle_commands(bot, message)
+#     translate.handle_message(bot, message)
 
 
 bot.polling(none_stop=True)
