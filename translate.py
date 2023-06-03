@@ -100,12 +100,10 @@ def translate_russian_to_ukrainian(word):
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
     text = message.text.lower()
+    words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
 
-    # Перевіряємо наявність слів зі списку
-    words_to_translate = re.findall(r'\b\w+\b', text)
     translated_words = []
-
-    for word in words_to_translate:
+    for word in words:
         ukrainian_word = translate_russian_to_ukrainian(word)
         if word != ukrainian_word:
             translated_words.append((word, ukrainian_word))
@@ -113,7 +111,10 @@ def handle_message(message):
     if translated_words:
         reply = ""
         for word_pair in translated_words:
-            reply += f"{word_pair[0]}, {word_pair[1]} немає в українській мові, є {word_pair[0]}, {word_pair[1]}\n"
+            reply += f"{word_pair[0]}, {word_pair[1]} "
+        reply += "немає в українській мові, правильно "
+        for word_pair in translated_words:
+            reply += f"{word_pair[0]}, {word_pair[1]} "
         bot.reply_to(message, reply)
 
 
