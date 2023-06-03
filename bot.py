@@ -82,6 +82,7 @@ def translate_russian_to_ukrainian(word):
         'ребят': 'друзі',
         'даровка': 'здоров',
         'даров': 'здоров',
+        'хотел': 'здоров',
         # Додайте сюди інші слова та їх переклади
     }
     return translation_dict.get(word, word)
