@@ -483,7 +483,7 @@ def hug_or_kiss(message):
             photo_choices = ['static/slaps/slap_one.gif', 'static/slaps/slap_two.gif', 'static/slaps/slap_three.gif', 'static/slaps/slap_four.gif']
         elif action in ('кекс', 'секс'):
             bot.send_message(message.chat.id, f"🥵😫 {message.from_user.first_name} трахнув(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/se/se_one.gif', 'static/se/se_two.gif', 'static/se/se_three.webp']
+            photo_choices = ['static/se/se_one.gif', 'static/se/se_two.gif']
         elif action == 'засос':
             bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} зацілував(-ла) свою половинку {reply_user.first_name}")
             photo_choices = ['static/strong_kiss/strong_kiss_one.gif', 'static/strong_kiss/strong_kiss_two.gif', 'static/strong_kiss/strong_kiss_three.webp']
