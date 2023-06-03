@@ -58,6 +58,24 @@ def send_email_message(message):
 pending_friendships = {}
 friendships = []
 
+def translate_russian_to_ukrainian(word):
+    translation_dict = {
+        'Спасиба': 'Дякую',
+        'што': 'що',
+        'что': 'що',
+        'когда': 'коли',
+        # Додайте сюди інші слова та їх переклади
+    }
+    return translation_dict.get(word, word)
+
+@bot.message_handler(func=lambda message: True)
+def handle_message(message):
+    russian_word = message.text.lower()
+    ukrainian_word = translate_russian_to_ukrainian(russian_word)
+    if russian_word != ukrainian_word:
+        reply = f"{russian_word} немає в українській мові, правильно {ukrainian_word}"
+        bot.reply_to(message, reply)
+
 
 @bot.message_handler(commands=['стосунки'])
 def add_friend(message):
