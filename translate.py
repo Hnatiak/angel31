@@ -43,18 +43,6 @@ bot = telebot.TeleBot(config.TOKEN)
 #     }
 #     return translation_dict.get(word, word)
 
-# @bot.message_handler(func=lambda message: True)
-# def handle_message(message):
-#     text = message.text.lower()
-#     words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
-
-#     for word in words:
-#         ukrainian_word = translate_russian_to_ukrainian(word)
-#         if word != ukrainian_word:
-#             reply = f"{word} немає в українській мові, правильно {ukrainian_word}"
-#             bot.reply_to(message, reply)
-#             break
-
 
 
 def translate_russian_to_ukrainian(word):
@@ -112,11 +100,23 @@ def handle_message(message):
     if translated_words:
         reply = ""
         for word_pair in translated_words:
-            reply += f"{word_pair[0]}, {word_pair[1]} "
+            reply += f"{word_pair[0]}"
         reply += "немає в українській мові, правильно "
         for word_pair in translated_words:
-            reply += f"{word_pair[0]}, {word_pair[1]} "
+            reply += f"{word_pair[1]} "
         bot.reply_to(message, reply)
+
+# @bot.message_handler(func=lambda message: True)
+# def handle_message(message):
+#     text = message.text.lower()
+#     words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
+
+#     for word in words:
+#         ukrainian_word = translate_russian_to_ukrainian(word)
+#         if word != ukrainian_word:
+#             reply = f"{word} немає в українській мові, правильно {ukrainian_word}"
+#             bot.reply_to(message, reply)
+#             break
 
 
 bot.polling(none_stop=True)
