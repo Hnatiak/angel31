@@ -68,6 +68,8 @@ def translate_russian_to_ukrainian(word):
         'как': 'як',
         'где': 'де',
         'но': 'але',
+        'чиво': 'чого',
+        'чо': 'що',
         # Додайте сюди інші слова та їх переклади
     }
     return translation_dict.get(word, word)
