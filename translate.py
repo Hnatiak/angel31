@@ -1,18 +1,9 @@
-import types
+import random
+import re
 import telebot
 import config
-import random
-import logging
-#import datetime
-#from datetime import datetime
-import time
-#from telebot import types
-#import sqlite3
-#from sqlite3 import Error
-from telebot import TeleBot, types
 
 bot = telebot.TeleBot(config.TOKEN)
-
 
 def translate_russian_to_ukrainian(word):
     translation_dict = {
