@@ -5,6 +5,8 @@ import config
 
 bot = telebot.TeleBot(config.TOKEN)
 
+player_scores = {}
+
 def translate_russian_to_ukrainian(word):
     translation_dict = {
 # А
@@ -156,10 +158,44 @@ def translate_russian_to_ukrainian(word):
     }
     return translation_dict.get(word, word)
 
+# @bot.message_handler(func=lambda message: True)
+# def handle_message(bot, message):
+#     text = message.text.lower()
+#     words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
+
+#     translated_words = []
+#     for word in words:
+#         ukrainian_word = translate_russian_to_ukrainian(word)
+#         if word != ukrainian_word:
+#             translated_words.append((word, ukrainian_word))
+
+#     if translated_words:
+#         reply = ""
+#         for word_pair in translated_words:
+#             reply += f"{word_pair[0]}, "
+#         reply += "немає в українській мові, правильно "
+#         for word_pair in translated_words:
+#             reply += f"{word_pair[1]} "
+#         bot.reply_to(message, reply)
+
+
+
+
+def update_scores(user_id, words):
+    player = player_scores.get(user_id, {"score": 0, "quests": 0})
+    if len(words) > 3:
+        player["score"] -= 1
+    else:
+        player["score"] += 1
+        if player["score"] >= 1000:
+            player["quests"] += 1
+            player["score"] = 0
+    player_scores[user_id] = player
+
 @bot.message_handler(func=lambda message: True)
-def handle_message(bot, message):
+def handle_message(message):
     text = message.text.lower()
-    words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
+    words = re.findall(r'\b\w+\b', text)  # Find individual words in the text
 
     translated_words = []
     for word in words:
@@ -175,6 +211,18 @@ def handle_message(bot, message):
         for word_pair in translated_words:
             reply += f"{word_pair[1]} "
         bot.reply_to(message, reply)
+
+    update_scores(message.from_user.id, words)  # Update scores based on the message
+
+@bot.message_handler(commands=['українські_бали'])
+def display_scores(message):
+    reply = "Учасники\n"
+    for player_id, player in player_scores.items():
+        player_name = message.from_user.first_name if player_id == message.from_user.id else ""
+        reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n"
+    bot.reply_to(message, reply)
+
+bot.polling()
 
 
 
