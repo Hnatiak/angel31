@@ -345,7 +345,7 @@ def handle_ukrainian_scores(message):
         ukrainian_word = translate_russian_to_ukrainian(word)
         if word != ukrainian_word:
             if ukrainian_word not in words:
-                player_scores[player_id]['score'] -= 1
+                player_scores[player_id]['score'] += 1
             else:
                 player_scores[player_id]['score'] += 1
             ukrainian_word_count += 1
