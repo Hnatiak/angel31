@@ -327,7 +327,6 @@ def translate_russian_to_ukrainian(word):
 # Я
     }
     return translation_dict.get(word, word)
-
 @bot.message_handler(commands=['українські_бали'])
 def display_scores(message):
     reply = "Учасники\n"
