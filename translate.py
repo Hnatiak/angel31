@@ -339,7 +339,6 @@ def display_scores(message):
 
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
-    translate.handle_message(bot, message)
     player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
     player_name = message.from_user.first_name  # Отримуємо ім'я гравця
 
@@ -363,7 +362,7 @@ def handle_message(message):
             reply += "немає в українській мові, правильно "
             for word_pair in translated_words:
                 reply += f"{word_pair[1]} "
-                player_scores[player_id]['score'] -= 1
+            update_scores(player_id, translated_words)
             bot.reply_to(message, reply)
         else:
             player_scores[player_id]['score'] += 1
