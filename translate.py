@@ -329,6 +329,12 @@ def translate_russian_to_ukrainian(word):
     return translation_dict.get(word, word)
 
 
+    
+def update_scores(player_id, translated_words):
+    player_scores[player_id]['score'] -= 1
+    for word_pair in translated_words:
+        player_scores[player_id]['score'] -= 1
+
 @bot.message_handler(commands=['українські_бали'])
 def display_scores(message):
     reply = "Учасники\n"
