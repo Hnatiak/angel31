@@ -335,29 +335,8 @@ def translate_russian_to_ukrainian(word):
     }
     return translation_dict.get(word, word)
 
-
-
-# @bot.message_handler(func=lambda message: True)
-# def handle_message(message):
-#     text = message.text.lower()
-#     words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
-
-#     translated_words = []
-#     for word in words:
-#         ukrainian_word = translate_russian_to_ukrainian(word)
-#         if word != ukrainian_word:
-#             translated_words.append((word, ukrainian_word))
-
-#     if translated_words:
-#         reply = ""
-#         for word_pair in translated_words:
-#             reply += f"{word_pair[0]}, "
-#         reply += "немає в українській мові, правильно "
-#         for word_pair in translated_words:
-#             reply += f"{word_pair[1]} "
-#         bot.reply_to(message, reply)
 @bot.message_handler(commands=['українські_бали'])
-def display_scores(message):
+def display_scores(bot, message):
     reply = "Учасники\n"
     for player_id, player in player_scores.items():
         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
@@ -366,7 +345,7 @@ def display_scores(message):
 
 
 @bot.message_handler(func=lambda message: True)
-def handle_message(message):
+def handle_message(bot, message):
     player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
     player_name = message.from_user.first_name  # Отримуємо ім'я гравця
 
@@ -400,7 +379,7 @@ def handle_message(message):
             player_scores[player_id]['quests'] += 1
             player_scores[player_id]['score'] = 0
 
-bot.polling()
+# bot.polling()
 
 
 
