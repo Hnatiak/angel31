@@ -287,7 +287,7 @@ QUEST_THRESHOLD = 1000
 
 def translate_russian_to_ukrainian(word):
     translation_dict = {
-        # # А
+       # А
     
 # Б
         'бистро': 'швидко',
@@ -425,16 +425,6 @@ def translate_russian_to_ukrainian(word):
     }
     return translation_dict.get(word, word)
 
-# @bot.message_handler(commands=['українські_бали'])
-# def handle_ukrainian_scores_command(message):
-#     table = "Учасники\n\n"
-#     for player, score_data in player_scores.items():
-#         name = score_data['name']
-#         score = score_data['score']
-#         quests = score_data['quests']
-#         table += f"{name} {score} {quests} виконаних квестів\n"
-
-#     bot.reply_to(message, table)
 @bot.message_handler(commands=['українські_бали'])
 def handle_ukrainian_scores_command(message):
     table = "Учасники\n\n"
@@ -449,12 +439,7 @@ def handle_ukrainian_scores_command(message):
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
     text = message.text.lower()
-    
-    # Remove symbols and extra spaces from the message
-    text = re.sub(r'[^\w\s]', '', text)
-    text = re.sub(r'\s+', ' ', text)
-
-    words = text.split()
+    words = re.findall(r'\b\w+\b', text)
 
     # Get the player's score or initialize it if they are new
     player_id = message.from_user.id
@@ -466,42 +451,7 @@ def handle_message(message):
         }
     player_score = player_scores[player_id]['score']
 
-#     if len(words) > 3:
-#         ukrainian_words = 0
-#         russian_words = 0
-
-#         for word in words:
-#             ukrainian_word = translate_russian_to_ukrainian(word)
-#             if word != ukrainian_word:
-#                 if ukrainian_word in words:
-#                     player_score -= 1
-#                 else:
-#                     player_score += 1
-#                 ukrainian_words += 1
-#             else:
-#                 russian_words += 1
-#                 player_score -= 1
-
-#         # Update the player's score
-#         player_scores[player_id]['score'] = player_score
-
-#         # Check if the player has completed a quest
-#         if player_score >= QUEST_THRESHOLD:
-#             player_scores[player_id]['quests'] += 1
-#             player_scores[player_id]['score'] = 0
-
-#         # Send a reply with the player's score change
-#         if ukrainian_words > 0:
-#             reply = f"Твій баланс: +{ukrainian_words}"
-#         elif russian_words > 0:
-#             reply = f"Твій баланс: -{russian_words}"
-#         else:
-#             reply = "Твій баланс не змінився"
-
-#         bot.reply_to(message, reply)
-
-
-      if len(words) > 3:
+    if len(words) > 3:
         ukrainian_words = 0
         russian_words = 0
 
@@ -517,15 +467,15 @@ def handle_message(message):
                 russian_words += 1
                 player_score -= 1
 
-    # Update the player's score
+        # Update the player's score
         player_scores[player_id]['score'] = player_score
 
-    # Check if the player has completed a quest
+        # Check if the player has completed a quest
         if player_score >= QUEST_THRESHOLD:
             player_scores[player_id]['quests'] += 1
             player_scores[player_id]['score'] = 0
 
-    # Send a reply with the player's score change
+        # Send a reply with the player's score change
         reply = f"Твій баланс: {player_score}"
         bot.reply_to(message, reply)
 
