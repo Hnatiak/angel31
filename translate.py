@@ -328,7 +328,7 @@ def translate_russian_to_ukrainian(word):
     return translation_dict.get(word, word)
 
 @bot.message_handler(commands=['українські_бали'])
-def handle_ukrainian_scores(bot, message):
+def handle_ukrainian_scores(message):
     player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
     player_name = message.from_user.first_name  # Отримуємо ім'я гравця
 
