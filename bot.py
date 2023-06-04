@@ -826,6 +826,7 @@ def handle_shower_command(message):
 
 @bot.message_handler(func=lambda message: True)
 def handle_all_commands(message):
+#     translate.handle_message(bot, message)
     translate.handle_message(bot, message)
     communication.handle_commands(bot, message)
 #     translate.handle_message(bot, message)
