@@ -401,7 +401,7 @@ def handle_message(message):
             player_scores[player_id]['quests'] += 1
             player_scores[player_id]['score'] = 0
 
-# bot.polling()
+bot.polling()
 
 
 
