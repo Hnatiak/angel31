@@ -338,7 +338,7 @@ def translate_russian_to_ukrainian(word):
 
 
 @bot.message_handler(func=lambda message: True)
-def handle_message(bot, message):
+def handle_message(message):
     text = message.text.lower()
     words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
 
