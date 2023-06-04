@@ -422,7 +422,9 @@ def handle_message(bot, message):
         if player_scores[player_id]['score'] >= QUEST_THRESHOLD:
             player_scores[player_id]['quests'] += 1
             player_scores[player_id]['score'] = 0
-
+            
+if __name__ == "__main__":
+    bot.infinity_polling()
 # bot.polling(none_stop=True)
 # bot.polling()
 
