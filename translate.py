@@ -344,7 +344,7 @@ def handle_ukrainian_scores(message):
     for word in words:
         ukrainian_word = translate_russian_to_ukrainian(word)
         if word != ukrainian_word:
-            if ukrainian_word in words:
+            if ukrainian_word not in words:
                 player_scores[player_id]['score'] -= 1
             else:
                 player_scores[player_id]['score'] += 1
@@ -360,7 +360,7 @@ def handle_ukrainian_scores(message):
 
     reply = f"Учасники\n"
     for pid, player in player_scores.items():
-        reply += f"{player_name} {player['score']} {player['quests']} виконаних квестів\n"
+        reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n"
 
     bot.reply_to(message, reply)
 
