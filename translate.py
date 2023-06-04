@@ -338,6 +338,39 @@ def display_scores(message):
     bot.reply_to(message, reply)
     
     
+# @bot.message_handler(func=lambda message: True)
+# def handle_message(message):
+#     player_id = message.from_user.id
+#     player_name = message.from_user.first_name
+
+#     if player_id not in player_scores:
+#         player_scores[player_id] = {'score': 0, 'quests': 0}
+
+#     text = message.text.lower()
+#     words = re.findall(r'\b\w+\b', text)
+
+#     if len(words) > MIN_WORDS_THRESHOLD:
+#         translated_words = []
+#         for word in words:
+#             ukrainian_word = translate_russian_to_ukrainian(word)
+#             if word != ukrainian_word:
+#                 translated_words.append((word, ukrainian_word))
+
+#         if any(word in translated_words for word in words):
+#             reply = "немає в українській мові, правильно що"
+#             for word_pair in translated_words:
+#                 reply += f" {word_pair[1]}"
+#                 player_scores[player_id]['score'] -= 1
+#             bot.reply_to(message, reply)
+#         else:
+#             update_scores(player_id, translated_words)
+
+#         # Перевірка виконання квесту
+#         if player_scores[player_id]['score'] >= QUEST_THRESHOLD:
+#             player_scores[player_id]['quests'] += 1
+#             player_scores[player_id]['score'] = 0
+
+
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
     player_id = message.from_user.id
@@ -359,7 +392,7 @@ def handle_message(message):
         if any(word in translated_words for word in words):
             reply = "немає в українській мові, правильно що"
             for word_pair in translated_words:
-                reply += f" {word_pair[1]}"
+                reply += f" {word_pair[0]}"
                 player_scores[player_id]['score'] -= 1
             bot.reply_to(message, reply)
         else:
@@ -369,6 +402,12 @@ def handle_message(message):
         if player_scores[player_id]['score'] >= QUEST_THRESHOLD:
             player_scores[player_id]['quests'] += 1
             player_scores[player_id]['score'] = 0
+
+def update_scores(player_id, translated_words):
+    player_scores[player_id]['score'] += 1
+    # Додаткова логіка оновлення балів може бути додана тут
+
+bot.polling()
 
 # @bot.message_handler(func=lambda message: True)
 # def handle_message(message):
@@ -405,7 +444,11 @@ def handle_message(message):
 #             player_scores[player_id]['quests'] += 1
 #             player_scores[player_id]['score'] = 0
 
-bot.polling()
+# bot.polling()
+
+
+
+
 
 
 # @bot.message_handler(commands=['українські_бали'])
