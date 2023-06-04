@@ -329,7 +329,7 @@ def translate_russian_to_ukrainian(word):
 
 
 @bot.message_handler(func=lambda message: True)
-def handle_message(bot, message):
+def handle_message(message):
     player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
     player_name = message.from_user.first_name  # Отримуємо ім'я гравця
 
