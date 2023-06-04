@@ -287,7 +287,7 @@ QUEST_THRESHOLD = 1000
 
 def translate_russian_to_ukrainian(word):
     translation_dict = {
-       # А
+# А
     
 # Б
         'бистро': 'швидко',
@@ -458,14 +458,11 @@ def handle_message(message):
         for word in words:
             ukrainian_word = translate_russian_to_ukrainian(word)
             if word != ukrainian_word:
-                if ukrainian_word in words:
-                    player_score -= 1
-                else:
-                    player_score += 1
+                player_score += 1  # Добавити 1 бал за українське слово
                 ukrainian_words += 1
             else:
+                player_score -= 1  # Відняти 1 бал за російське слово
                 russian_words += 1
-                player_score -= 1
 
         # Update the player's score
         player_scores[player_id]['score'] = player_score
