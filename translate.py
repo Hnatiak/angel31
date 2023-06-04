@@ -330,11 +330,6 @@ def translate_russian_to_ukrainian(word):
 
 
     
-def update_scores(player_id, translated_words):
-    player_scores[player_id]['score'] -= 1
-    for word_pair in translated_words:
-        player_scores[player_id]['score'] -= 1
-
 @bot.message_handler(commands=['українські_бали'])
 def display_scores(message):
     reply = "Учасники\n"
@@ -368,7 +363,7 @@ def handle_message(bot, message):
             reply += "немає в українській мові, правильно "
             for word_pair in translated_words:
                 reply += f"{word_pair[1]} "
-            update_scores(player_id, translated_words)
+                player_scores[player_id]['score'] -= 1
             bot.reply_to(message, reply)
         else:
             player_scores[player_id]['score'] += 1
