@@ -268,7 +268,7 @@ QUEST_THRESHOLD = 1000
 
 def translate_russian_to_ukrainian(word):
     translation_dict = {
-        # А
+        # # А
     
 # Б
         'бистро': 'швидко',
@@ -420,7 +420,12 @@ def handle_ukrainian_scores_command(message):
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
     text = message.text.lower()
-    words = re.findall(r'\b\w+\b', text)
+    
+    # Remove symbols and extra spaces from the message
+    text = re.sub(r'[^\w\s]', '', text)
+    text = re.sub(r'\s+', ' ', text)
+
+    words = text.split()
 
     # Get the player's score or initialize it if they are new
     player_id = message.from_user.id
@@ -457,7 +462,13 @@ def handle_message(message):
             player_scores[player_id]['score'] = 0
 
         # Send a reply with the player's score change
-        reply = f"Твій баланс: {player_score} (+{ukrainian_words}, -{russian_words})"
+        if ukrainian_words > 0:
+            reply = f"Твій баланс: +{ukrainian_words}"
+        elif russian_words > 0:
+            reply = f"Твій баланс: -{russian_words}"
+        else:
+            reply = "Твій баланс не змінився"
+
         bot.reply_to(message, reply)
 
 bot.polling()
