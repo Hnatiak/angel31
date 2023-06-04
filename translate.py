@@ -500,6 +500,7 @@ def handle_message(message):
 
 #         bot.reply_to(message, reply)
 
+
       if len(words) > 3:
         ukrainian_words = 0
         russian_words = 0
