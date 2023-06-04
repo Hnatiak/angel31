@@ -352,10 +352,10 @@ def handle_message(message):
         reply += "немає в українській мові, правильно "
         for word_pair in translated_words:
             reply += f"{word_pair[1]} "
-            player_scores[player_id]['score'] += 1
+            player_scores[player_id]['score'] -= 1
         bot.reply_to(message, reply)
     else:
-        player_scores[player_id]['score'] -= 1
+        player_scores[player_id]['score'] += 1
 
     # Перевірка виконання квесту
     if player_scores[player_id]['score'] >= QUEST_THRESHOLD:
