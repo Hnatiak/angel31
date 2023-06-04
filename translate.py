@@ -65,6 +65,7 @@ def translate_russian_to_ukrainian(word):
 
 # Л
         'ладно': 'гаразд/окей',
+        'лан': 'гаразд/окей',
         
 # М
         'мать': 'мати',
@@ -146,6 +147,7 @@ def translate_russian_to_ukrainian(word):
 # Ш
         'шо': 'що',
         'што': 'що',
+        'шучу': 'жартую',
 
 # Щ
 
