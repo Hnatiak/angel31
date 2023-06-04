@@ -24,8 +24,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import speakwithbot.communication as communication
-# import translate
-from translate import display_scores
+import translate
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -830,8 +829,5 @@ def handle_all_commands(message):
     translate.handle_message(bot, message)
     communication.handle_commands(bot, message)
 #     translate.handle_message(bot, message)
-
-if __name__ == "__main__":
-    bot.infinity_polling()
 
 bot.polling(none_stop=True)
