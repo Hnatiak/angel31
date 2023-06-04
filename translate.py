@@ -356,9 +356,8 @@ def translate_russian_to_ukrainian(word):
 #         for word_pair in translated_words:
 #             reply += f"{word_pair[1]} "
 #         bot.reply_to(message, reply)
-
 @bot.message_handler(commands=['українські_бали'])
-def display_scores(bot, message):
+def display_scores(message):
     reply = "Учасники\n"
     for player_id, player in player_scores.items():
         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
