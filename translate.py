@@ -486,70 +486,67 @@ import config
 
 bot = telebot.TeleBot(config.TOKEN)
 
-# Dictionary to store players' scores
-player_scores = {}
-
-# Number of points required to complete a quest
-QUEST_THRESHOLD = 1000
+player_scores = {}  # Словник для збереження балів гравців
+QUEST_THRESHOLD = 1000  # Поріг для виконання квесту
 
 def translate_russian_to_ukrainian(word):
     translation_dict = {
-# А
+        # А
     
-# Б
+        # Б
         'бистро': 'швидко',
         'больше': 'більше',
         'боюсь': 'боюся',
         'бес': 'біс',
         'бесит': 'бісить',
         
-# В
+        # В
         'вопрос': 'питання/запитання',
-# Г
+        # Г
         'где': 'де',
         'говоришь': 'говориш/кажеш/розмовляєш/спілкуєшся',
 
-# Ґ
+        # Ґ
 
-# Д
+        # Д
         'да': 'так/та',
         'даров': 'здоров',
         'даровка': 'здоров',
 
-# Е
+        # Е
         'ему': 'йому',
         'её': 'її',
         'если': 'якщо',
         'ещё': 'ще',
 
-# Є
+        # Є
 
-# Ж
+        # Ж
         'жёстко': 'жорстоко',
 
-# З
+        # З
         'значит': 'значить/це означає',
 
-# И
+        # И
         'иди': 'йди/іди',
 
-# І
+        # І
 
-# Ї
+        # Ї
 
-# Й
+        # Й
 
-# К
+        # К
         'как': 'як',
         'канеш': 'звісно',
         'канешно': 'звісно',
         'когда': 'коли',
         'красивый': 'красивий',
 
-# Л
+        # Л
         'ладно': 'гаразд/окей',
         
-# М
+        # М
         'мать': 'мати',
         'меня': 'мене',
         'мы': 'ми',
@@ -558,8 +555,8 @@ def translate_russian_to_ukrainian(word):
         'молчи': 'мовчи',
         
         
-# Н
-#         'не': 'ні', ВИКЛЮЧЕННЯ
+        # Н
+        # 'не': 'ні', ВИКЛЮЧЕННЯ
         'надо': 'потрібно',
         'немного': 'трохи/трішки',
         'немножко': 'трішки/трошки',
@@ -567,10 +564,10 @@ def translate_russian_to_ukrainian(word):
         'ничего': 'нічого',
         'но': 'але',
         
-# О
+        # О
         'от': 'від/з/ось',
         
-# П
+        # П
         'понятно': 'зрозуміло',
         'похож': 'похожий/схожий/подібний',
         'почему': 'чому',
@@ -579,10 +576,10 @@ def translate_russian_to_ukrainian(word):
         'привык': 'привик/звик',
         
 
-# Р
+        # Р
         'ребят': 'друзі',
 
-# С
+        # С
         'свой': 'свій',
         'сейчас': 'зараз / на даний момент',
         'сложный': 'важкий',
@@ -590,26 +587,26 @@ def translate_russian_to_ukrainian(word):
         'спасибо': 'дякую',
         
 
-# Т
+        # Т
         'такое': 'таке',
-#         'тебе': 'тобі', ВИКЛЮЧЕННЯ
+        # 'тебе': 'тобі', ВИКЛЮЧЕННЯ
         'ты': 'ти',
         'тебя': 'тебе',
         'только': 'тільки/лише',
         'тяжело': 'важко/тяжко',
 
-# У
-#         'уже': 'вже', ВИНЯТОК
+        # У
+        # 'уже': 'вже', ВИНЯТОК
 
-# Ф
+        # Ф
         'франсузком': 'французькій',
 
-# Х
+        # Х
         'хотел': 'здоров',
 
-# Ц
+        # Ц
 
-# Ч
+        # Ч
         'час': 'година',
         'часов': 'годин',
         'чево': 'чого',
@@ -618,72 +615,55 @@ def translate_russian_to_ukrainian(word):
         'чо': 'що/чого',
         'что': 'що',
 
-# Ш
+        # Ш
         'шо': 'що',
         'што': 'що',
 
-# Щ
+        # Щ
 
-# Ь
+        # Ь
 
-# Ю
+        # Ю
 
-# Я
+        # Я
     }
     return translation_dict.get(word, word)
 
 @bot.message_handler(commands=['українські_бали'])
-def handle_ukrainian_scores_command(message):
-    table = "Учасники\n\n"
-    for player, score_data in player_scores.items():
-        name = score_data['name']
-        score = score_data['score']
-        quests = score_data['quests']
-        table += f"{name} {score} {quests} виконаних квестів\n"
+def handle_ukrainian_scores(bot, message):
+    player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
+    player_name = message.from_user.first_name  # Отримуємо ім'я гравця
 
-    bot.reply_to(message, table)
-
-@bot.message_handler(func=lambda message: True)
-def handle_message(message):
-    text = message.text.lower()
-    words = re.findall(r'\b\w+\b', text)
-
-    # Get the player's score or initialize it if they are new
-    player_id = message.from_user.id
     if player_id not in player_scores:
-        player_scores[player_id] = {
-            'name': message.from_user.username or message.from_user.first_name,
-            'score': 0,
-            'quests': 0
-        }
-    player_score = player_scores[player_id]['score']
+        player_scores[player_id] = {'score': 0, 'quests': 0}  # Ініціалізуємо бали гравця
 
-    if len(words) > 3:
-        ukrainian_words = 0
-        russian_words = 0
+    text = message.text.lower()
+    words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
 
-        for word in words:
-            ukrainian_word = translate_russian_to_ukrainian(word)
-            if word != ukrainian_word:
-                if ukrainian_word in words:
-                    player_score -= 1  # Відняти 1 бал, якщо вже є український переклад
-                else:
-                    player_score += 1  # Добавити 1 бал за українське слово
-                ukrainian_words += 1
+    ukrainian_word_count = 0
+    russian_word_count = 0
+
+    for word in words:
+        ukrainian_word = translate_russian_to_ukrainian(word)
+        if word != ukrainian_word:
+            if ukrainian_word in words:
+                player_scores[player_id]['score'] -= 1
             else:
-                russian_words += 1
-                player_score -= 1  # Відняти 1 бал за російське слово
+                player_scores[player_id]['score'] += 1
+            ukrainian_word_count += 1
+        else:
+            russian_word_count += 1
+            player_scores[player_id]['score'] -= 1
 
-        # Update the player's score
-        player_scores[player_id]['score'] = player_score
+    # Перевірка виконання квесту
+    if player_scores[player_id]['score'] >= QUEST_THRESHOLD:
+        player_scores[player_id]['quests'] += 1
+        player_scores[player_id]['score'] = 0
 
-        # Check if the player has completed a quest
-        if player_score >= QUEST_THRESHOLD:
-            player_scores[player_id]['quests'] += 1
-            player_scores[player_id]['score'] = 0
+    reply = f"Учасники\n"
+    for pid, player in player_scores.items():
+        reply += f"{player_name} {player['score']} {player['quests']} виконаних квестів\n"
 
-        # Send a reply with the player's score change
-        reply = f"Твій баланс: {player_score}"
-        bot.reply_to(message, reply)
+    bot.reply_to(message, reply)
 
 bot.polling()
