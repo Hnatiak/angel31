@@ -132,6 +132,7 @@ def translate_russian_to_ukrainian(word):
 
 # Х
         'хотел': 'здоров',
+        'хуйня': 'фігня',
 
 # Ц
 
