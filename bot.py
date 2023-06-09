@@ -62,6 +62,17 @@ friendships = []
 ukrainian_alphabet = ['а', 'б', 'в', 'г', 'ґ', 'д', 'е', 'є', 'ж', 'з', 'и', 'і', 'ї', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ю', 'я']
 
 pending_games = {}
+game_numbers = {}
+
+@bot.message_handler(func=lambda message: True)
+def handle_other_messages(message):
+    chat_id = message.chat.id
+    if chat_id in pending_games:
+        if message.text.isdigit():
+            bot.send_message(chat_id, 'Наразі триває гра в слова. Введіть слово, щоб грати.')
+        else:
+            bot.send_message(chat_id, 'Будь ласка, введіть число або почніть нову гру.')
+
 
 @bot.message_handler(commands=['гра_в_слова'])
 def start_game(message):
@@ -73,6 +84,7 @@ def start_game(message):
         random_letter = random.choice(ukrainian_alphabet)
         pending_games[chat_id]['current_letter'] = random_letter
         bot.send_message(chat_id, f'Гра в слова почата. Перше слово починається на букву "{random_letter.upper()}"')
+
 
 @bot.message_handler(func=lambda message: message.text.isalpha() and len(message.text) == 1)
 def play_game(message):
@@ -94,209 +106,6 @@ def play_game(message):
             bot.send_message(chat_id, 'Це слово вже було використано. Введіть нове слово.')
     else:
         bot.send_message(chat_id, 'Слово не починається на потрібну букву. Спробуйте ще раз.')
-
-@bot.message_handler(func=lambda message: True)
-def handle_other_messages(message):
-    chat_id = message.chat.id
-    if chat_id in pending_games:
-        if message.text.isdigit():
-            bot.send_message(chat_id, 'Наразі триває гра в слова. Введіть слово, щоб грати.')
-        else:
-            bot.send_message(chat_id, 'Будь ласка, введіть число або почніть нову гру.')
-
-
-
-
-
-
-# ukrainian_alphabet = ['а', 'б', 'в', 'г', 'ґ', 'д', 'е', 'є', 'ж', 'з', 'и', 'і', 'ї', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ю', 'я']
-
-# pending_games = {}
-
-# @bot.message_handler(commands=['гра_в_слова'])
-# def start_game(message):
-#     chat_id = message.chat.id
-#     if chat_id in pending_games:
-#         bot.send_message(chat_id, 'Гра вже розпочата. Дочекайтеся своєї черги.')
-#     else:
-#         pending_games[chat_id] = {'current_letter': '', 'participants': [], 'used_words': set()}
-#         random_letter = random.choice(ukrainian_alphabet)
-#         pending_games[chat_id]['current_letter'] = random_letter
-#         bot.send_message(chat_id, f'Гра в слова почата. Перше слово починається на букву "{random_letter.upper()}"')
-
-# @bot.message_handler(func=lambda message: message.text.isalpha() and len(message.text) == 1)
-# def play_game(message):
-#     chat_id = message.chat.id
-#     if chat_id not in pending_games:
-#         return
-
-#     current_game = pending_games[chat_id]
-#     current_letter = current_game['current_letter']
-#     word = message.text.lower()
-
-#     if not current_letter or word.startswith(current_letter):
-#         if detect(word) == 'uk':
-#             if word not in current_game['used_words']:
-#                 current_game['current_letter'] = word[-1]
-#                 current_game['participants'].append((message.from_user.username, word))
-#                 current_game['used_words'].add(word)
-#                 bot.send_message(chat_id, f'Наступне слово повинно починатися на букву "{word[-1].upper()}"')
-#             else:
-#                 bot.send_message(chat_id, 'Це слово вже було використано. Введіть нове слово.')
-#         else:
-#             bot.send_message(chat_id, 'Слово не належить українській мові. Введіть слово українською.')
-#     else:
-#         bot.send_message(chat_id, 'Слово не починається на потрібну букву. Спробуйте ще раз.')
-
-# @bot.message_handler(func=lambda message: True)
-# def handle_other_messages(message):
-#     chat_id = message.chat.id
-#     if chat_id in pending_games:
-#         bot.send_message(chat_id, 'Наразі триває гра в слова. Зачекайте, поки поточна гра завершиться.')
-
-@bot.message_handler(commands=['стосунки'])
-def add_friend(message):
-    user1_id = message.chat.id
-    if len(message.text.split()) == 1:
-        bot.send_message(user1_id, 'Будь ласка, введіть імя користувача, з яким хочете одружитися.')
-        return
-    user2_name = message.text.split()[1]
-    if not user2_name.startswith('@'):
-        bot.send_message(user1_id, 'Будь ласка, введіть імя користувача у форматі @username.')
-        return
-    user2_username = user2_name[1:]
-
-    pending_friendships[user1_id] = {'username': user2_username, 'time': datetime.now(), 'user2_id': None}
-
-    confirmation_message = f'{message.from_user.username} хоче бути разом з тобою назавжди, ти погодишся??'
-    confirmation_markup = types.InlineKeyboardMarkup()
-    confirmation_yes_button = types.InlineKeyboardButton('Yes',
-                                                         callback_data=f'confirm_friendship:{user1_id}:{user2_username}:yes')
-    confirmation_no_button = types.InlineKeyboardButton('No',
-                                                        callback_data=f'confirm_friendship:{user1_id}:{user2_username}:no')
-    confirmation_markup.add(confirmation_yes_button, confirmation_no_button)
-    bot.send_message(message.chat.id, confirmation_message, reply_markup=confirmation_markup)
-
-
-@bot.callback_query_handler(lambda query: query.data.startswith('confirm_friendship'))
-def confirm_friendship(callback_query):
-    # Get the IDs of the users involved in the friendship request
-    user1_id = callback_query.message.chat.id
-    user2_username = callback_query.data.split(':')[2]
-
-    # Check if the friend request was sent less than 60 seconds ago
-    if user1_id in pending_friendships and user2_username == pending_friendships[user1_id]['username'] \
-            and (datetime.now() - pending_friendships[user1_id]['time']).total_seconds() < 60:
-
-        if callback_query.data.endswith('yes'):
-            print("Yes button clicked")  # add this line
-            # Update the database to record the friendship
-            user2_id = get_user_id_from_username(user2_username)
-            if user2_id:
-                friendships.append(
-                    {'user1_id': user1_id, 'user2_id': user2_id, 'date': datetime.now(), 'confirmed': True})
-                bot.send_message(user1_id, f"Твоя половинка {user2_username} підтвердив(-ла) твоє прохання!")
-                bot.send_message(user2_id, f"Ти дружиш з {callback_query.from_user.username}!")
-            else:
-                bot.send_message(user1_id, f"Не вдалося знайти користувача з ім'ям {user2_username}.")
-        else:
-            bot.send_message(user1_id, f"Твоя половинка {user2_username} відхилив(-ла) твоє прохання.")
-
-        del pending_friendships[user1_id]
-
-    else:
-        bot.send_message(user1_id, 'Вибачте, термін дії вашого запиту про дружби минув.')
-
-#@bot.message_handler(commands=['мої_стосунки'])
-#def show_friendship_date(message):
-#    user_id = message.chat.id
-#    # Check if there is a confirmed friendship involving the user
-#    friendship_date = get_friendship_date(user_id)
-#    if friendship_date:
-#        bot.send_message(user_id, f"Ви разом вже з {friendship_date.strftime('%d.%m.%Y')}!")
-#    else:
-#        bot.send_message(user_id, "Ви ще не маєте підтверджених в стосунках.")
-#
-#def get_friendship_date(user_id):
-    # Check the database for a confirmed friendship involving the user
-    # Return the date of the friendship, or None if there is no confirmed friendship
-    # ...
-#    return datetime.now() # Placeholder value, replace with actual database lookup
-
-#@bot.message_handler(commands=['розірвати_стосунки'])
-#def remove_friendship(message):
-#    user_id = message.chat.id
-#    # Check if there is a confirmed friendship involving the user
-#    if get_friendship_date(user_id):
-#        # Update the database to remove the friendship
-#        # ...
-#
-#        bot.send_message(user_id, "Ваші стосунки були розірвані.")
-#    else:
-#        bot.send_message(user_id, "Ви ще не маєте підтверджених в стосунках.")
-
-#@bot.message_handler(commands=['мої_стосунки'])
-#def show_friendship_date(message):
-#    user_id = message.chat.id
-#    # Check if there is a confirmed friendship involving the user
-#    friendship_date = get_friendship_date(user_id)
-#    if friendship_date:
-#        bot.send_message(user_id, f"Ви дружите з {friendship_date.strftime('%d.%m.%Y %H:%M:%S')}.")
-#    else:
-#        bot.send_message(user_id, "Ви ще не в стосунках. Для того, щоб бути в стосунках, введіть /стосунки @імя_користувача.")
-
-
-@bot.message_handler(commands=['мої_стосунки'])
-def show_friendship_date(message):
-    user_id = message.chat.id
-    # Check if there is a confirmed friendship involving the user
-    friendship_date = None
-    for friendship in friendships:
-        if friendship['user1_id'] == user_id and friendship['confirmed']:
-            friendship_date = friendship['date']
-            break
-        elif friendship['user2_id'] == user_id and friendship['confirmed']:
-            friendship_date = friendship['date']
-            break
-    if friendship_date:
-        bot.send_message(user_id, f"Ви дружите з {friendship_date.strftime('%d.%m.%Y %H:%M:%S')}.")
-    else:
-        bot.send_message(user_id, "Ви ще не в стосунках. Для того, щоб бути в стосунках, введіть        /стосунки @імя_користувача.")
-
-def get_friendship_date(user_id):
-    # Check the database for a confirmed friendship involving the user
-    # Return the date of the friendship, or None if there is no confirmed friendship
-    # ...
-    return datetime.now() # Placeholder value, replace with actual database lookup
-
-@bot.message_handler(commands=['розірвати_стосунки'])
-def remove_friendship(message):
-    user_id = message.chat.id
-    # Check if there is a confirmed friendship involving the user
-    friendship_date = get_friendship_date(user_id)
-    if friendship_date:
-        # Update the database to remove the friendship
-        # ...
-        bot.send_message(user_id, "Ваші стосунки були розірвані.")
-    else:
-        bot.send_message(user_id, "Ви ще не в стосунках. Для того, щоб бути в стосунках, введіть /стосунки @імя_користувача.")
-
-
-@bot.message_handler(commands=['help_bot', 'start'])
-def greeting(message):
-    bot.send_message(message.chat.id, "У мене доступні такі команди як:\n\n<b>/від вдарити</b>, \n<b>/від обняти</b>, "
-                                      "\n<b>/від поцілувати</b> \n<b>/від образити</b>\n<b>/від чмок</b>\n<b>/від шльоп</b>"
-                                      "\n<b>/від сильнийшльоп</b>\n<b>/від кекс або ж /від секс</b>\n<b>/від онанізм</b>"
-                                      "\n<b>/від засос</b>\n<b>/стать</b>\n<b>Відповідати на запитання на скільки хтось розумний чи дурний</b>"
-                                      "\n<b>Відповідати на запитання так чи ні (В кінці обовязково напиши ?, для прикладу: ангел таке можливе?)</b>"
-                                      "\n\nТакож я маю звичайні команди як:\n\n<b>показати ніжки</b>\n\n<b>А також я можу надавати інформацію про те як купити "
-                                      "піар або адмінку, просто пропиши: купити піар, або купити адмінку</b>\n\n Також у мене є ігри як:\n\n/гра_в_цифри", parse_mode='html', disable_web_page_preview=True)
-    bot.send_photo(message.chat.id, open('static/01.jpg', 'rb'))
-
-
-user_choices = {}
-
-gender = ""
 
 
 @bot.message_handler(commands=['гра_в_цифри'])
@@ -376,6 +185,140 @@ def end_number_game(message):
         bot.send_message(chat_id=message.chat.id, text='Гра була закінчена.')
     else:
         bot.send_message(chat_id=message.chat.id, text='Ви не брали участі в жодній грі.')
+
+
+
+
+
+
+# ukrainian_alphabet = ['а', 'б', 'в', 'г', 'ґ', 'д', 'е', 'є', 'ж', 'з', 'и', 'і', 'ї', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ю', 'я']
+
+# pending_games = {}
+
+# @bot.message_handler(commands=['гра_в_слова'])
+# def start_game(message):
+#     chat_id = message.chat.id
+#     if chat_id in pending_games:
+#         bot.send_message(chat_id, 'Гра вже розпочата. Дочекайтеся своєї черги.')
+#     else:
+#         pending_games[chat_id] = {'current_letter': '', 'participants': [], 'used_words': set()}
+#         random_letter = random.choice(ukrainian_alphabet)
+#         pending_games[chat_id]['current_letter'] = random_letter
+#         bot.send_message(chat_id, f'Гра в слова почата. Перше слово починається на букву "{random_letter.upper()}"')
+
+# @bot.message_handler(func=lambda message: message.text.isalpha() and len(message.text) == 1)
+# def play_game(message):
+#     chat_id = message.chat.id
+#     if chat_id not in pending_games:
+#         return
+
+#     current_game = pending_games[chat_id]
+#     current_letter = current_game['current_letter']
+#     word = message.text.lower()
+
+#     if not current_letter or word.startswith(current_letter):
+#         if detect(word) == 'uk':
+#             if word not in current_game['used_words']:
+#                 current_game['current_letter'] = word[-1]
+#                 current_game['participants'].append((message.from_user.username, word))
+#                 current_game['used_words'].add(word)
+#                 bot.send_message(chat_id, f'Наступне слово повинно починатися на букву "{word[-1].upper()}"')
+#             else:
+#                 bot.send_message(chat_id, 'Це слово вже було використано. Введіть нове слово.')
+#         else:
+#             bot.send_message(chat_id, 'Слово не належить українській мові. Введіть слово українською.')
+#     else:
+#         bot.send_message(chat_id, 'Слово не починається на потрібну букву. Спробуйте ще раз.')
+
+# @bot.message_handler(func=lambda message: True)
+# def handle_other_messages(message):
+#     chat_id = message.chat.id
+#     if chat_id in pending_games:
+#         bot.send_message(chat_id, 'Наразі триває гра в слова. Зачекайте, поки поточна гра завершиться.')
+
+
+user_choices = {}
+
+gender = ""
+
+
+# @bot.message_handler(commands=['гра_в_цифри'])
+# def start_number_game(message):
+#     user_id = message.from_user.id
+
+#     if user_id in game_numbers:
+#         bot.send_message(chat_id=message.chat.id, text='Ви вже граєте в гру. Спробуйте закінчити попередню гру, прописавши команду /закінчити_гру.')
+#         return
+
+#     game_numbers[user_id] = {
+#         'number': random.randint(1, 100),
+#         'attempts_left': None
+#     }
+
+#     bot.send_message(chat_id=message.chat.id, text='Гра "Вгадай число" розпочата. Вгадайте число від 1 до 100.')
+
+
+# @bot.message_handler(commands=['гра_в_цифри_10', 'гра_в_цифри_9', 'гра_в_цифри_8', 'гра_в_цифри_7', 'гра_в_цифри_6', 'гра_в_цифри_5', 'гра_в_цифри_4', 'гра_в_цифри_3', 'гра_в_цифри_2', 'гра_в_цифри_1'])
+# def start_number_game_with_attempts(message):
+#     user_id = message.from_user.id
+
+#     if user_id in game_numbers:
+#         bot.send_message(chat_id=message.chat.id, text='Ви вже граєте в гру. Спробуйте закінчити попередню гру, прописавши команду /закінчити_гру.')
+#         return
+
+#     attempts_left = int(message.text.split('_')[-1])
+#     if attempts_left < 1 or attempts_left > 10:
+#         bot.send_message(chat_id=message.chat.id, text='Кількість спроб має бути від 1 до 10.')
+#         return
+
+#     game_numbers[user_id] = {
+#         'number': random.randint(1, 100),
+#         'attempts_left': attempts_left
+#     }
+
+#     bot.send_message(chat_id=message.chat.id, text=f'Гра "Вгадай число" розпочата. Вгадайте число від 1 до 100. У вас є {attempts_left} спроб.')
+
+
+# @bot.message_handler(func=lambda message: message.text.isdigit())
+# def guess_number(message):
+#     user_id = message.from_user.id
+
+#     if user_id not in game_numbers:
+#         bot.send_message(chat_id=message.chat.id, text='Ви ще не почали гру. Почніть гру командою /гра_в_цифри або /гра_в_цифри_(число від 1 - 10 спроб).')
+#         return
+
+#     game = game_numbers[user_id]
+#     number = game['number']
+#     attempts_left = game['attempts_left']
+
+#     guess = int(message.text)
+
+#     if guess == number:
+#         bot.send_message(chat_id=message.chat.id, text='Вітаю! Ви вгадали число!')
+#         del game_numbers[user_id]
+#     elif guess < number:
+#         bot.send_message(chat_id=message.chat.id, text='Загадане число більше.')
+#     else:
+#         bot.send_message(chat_id=message.chat.id, text='Загадане число менше.')
+
+#     if attempts_left is not None:
+#         game['attempts_left'] -= 1
+#         if game['attempts_left'] == 0:
+#             bot.send_message(chat_id=message.chat.id, text=f'Гра закінчена. Ви вичерпали всі спроби. Загадане число було {number}.')
+#             del game_numbers[user_id]
+#         else:
+#             bot.send_message(chat_id=message.chat.id, text=f'У вас залишилося {game["attempts_left"]} спроб.')
+
+
+# @bot.message_handler(commands=['закінчити_гру'])
+# def end_number_game(message):
+#     user_id = message.from_user.id
+
+#     if user_id in game_numbers:
+#         del game_numbers[user_id]
+#         bot.send_message(chat_id=message.chat.id, text='Гра була закінчена.')
+#     else:
+#         bot.send_message(chat_id=message.chat.id, text='Ви не брали участі в жодній грі.')
 
 
 @bot.message_handler(commands=['стать'])
