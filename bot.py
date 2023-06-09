@@ -104,6 +104,56 @@ def handle_other_messages(message):
     if chat_id in pending_games:
         bot.send_message(chat_id, 'Наразі триває гра в слова. Зачекайте, поки поточна гра завершиться.')
 
+
+
+
+
+
+# ukrainian_alphabet = ['а', 'б', 'в', 'г', 'ґ', 'д', 'е', 'є', 'ж', 'з', 'и', 'і', 'ї', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ю', 'я']
+
+# pending_games = {}
+
+# @bot.message_handler(commands=['гра_в_слова'])
+# def start_game(message):
+#     chat_id = message.chat.id
+#     if chat_id in pending_games:
+#         bot.send_message(chat_id, 'Гра вже розпочата. Дочекайтеся своєї черги.')
+#     else:
+#         pending_games[chat_id] = {'current_letter': '', 'participants': [], 'used_words': set()}
+#         random_letter = random.choice(ukrainian_alphabet)
+#         pending_games[chat_id]['current_letter'] = random_letter
+#         bot.send_message(chat_id, f'Гра в слова почата. Перше слово починається на букву "{random_letter.upper()}"')
+
+# @bot.message_handler(func=lambda message: message.text.isalpha() and len(message.text) == 1)
+# def play_game(message):
+#     chat_id = message.chat.id
+#     if chat_id not in pending_games:
+#         return
+
+#     current_game = pending_games[chat_id]
+#     current_letter = current_game['current_letter']
+#     word = message.text.lower()
+
+#     if not current_letter or word.startswith(current_letter):
+#         if detect(word) == 'uk':
+#             if word not in current_game['used_words']:
+#                 current_game['current_letter'] = word[-1]
+#                 current_game['participants'].append((message.from_user.username, word))
+#                 current_game['used_words'].add(word)
+#                 bot.send_message(chat_id, f'Наступне слово повинно починатися на букву "{word[-1].upper()}"')
+#             else:
+#                 bot.send_message(chat_id, 'Це слово вже було використано. Введіть нове слово.')
+#         else:
+#             bot.send_message(chat_id, 'Слово не належить українській мові. Введіть слово українською.')
+#     else:
+#         bot.send_message(chat_id, 'Слово не починається на потрібну букву. Спробуйте ще раз.')
+
+# @bot.message_handler(func=lambda message: True)
+# def handle_other_messages(message):
+#     chat_id = message.chat.id
+#     if chat_id in pending_games:
+#         bot.send_message(chat_id, 'Наразі триває гра в слова. Зачекайте, поки поточна гра завершиться.')
+
 @bot.message_handler(commands=['стосунки'])
 def add_friend(message):
     user1_id = message.chat.id
