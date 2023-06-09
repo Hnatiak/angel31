@@ -63,7 +63,7 @@ ukrainian_alphabet = ['а', 'б', 'в', 'г', 'ґ', 'д', 'е', 'є', 'ж', 'з'
 
 pending_games = {}
 
-@bot.message_handler(commands=['start'])
+@bot.message_handler(commands=['гра_в_слова'])
 def start_game(message):
     chat_id = message.chat.id
     if chat_id in pending_games:
