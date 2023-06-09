@@ -63,7 +63,7 @@ ukrainian_alphabet = ['а', 'б', 'в', 'г', 'ґ', 'д', 'е', 'є', 'ж', 'з'
 
 pending_games = {}
 
-@bot.message_handler(commands=['гра_в_слова'])
+@bot.message_handler(commands=['start'])
 def start_game(message):
     chat_id = message.chat.id
     if chat_id in pending_games:
@@ -85,16 +85,13 @@ def play_game(message):
     word = message.text.lower()
 
     if not current_letter or word.startswith(current_letter):
-        if detect(word) == 'uk':
-            if word not in current_game['used_words']:
-                current_game['current_letter'] = word[-1]
-                current_game['participants'].append((message.from_user.username, word))
-                current_game['used_words'].add(word)
-                bot.send_message(chat_id, f'Наступне слово повинно починатися на букву "{word[-1].upper()}"')
-            else:
-                bot.send_message(chat_id, 'Це слово вже було використано. Введіть нове слово.')
+        if word not in current_game['used_words']:
+            current_game['current_letter'] = word[-1]
+            current_game['participants'].append((message.from_user.username, word))
+            current_game['used_words'].add(word)
+            bot.send_message(chat_id, f'Наступне слово повинно починатися на букву "{word[-1].upper()}"')
         else:
-            bot.send_message(chat_id, 'Слово не належить українській мові. Введіть слово українською.')
+            bot.send_message(chat_id, 'Це слово вже було використано. Введіть нове слово.')
     else:
         bot.send_message(chat_id, 'Слово не починається на потрібну букву. Спробуйте ще раз.')
 
