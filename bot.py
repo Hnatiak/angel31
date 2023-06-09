@@ -95,11 +95,14 @@ def play_game(message):
     else:
         bot.send_message(chat_id, 'Слово не починається на потрібну букву. Спробуйте ще раз.')
 
-# @bot.message_handler(func=lambda message: True)
-# def handle_other_messages(message):
-#     chat_id = message.chat.id
-#     if chat_id in pending_games:
-#         bot.send_message(chat_id, 'Наразі триває гра в слова. Зачекайте, поки поточна гра завершиться.')
+@bot.message_handler(func=lambda message: True)
+def handle_other_messages(message):
+    chat_id = message.chat.id
+    if chat_id in pending_games:
+        if message.text.isdigit():
+            bot.send_message(chat_id, 'Наразі триває гра в слова. Введіть слово, щоб грати.')
+        else:
+            bot.send_message(chat_id, 'Будь ласка, введіть число або почніть нову гру.')
 
 
 
