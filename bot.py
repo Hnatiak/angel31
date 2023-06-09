@@ -25,6 +25,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import speakwithbot.communication as communication
 # import translate
+from langdetect import detect
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -58,6 +59,43 @@ def send_email_message(message):
 
 pending_friendships = {}
 friendships = []
+pending_games = {}
+
+
+@bot.message_handler(commands=['гра_в_слова'])
+def start_game(message):
+    chat_id = message.chat.id
+    if chat_id in pending_games:
+        bot.send_message(chat_id, 'Гра вже розпочата. Дочекайтеся своєї черги.')
+    else:
+        pending_games[chat_id] = {'current_letter': '', 'participants': []}
+        bot.send_message(chat_id, 'Гра в слова почата. Перше слово починається на будь-яку українську букву.')
+
+@bot.message_handler(func=lambda message: message.text.isalpha() and len(message.text) == 1)
+def play_game(message):
+    chat_id = message.chat.id
+    if chat_id not in pending_games:
+        return
+
+    current_game = pending_games[chat_id]
+    current_letter = current_game['current_letter']
+    word = message.text.lower()
+
+    if not current_letter or word.startswith(current_letter):
+        if detect(word) == 'uk':
+            current_game['current_letter'] = word[-1]
+            current_game['participants'].append((message.from_user.username, word))
+            bot.send_message(chat_id, f'Наступне слово повинно починатися на букву "{word[-1].upper()}"')
+        else:
+            bot.send_message(chat_id, 'Слово не належить українській мові. Введіть слово українською.')
+    else:
+        bot.send_message(chat_id, 'Слово не починається на потрібну букву. Спробуйте ще раз.')
+
+@bot.message_handler(func=lambda message: True)
+def handle_other_messages(message):
+    chat_id = message.chat.id
+    if chat_id in pending_games:
+        bot.send_message(chat_id, 'Наразі триває гра в слова. Зачекайте, поки поточна гра завершиться.')
 
 
 @bot.message_handler(commands=['стосунки'])
