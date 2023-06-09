@@ -32,9 +32,6 @@ logger = logging.getLogger(__name__)
 
 bot = telebot.TeleBot(config.TOKEN)
 
-game_numbers = {}
-battles = {}
-
 # @bot.message_handler(commands=['написати_власнику'])
 # def send_email(message):
 #     bot.send_message(message.chat.id, "Будь ласка введіть ваше повідомлення:")
@@ -63,10 +60,6 @@ ukrainian_alphabet = ['а', 'б', 'в', 'г', 'ґ', 'д', 'е', 'є', 'ж', 'з'
 
 pending_games = {}
 game_numbers = {}
-
-ukrainian_alphabet = ['а', 'б', 'в', 'г', 'ґ', 'д', 'е', 'є', 'ж', 'з', 'и', 'і', 'ї', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ю', 'я']
-
-pending_games = {}
 
 @bot.message_handler(commands=['гра_в_слова'])
 def start_game(message):
