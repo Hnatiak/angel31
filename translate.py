@@ -211,8 +211,8 @@ MIN_WORDS_THRESHOLD = 3
 
 def translate_russian_to_ukrainian(word):
     translation_dict = {
-#         'ё': 'їо',
-#         'ы': 'и',
+        'ё': 'їо',
+        'ы': 'и',
 # А
     
 # Б
@@ -412,26 +412,6 @@ def translate_russian_to_ukrainian(word):
             
 # bot.polling(none_stop=True)
 # bot.polling()
-
-
-import random
-import re
-import telebot
-import config
-
-bot = telebot.TeleBot(config.TOKEN)
-
-player_scores = {}  # Словник для збереження балів гравців
-QUEST_THRESHOLD = 1000  # Поріг для виконання квесту
-MIN_WORDS_THRESHOLD = 3
-
-def translate_russian_to_ukrainian(word):
-    translation_dict = {
-        'ё': 'їо',
-        'ы': 'и',
-        # Решта перекладів
-    }
-    return translation_dict.get(word, word)
 
 @bot.message_handler(commands=['українські_бали'])
 def display_scores(message):
