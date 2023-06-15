@@ -198,261 +198,210 @@
 
 
 
-import random
-import re
-import telebot
-import config
+# import random
+# import re
+# import telebot
+# import config
 
-bot = telebot.TeleBot(config.TOKEN)
+# bot = telebot.TeleBot(config.TOKEN)
 
-player_scores = {}  # Словник для збереження балів гравців
-QUEST_THRESHOLD = 1000  # Поріг для виконання квесту
-MIN_WORDS_THRESHOLD = 3
+# player_scores = {}  # Словник для збереження балів гравців
+# QUEST_THRESHOLD = 1000  # Поріг для виконання квесту
+# MIN_WORDS_THRESHOLD = 3
 
-def translate_russian_to_ukrainian(word):
-    translation_dict = {
-# А
+# def translate_russian_to_ukrainian(word):
+#     translation_dict = {
+# # А
     
-# Б
-        'бистро': 'швидко',
-        'больше': 'більше',
-        'боюсь': 'боюся',
-        'бес': 'біс',
-        'бесит': 'бісить',
+# # Б
+#         'бистро': 'швидко',
+#         'больше': 'більше',
+#         'боюсь': 'боюся',
+#         'бес': 'біс',
+#         'бесит': 'бісить',
         
-# В
-        'вопрос': 'питання/запитання',
-# Г
-        'где': 'де',
-        'говоришь': 'говориш/кажеш/розмовляєш/спілкуєшся',
+# # В
+#         'вопрос': 'питання/запитання',
+# # Г
+#         'где': 'де',
+#         'говоришь': 'говориш/кажеш/розмовляєш/спілкуєшся',
 
-# Ґ
+# # Ґ
 
-# Д
-        'да': 'так/та',
-        'даров': 'здоров',
-        'даровка': 'здоров',
+# # Д
+#         'да': 'так/та',
+#         'даров': 'здоров',
+#         'даровка': 'здоров',
 
-# Е
-        'ему': 'йому',
-        'её': 'її',
-        'если': 'якщо',
-        'ещё': 'ще',
+# # Е
+#         'ему': 'йому',
+#         'её': 'її',
+#         'если': 'якщо',
+#         'ещё': 'ще',
 
-# Є
+# # Є
 
-# Ж
-        'жёстко': 'жорстоко',
+# # Ж
+#         'жёстко': 'жорстоко',
 
-# З
-        'значит': 'значить/це означає',
+# # З
+#         'значит': 'значить/це означає',
 
-# И
-        'иди': 'йди/іди',
+# # И
+#         'иди': 'йди/іди',
 
-# І
+# # І
 
-# Ї
+# # Ї
 
-# Й
+# # Й
 
-# К
-        'как': 'як',
-        'канеш': 'звісно',
-        'канешно': 'звісно',
-        'когда': 'коли',
-        'красивый': 'красивий',
+# # К
+#         'как': 'як',
+#         'канеш': 'звісно',
+#         'канешно': 'звісно',
+#         'когда': 'коли',
+#         'красивый': 'красивий',
 
-# Л
-        'ладно': 'гаразд/окей',
+# # Л
+#         'ладно': 'гаразд/окей',
         
-# М
-        'мать': 'мати',
-        'меня': 'мене',
-        'мы': 'ми',
-        'мой': 'мій',
-        'мне': 'мені',
-        'молчи': 'мовчи',
+# # М
+#         'мать': 'мати',
+#         'меня': 'мене',
+#         'мы': 'ми',
+#         'мой': 'мій',
+#         'мне': 'мені',
+#         'молчи': 'мовчи',
         
         
-# Н
-#         'не': 'ні', ВИКЛЮЧЕННЯ
-        'надо': 'потрібно',
-        'немного': 'трохи/трішки',
-        'немножко': 'трішки/трошки',
-        'нет': 'ні/немає',
-        'ничего': 'нічого',
-        'но': 'але',
+# # Н
+# #       'не': 'ні', ВИКЛЮЧЕННЯ
+#         'надо': 'потрібно',
+#         'немного': 'трохи/трішки',
+#         'немножко': 'трішки/трошки',
+#         'нет': 'ні/немає',
+#         'ничего': 'нічого',
+#         'но': 'але',
         
-# О
-        'от': 'від/з/ось',
+# # О
+#         'от': 'від/з/ось',
         
-# П
-        'понятно': 'зрозуміло',
-        'похож': 'похожий/схожий/подібний',
-        'почему': 'чому',
-        'почти': 'майже',
-        'писать': 'писати',
-        'привык': 'привик/звик',
-        
-
-# Р
-        'ребят': 'друзі',
-
-# С
-        'свой': 'свій',
-        'сейчас': 'зараз / на даний момент',
-        'сложный': 'важкий',
-        'спасиба': 'Дякую',
-        'спасибо': 'дякую',
+# # П
+#         'понятно': 'зрозуміло',
+#         'похож': 'похожий/схожий/подібний',
+#         'почему': 'чому',
+#         'почти': 'майже',
+#         'писать': 'писати',
+#         'привык': 'привик/звик',
         
 
-# Т
-        'такое': 'таке',
-#         'тебе': 'тобі', ВИКЛЮЧЕННЯ
-        'ты': 'ти',
-        'тебя': 'тебе',
-        'только': 'тільки/лише',
-        'тяжело': 'важко/тяжко',
+# # Р
+#         'ребят': 'друзі',
 
-# У
-#         'уже': 'вже', ВИНЯТОК
+# # С
+#         'свой': 'свій',
+#         'сейчас': 'зараз / на даний момент',
+#         'сложный': 'важкий',
+#         'спасиба': 'Дякую',
+#         'спасибо': 'дякую',
+        
 
-# Ф
-        'франсузком': 'французькій',
+# # Т
+#         'такое': 'таке',
+# #       'тебе': 'тобі', ВИКЛЮЧЕННЯ
+#         'ты': 'ти',
+#         'тебя': 'тебе',
+#         'только': 'тільки/лише',
+#         'тяжело': 'важко/тяжко',
 
-# Х
-        'хотел': 'хотів',
-        'хотела': 'хотіла',
+# # У
+# #         'уже': 'вже', ВИНЯТОК
 
-# Ц
+# # Ф
+#         'франсузком': 'французькій',
 
-# Ч
-        'час': 'година',
-        'часов': 'годин',
-        'чево': 'чого',
-        'чего': 'чого',
-        'чиво': 'чого',
-        'чо': 'що/чого',
-        'что': 'що',
+# # Х
+#         'хотел': 'хотів',
+#         'хотела': 'хотіла',
 
-# Ш
-        'шо': 'що',
-        'што': 'що',
+# # Ц
 
-# Щ
+# # Ч
+#         'час': 'година',
+#         'часов': 'годин',
+#         'чево': 'чого',
+#         'чего': 'чого',
+#         'чиво': 'чого',
+#         'чо': 'що/чого',
+#         'что': 'що',
 
-# Ь
+# # Ш
+#         'шо': 'що',
+#         'што': 'що',
 
-# Ю
+# # Щ
 
-# Я
-    }
-    return translation_dict.get(word, word)
+# # Ь
 
-# @bot.message_handler(commands=['українські_бали'])
-# def display_scores(bot, message):
-#     reply = "Учасники\n"
-#     for player_id, player in player_scores.items():
-#         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
-#         reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n"
-#     bot.reply_to(message, reply)
+# # Ю
 
+# # Я
+#     }
+#     return translation_dict.get(word, word)
 
-# @bot.message_handler(func=lambda message: True)
-# def handle_message(bot, message):
-#     player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
-#     player_name = message.from_user.first_name  # Отримуємо ім'я гравця
-
-#     if player_id not in player_scores:
-#         player_scores[player_id] = {'score': 0, 'quests': 0}  # Ініціалізуємо бали гравця
-
-#     text = message.text.lower()
-#     words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
-
-#     if len(words) > MIN_WORDS_THRESHOLD:
-#         translated_words = []
-#         for word in words:
-#             ukrainian_word = translate_russian_to_ukrainian(word)
-#             if word != ukrainian_word:
-#                 translated_words.append((word, ukrainian_word))
-
-#         if translated_words:
-#             reply = ""
-#             for word_pair in translated_words:
-#                 reply += f"{word_pair[0]}, "
-#             reply += "немає в українській мові, правильно "
-#             for word_pair in translated_words:
-#                 reply += f"{word_pair[1]} "
-#                 player_scores[player_id]['score'] -= 1
-#             bot.reply_to(message, reply)
-#         else:
-#             player_scores[player_id]['score'] += 1
-
-#         # Перевірка виконання квесту
-#         if player_scores[player_id]['score'] >= QUEST_THRESHOLD:
-#             player_scores[player_id]['quests'] += 1
-#             player_scores[player_id]['score'] = 0
+# # @bot.message_handler(commands=['українські_бали'])
+# # def display_scores(bot, message):
+# #     reply = "Учасники\n"
+# #     for player_id, player in player_scores.items():
+# #         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
+# #         reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n"
+# #     bot.reply_to(message, reply)
 
 
-# @bot.message_handler(commands=['українські_бали'])
-# def display_scores(message):
-#     reply = "Учасники\n"
-#     for player_id, player in player_scores.items():
-#         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
-#         reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n"
-#     bot.reply_to(message, reply)
+# # @bot.message_handler(func=lambda message: True)
+# # def handle_message(bot, message):
+# #     player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
+# #     player_name = message.from_user.first_name  # Отримуємо ім'я гравця
 
-@bot.message_handler(commands=['українські_бали'])
-def display_scores(message):
-    reply = "Учасники\n"
-    for player_id, player in player_scores.items():
-        player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
-        reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n"
-    bot.send_message(message.chat.id, reply)
+# #     if player_id not in player_scores:
+# #         player_scores[player_id] = {'score': 0, 'quests': 0}  # Ініціалізуємо бали гравця
 
-@bot.message_handler(func=lambda message: True)
-def handle_message(message):
-    player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
-    player_name = message.from_user.first_name  # Отримуємо ім'я гравця
+# #     text = message.text.lower()
+# #     words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
 
-    if player_id not in player_scores:
-        player_scores[player_id] = {'score': 0, 'quests': 0}  # Ініціалізуємо бали гравця
+# #     if len(words) > MIN_WORDS_THRESHOLD:
+# #         translated_words = []
+# #         for word in words:
+# #             ukrainian_word = translate_russian_to_ukrainian(word)
+# #             if word != ukrainian_word:
+# #                 translated_words.append((word, ukrainian_word))
 
-    text = message.text.lower()
-    words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
+# #         if translated_words:
+# #             reply = ""
+# #             for word_pair in translated_words:
+# #                 reply += f"{word_pair[0]}, "
+# #             reply += "немає в українській мові, правильно "
+# #             for word_pair in translated_words:
+# #                 reply += f"{word_pair[1]} "
+# #                 player_scores[player_id]['score'] -= 1
+# #             bot.reply_to(message, reply)
+# #         else:
+# #             player_scores[player_id]['score'] += 1
 
-    if len(words) > MIN_WORDS_THRESHOLD:
-        translated_words = []
-        for word in words:
-            ukrainian_word = translate_russian_to_ukrainian(word)
-            if word != ukrainian_word:
-                translated_words.append((word, ukrainian_word))
-
-        if translated_words:
-            reply = ""
-            for word_pair in translated_words:
-                reply += f"{word_pair[0]}, "
-            reply += "немає в українській мові, правильно "
-            for word_pair in translated_words:
-                reply += f"{word_pair[1]} "
-                player_scores[player_id]['score'] -= 1
-            bot.reply_to(message, reply)
-        else:
-            player_scores[player_id]['score'] += 1
-
-        # Перевірка виконання квесту
-        if player_scores[player_id]['score'] >= QUEST_THRESHOLD:
-            player_scores[player_id]['quests'] += 1
-            player_scores[player_id]['score'] = 0
-            
-bot.polling(none_stop=True)
-bot.polling()
+# #         # Перевірка виконання квесту
+# #         if player_scores[player_id]['score'] >= QUEST_THRESHOLD:
+# #             player_scores[player_id]['quests'] += 1
+# #             player_scores[player_id]['score'] = 0
 
 
-
-
-
+# # @bot.message_handler(commands=['українські_бали'])
+# # def display_scores(message):
+# #     reply = "Учасники\n"
+# #     for player_id, player in player_scores.items():
+# #         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
+# #         reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n"
+# #     bot.reply_to(message, reply)
 
 # @bot.message_handler(commands=['українські_бали'])
 # def display_scores(message):
@@ -460,7 +409,7 @@ bot.polling()
 #     for player_id, player in player_scores.items():
 #         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
 #         reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n"
-#     bot.reply_to(message, reply)
+#     bot.send_message(message.chat.id, reply)
 
 # @bot.message_handler(func=lambda message: True)
 # def handle_message(message):
@@ -496,5 +445,103 @@ bot.polling()
 #         if player_scores[player_id]['score'] >= QUEST_THRESHOLD:
 #             player_scores[player_id]['quests'] += 1
 #             player_scores[player_id]['score'] = 0
-
+            
+# bot.polling(none_stop=True)
 # bot.polling()
+
+
+
+
+
+
+
+
+
+
+import random
+import re
+import telebot
+import config
+
+bot = telebot.TeleBot(config.TOKEN)
+
+player_scores = {}  # Словник для збереження балів гравців
+QUEST_THRESHOLD = 1000  # Поріг для виконання квесту
+MIN_WORDS_THRESHOLD = 3
+russia_verbs = [
+# A
+    
+# Б             
+    'бистро',
+# В
+    'вопрос',
+    'где',
+    'да',
+    'ему',
+    'жёстко',
+    'значит',
+    'иди',
+    'как',
+    'ладно',
+    'мать',
+    'не',
+    'от',
+    
+    
+    
+    
+    
+    
+    'как', 'шо']
+
+def translate_russian_to_ukrainian(word):
+    translation_dict = {
+        # Решта перекладів...
+    }
+    return translation_dict.get(word, word)
+
+@bot.message_handler(commands=['українські_бали'])
+def display_scores(message):
+    reply = "Учасники\n"
+    for player_id, player in player_scores.items():
+        player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
+        reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n"
+    bot.send_message(message.chat.id, reply)
+
+@bot.message_handler(func=lambda message: True)
+def handle_message(message):
+    player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
+    player_name = message.from_user.first_name  # Отримуємо ім'я гравця
+
+    if player_id not in player_scores:
+        player_scores[player_id] = {'score': 0, 'quests': 0}  # Ініціалізуємо бали гравця
+
+    text = message.text.lower()
+    words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
+
+    if len(words) > MIN_WORDS_THRESHOLD:
+        translated_words = []
+        for word in words:
+            ukrainian_word = translate_russian_to_ukrainian(word)
+            if word != ukrainian_word:
+                translated_words.append((word, ukrainian_word))
+
+        if translated_words:
+            reply = ""
+            for word_pair in translated_words:
+                reply += f"{word_pair[0]}, "
+                if word_pair[0] in russia_verbs:
+                    player_scores[player_id]['score'] -= 1
+            reply += "немає в українській мові, правильно "
+            for word_pair in translated_words:
+                reply += f"{word_pair[1]} "
+            bot.reply_to(message, reply)
+        else:
+            player_scores[player_id]['score'] += 1
+
+        # Перевірка виконання квесту
+        if player_scores[player_id]['score'] >= QUEST_THRESHOLD:
+            player_scores[player_id]['quests'] += 1
+            player_scores[player_id]['score'] = 0
+
+bot.polling(none_stop=True)
