@@ -474,9 +474,9 @@ def handle_message(message):
         else:
             player_scores[player_id]['score'] += 1
 
-        # Перевірка наявності букв "ё" або "ы" у слові
+        # Перевірка наявності букв "ё" або "ы" э у слові
         for word in words:
-            if 'ё' in word or 'ы' in word:
+            if 'ё' in word or 'ы' in word or 'э' in word:
                 player_scores[player_id]['score'] -= 1
 
         # Перевірка виконання квесту
