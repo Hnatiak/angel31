@@ -211,6 +211,8 @@ MIN_WORDS_THRESHOLD = 3
 
 def translate_russian_to_ukrainian(word):
     translation_dict = {
+        'ё': 'їо',
+        'ы': 'и',
 # А
     
 # Б
