@@ -424,8 +424,17 @@ def display_scores(message):
     reply = "Учасники\n"
     for player_id, player in player_scores.items():
         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
-        reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n"
+        reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n\nЯкщо ти новенький, тоді пропиши /українські_бали_правила і прочитай які умови і як в це грати"
     bot.send_message(message.chat.id, reply)
+
+@bot.message_handler(commands=['українські_бали_правила'])
+def display_rules(message):
+    rules = "Правила гри:\n"
+    rules += "1. Бали нараховуються за кожне правильне слово українською мовою.\n"
+    rules += "2. За кожне слово, яке НЕ існує в українській мові, гравцю знімається 1 бал.\n"
+    rules += "3. Якщо слово містить букви 'ё' або 'ы', гравцю також знімається 1 бал.\n"
+    rules += "4. Після набору 1000 балів гравець отримує виконаний квест.\n"
+    bot.send_message(message.chat.id, rules)
 
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
