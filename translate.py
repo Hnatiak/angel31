@@ -652,26 +652,20 @@ def handle_message(message):
     words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
 
     if len(words) > MIN_WORDS_THRESHOLD:
+        if any(word in russia_verbs for word in words):
+            player_scores[player_id]['score'] -= 1
+
         translated_words = []
-        russian_words_count = 0
         for word in words:
             ukrainian_word = translate_russian_to_ukrainian(word)
             if word != ukrainian_word:
                 translated_words.append((word, ukrainian_word))
-                if word in russia_verbs:
-                    russian_words_count += 1
 
         if translated_words:
             reply = ""
             for word_pair in translated_words:
                 reply += f"{word_pair[0]}, "
-            if russian_words_count > 0:
-                score_penalty = -russian_words_count
-                player_scores[player_id]['score'] += score_penalty
-                reply += f"знімається {abs(score_penalty)} балів"
-            else:
-                reply += "немає в українській мові"
-            reply += ", правильно "
+            reply += "немає в українській мові, правильно "
             for word_pair in translated_words:
                 reply += f"{word_pair[1]} "
             bot.reply_to(message, reply)
