@@ -363,16 +363,15 @@ def translate_russian_to_ukrainian(word):
     return translation_dict.get(word, word)
 
 # @bot.message_handler(commands=['українські_бали'])
-# def display_scores(bot, message):
+# def display_scores(message):
 #     reply = "Учасники\n"
 #     for player_id, player in player_scores.items():
 #         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
 #         reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n"
-#     bot.reply_to(message, reply)
-
+#     bot.send_message(message.chat.id, reply)
 
 # @bot.message_handler(func=lambda message: True)
-# def handle_message(bot, message):
+# def handle_message(message):
 #     player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
 #     player_name = message.from_user.first_name  # Отримуємо ім'я гравця
 
@@ -400,20 +399,39 @@ def translate_russian_to_ukrainian(word):
 #             bot.reply_to(message, reply)
 #         else:
 #             player_scores[player_id]['score'] += 1
+         
+#         # Перевірка наявності букв "ё" або "ы" у слові
+#         for word in words:
+#             if 'ё' in word or 'ы' in word:
+#                 player_scores[player_id]['score'] -= 1
 
 #         # Перевірка виконання квесту
 #         if player_scores[player_id]['score'] >= QUEST_THRESHOLD:
 #             player_scores[player_id]['quests'] += 1
 #             player_scores[player_id]['score'] = 0
+            
+# bot.polling(none_stop=True)
+# bot.polling()
 
 
-# @bot.message_handler(commands=['українські_бали'])
-# def display_scores(message):
-#     reply = "Учасники\n"
-#     for player_id, player in player_scores.items():
-#         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
-#         reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n"
-#     bot.reply_to(message, reply)
+import random
+import re
+import telebot
+import config
+
+bot = telebot.TeleBot(config.TOKEN)
+
+player_scores = {}  # Словник для збереження балів гравців
+QUEST_THRESHOLD = 1000  # Поріг для виконання квесту
+MIN_WORDS_THRESHOLD = 3
+
+def translate_russian_to_ukrainian(word):
+    translation_dict = {
+        'ё': 'їо',
+        'ы': 'и',
+        # Решта перекладів
+    }
+    return translation_dict.get(word, word)
 
 @bot.message_handler(commands=['українські_бали'])
 def display_scores(message):
@@ -452,7 +470,7 @@ def handle_message(message):
             bot.reply_to(message, reply)
         else:
             player_scores[player_id]['score'] += 1
-         
+
         # Перевірка наявності букв "ё" або "ы" у слові
         for word in words:
             if 'ё' in word or 'ы' in word:
@@ -462,10 +480,9 @@ def handle_message(message):
         if player_scores[player_id]['score'] >= QUEST_THRESHOLD:
             player_scores[player_id]['quests'] += 1
             player_scores[player_id]['score'] = 0
-            
+
 bot.polling(none_stop=True)
 bot.polling()
-
 
 
 
