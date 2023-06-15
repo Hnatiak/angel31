@@ -419,12 +419,20 @@ def translate_russian_to_ukrainian(word):
 # bot.polling(none_stop=True)
 # bot.polling()
 
+# @bot.message_handler(commands=['українські_бали'])
+# def display_scores(message):
+#     reply = "Учасники\n"
+#     for player_id, player in player_scores.items():
+#         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
+#         reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n\nЯкщо ти новенький, тоді пропиши /українські_бали_правила і прочитай які умови і як в це грати"
+#     bot.send_message(message.chat.id, reply)   
 @bot.message_handler(commands=['українські_бали'])
 def display_scores(message):
     reply = "Учасники\n"
     for player_id, player in player_scores.items():
         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
-        reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n\nЯкщо ти новенький, тоді пропиши /українські_бали_правила і прочитай які умови і як в це грати"
+        reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n\n"
+    reply += "Якщо ти новенький, тоді пропиши /українські_бали_правила і прочитай які умови і як в це грати"
     bot.send_message(message.chat.id, reply)
 
 @bot.message_handler(commands=['українські_бали_правила'])
