@@ -211,8 +211,8 @@ MIN_WORDS_THRESHOLD = 3
 
 def translate_russian_to_ukrainian(word):
     translation_dict = {
-        'ё': 'їо',
-        'ы': 'и',
+#         'ё': 'їо',
+#         'ы': 'и',
 # А
     
 # Б
@@ -452,6 +452,11 @@ def handle_message(message):
             bot.reply_to(message, reply)
         else:
             player_scores[player_id]['score'] += 1
+         
+        # Перевірка наявності букв "ё" або "ы" у слові
+        for word in words:
+            if 'ё' in word or 'ы' in word:
+                player_scores[player_id]['score'] -= 1
 
         # Перевірка виконання квесту
         if player_scores[player_id]['score'] >= QUEST_THRESHOLD:
