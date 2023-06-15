@@ -462,7 +462,6 @@ def handle_message(message):
             player_scores[player_id]['score'] = 0
 
 bot.polling(none_stop=True)
-bot.polling()
 
 
 
