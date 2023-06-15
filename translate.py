@@ -469,11 +469,11 @@ player_scores = {}  # Словник для збереження балів гр
 QUEST_THRESHOLD = 1000  # Поріг для виконання квесту
 MIN_WORDS_THRESHOLD = 3
 russia_verbs = [
-# A
+    # A
     
-# Б             
+    # Б             
     'бистро',
-# В
+    # В
     'вопрос',
     'где',
     'да',
@@ -486,13 +486,9 @@ russia_verbs = [
     'мать',
     'не',
     'от',
-    
-    
-    
-    
-    
-    
-    'как', 'шо']
+    'как',
+    'шо'
+]
 
 def translate_russian_to_ukrainian(word):
     translation_dict = {
@@ -530,7 +526,7 @@ def handle_message(message):
             reply = ""
             for word_pair in translated_words:
                 reply += f"{word_pair[0]}, "
-                if word_pair[0] in russia_verbs:
+                if any(russian_word in word_pair for russian_word in russia_verbs):
                     player_scores[player_id]['score'] -= 1
             reply += "немає в українській мові, правильно "
             for word_pair in translated_words:
