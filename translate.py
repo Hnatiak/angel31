@@ -376,13 +376,23 @@ def translate_russian_to_ukrainian(word):
     return translation_dict.get(word, word)
 
 
+# @bot.message_handler(commands=['українські_бали'])
+# def display_scores(message):
+#     sorted_players = sorted(player_scores.items(), key=lambda x: x[1]['score'], reverse=True)
+#     reply = "Рейтинг гравців:\n"
+#     for player_id, player in sorted_players:
+#         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
+#         reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n"
+#     reply += "\nЯкщо ти новенький, тоді пропиши /українські_бали_правила і прочитай які умови і як в це грати"
+#     bot.send_message(message.chat.id, reply)
+
 @bot.message_handler(commands=['українські_бали'])
 def display_scores(message):
     sorted_players = sorted(player_scores.items(), key=lambda x: x[1]['score'], reverse=True)
     reply = "Рейтинг гравців:\n"
-    for player_id, player in sorted_players:
+    for i, (player_id, player) in enumerate(sorted_players, start=1):
         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
-        reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n"
+        reply += f"{i}. {player_name} - {player['score']} {player['quests']} виконаних квестів\n"
     reply += "\nЯкщо ти новенький, тоді пропиши /українські_бали_правила і прочитай які умови і як в це грати"
     bot.send_message(message.chat.id, reply)
 
