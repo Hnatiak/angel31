@@ -649,14 +649,36 @@ def handle_shower_command(message):
         
 
 
+# @bot.message_handler(func=lambda message: True)
+# def handle_all_commands(message):
+#     translate.handle_message(message)
+# #     translate.handle_message(message)
+#     communication.handle_commands(bot, message)
+# #     translate.handle_message(message)
+
+        
+# @bot.message_handler(commands=['українські_бали'])
+# def display_scores(message):
+#     translate.display_scores(message)
+
+# @bot.message_handler(commands=['українські_бали_правила'])
+# def display_rules(message):
+#     translate.display_rules(message)
+
+# @bot.message_handler(func=lambda message: True)
+# def handle_message(message):
+#     translate.handle_message(message)
+
+# @bot.message_handler(func=lambda message: True)
+# def handle_all_commands(message):
+#     translate.handle_all_commands(message)
+
+
 @bot.message_handler(func=lambda message: True)
 def handle_all_commands(message):
     translate.handle_message(message)
-#     translate.handle_message(message)
     communication.handle_commands(bot, message)
-#     translate.handle_message(message)
 
-        
 @bot.message_handler(commands=['українські_бали'])
 def display_scores(message):
     translate.display_scores(message)
@@ -670,7 +692,7 @@ def handle_message(message):
     translate.handle_message(message)
 
 @bot.message_handler(func=lambda message: True)
-def handle_all_commands(message):
+def handle_commands_translate(message):
     translate.handle_all_commands(message)
 
 bot.polling(none_stop=True)
