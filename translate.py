@@ -432,7 +432,12 @@ def handle_message(bot, message):
         if player_scores[player_id]['score'] >= QUEST_THRESHOLD:
             player_scores[player_id]['quests'] += 1
             player_scores[player_id]['score'] = 0
+            
+@bot.message_handler(func=lambda message: True)
+def handle_all_messages(message):
+    handle_message(bot, message)
 
+bot.polling()
 # @bot.message_handler(commands=['українські_бали'])
 # def display_scores(message):
 #     reply = "Учасники:\n\n"
