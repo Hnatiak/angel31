@@ -376,14 +376,14 @@ def translate_russian_to_ukrainian(word):
     return translation_dict.get(word, word)
 
 def handle_message(message):
-    player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
-    player_name = message.from_user.first_name  # Отримуємо ім'я гравця
+    player_id = message.from_user.id
+    player_name = message.from_user.first_name
 
     if player_id not in player_scores:
-        player_scores[player_id] = {'score': 0, 'quests': 0}  # Ініціалізуємо бали гравця
+        player_scores[player_id] = {'score': 0, 'quests': 0}
 
     text = message.text.lower()
-    words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
+    words = re.findall(r'\b\w+\b', text)
 
     if len(words) > MIN_WORDS_THRESHOLD:
         translated_words = []
@@ -400,24 +400,22 @@ def handle_message(message):
             for word_pair in translated_words:
                 reply += f"{word_pair[1]} "
                 player_scores[player_id]['score'] -= 1
-            bot.reply_to(message, reply)
+            bot.send_message(message.chat.id, reply)
         else:
             player_scores[player_id]['score'] += 1
 
-        # Перевірка наявності букв "ё" або "ы" э у слові
         for word in words:
             if 'ё' in word or 'ы' in word or 'э' in word:
                 player_scores[player_id]['score'] -= 1
 
-        # Перевірка виконання квесту
         if player_scores[player_id]['score'] >= QUEST_THRESHOLD:
             player_scores[player_id]['quests'] += 1
             player_scores[player_id]['score'] = 0
 
 @bot.message_handler(commands=['українські_бали'])
 def display_scores(message):
-    reply = "Учасники:\n\n"
     sorted_players = sorted(player_scores.items(), key=lambda x: x[1]['score'], reverse=True)
+    reply = "Рейтинг гравців:\n"
     for player_id, player in sorted_players:
         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
         reply += f"{player_name} - {player['score']} {player['quests']} виконаних квестів\n"
