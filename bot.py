@@ -653,6 +653,6 @@ def handle_all_commands(message):
 #     translate.handle_message(bot, message)
 #     translate.handle_message(message)
     communication.handle_commands(bot, message)
-    translate.handle_message(bot, message)
+    translate.handle_message(message)
 
 bot.polling(none_stop=True)
