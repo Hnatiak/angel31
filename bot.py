@@ -23,8 +23,8 @@ import re
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-import speakwithbot.communication as communication
 import translate
+import speakwithbot.communication as communication
 from langdetect import detect
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -647,6 +647,15 @@ def handle_shower_command(message):
     else:
         bot.reply_to(message, 'Ця команда доступна лише з 19:00 до 20:00')
         
+
+
+@bot.message_handler(func=lambda message: True)
+def handle_all_commands(message):
+#     translate.handle_message(bot, message)
+#     translate.handle_message(message)
+    communication.handle_commands(bot, message)
+#     translate.handle_message(message)
+
         
 @bot.message_handler(commands=['українські_бали'])
 def display_scores(message):
@@ -663,15 +672,5 @@ def handle_message(message):
 @bot.message_handler(func=lambda message: True)
 def handle_all_commands(message):
     translate.handle_all_commands(message)
-
-bot.polling(none_stop=True)
-
-
-@bot.message_handler(func=lambda message: True)
-def handle_all_commands(message):
-#     translate.handle_message(bot, message)
-#     translate.handle_message(message)
-    communication.handle_commands(bot, message)
-#     translate.handle_message(message)
 
 bot.polling(none_stop=True)
