@@ -375,7 +375,8 @@ def translate_russian_to_ukrainian(word):
     }
     return translation_dict.get(word, word)
 
-def handle_message(bot, message):
+@bot.message_handler(func=lambda message: True)
+def handle_message(message):
     player_id = message.from_user.id
     player_name = message.from_user.first_name
 
