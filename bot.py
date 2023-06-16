@@ -646,6 +646,25 @@ def handle_shower_command(message):
             bot.send_message(message.chat.id, "Гей, перестань, мені не приємно!")
     else:
         bot.reply_to(message, 'Ця команда доступна лише з 19:00 до 20:00')
+        
+        
+@bot.message_handler(commands=['українські_бали'])
+def display_scores(message):
+    translate.display_scores(message)
+
+@bot.message_handler(commands=['українські_бали_правила'])
+def display_rules(message):
+    translate.display_rules(message)
+
+@bot.message_handler(func=lambda message: True)
+def handle_message(message):
+    translate.handle_message(message)
+
+@bot.message_handler(func=lambda message: True)
+def handle_all_commands(message):
+    translate.handle_all_commands(message)
+
+bot.polling(none_stop=True)
 
 
 @bot.message_handler(func=lambda message: True)
@@ -653,6 +672,6 @@ def handle_all_commands(message):
 #     translate.handle_message(bot, message)
 #     translate.handle_message(message)
     communication.handle_commands(bot, message)
-    translate.handle_message(message)
+#     translate.handle_message(message)
 
 bot.polling(none_stop=True)
