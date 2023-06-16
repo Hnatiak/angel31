@@ -493,4 +493,4 @@ def display_rules(message):
 #             player_scores[player_id]['quests'] += 1
 #             player_scores[player_id]['score'] = 0
 
-# bot.polling(none_stop=True)
+bot.polling(none_stop=True)
