@@ -26,7 +26,7 @@ from email.mime.multipart import MIMEMultipart
 import speakwithbot.communication as communication
 # import translate
 from langdetect import detect
-import YandexSpeller
+from pyaspeller import YandexSpeller
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -404,7 +404,6 @@ def end_word_game(message):
     else:
         result = '\n'.join([f'@{username}: {word}' for username, word in participants])
         bot.send_message(chat_id, 'Гра завершена. Ось список учасників та слів:')
-
 
 user_choices = {}
 
