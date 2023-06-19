@@ -958,7 +958,7 @@ def handle_message(message):
 
 @bot.message_handler(func=lambda message: True)
 def handle_all_commands(message):
-    communication.handle_all_commands(bot, message)
+    communication.handle_commands(bot, message)
 
 # @bot.message_handler(func=lambda message: True)
 # def handle_all_messages(message):
