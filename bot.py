@@ -158,7 +158,7 @@ special_ukrainian_words = {
     'лебідь': 'д',
 }
 
-not_correct_ukrainian_words = ['продек', 'пкопр', 'пкойцв', 'цушгк']
+not_correct_ukrainian_words = ['продек', 'пкопр', 'пкойцв', 'цушгк', 'нейросеть']
 
 pending_games = {}
 
