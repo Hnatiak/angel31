@@ -726,20 +726,7 @@ def translate_russian_to_ukrainian(word):
 #     reply += "\nЯкщо ти новенький, тоді пропиши /українські_бали_правила і прочитай які умови і як в це грати"
 #     bot.send_message(message.chat.id, reply)
 
-@bot.message_handler(commands=['українські_бали'])
-def display_scores(message):
-    sorted_players = sorted(player_scores.items(), key=lambda x: x[1]['score'], reverse=True)
-    total_players = len(sorted_players)
-    page_size = 10  # Number of players to display per page
-    total_pages = math.ceil(total_players / page_size)
-
-    page = 1  # Initial page number
-    display_players = sorted_players[(page - 1) * page_size:page * page_size]
-
-    reply = get_scoreboard_reply(display_players, page, total_pages)
-    bot.send_message(message.chat.id, reply)
-
-def get_scoreboard_reply(players, current_page, total_pages):
+def get_scoreboard_reply(players, current_page, total_pages, message):
     reply = "Рейтинг гравців:\n\n"
     for i, (player_id, player) in enumerate(players, start=1):
         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
@@ -759,26 +746,6 @@ def get_scoreboard_reply(players, current_page, total_pages):
         reply += "\n\nНатисни кнопку, щоб переглянути інших учасників."
 
     return reply
-
-@bot.callback_query_handler(func=lambda call: True)
-def handle_pagination_buttons(callback_query):
-    query = callback_query.data.split(":")
-    button = query[0]
-    current_page = int(query[1])
-
-    if button == "prev_page":
-        page = current_page - 1
-    elif button == "next_page":
-        page = current_page + 1
-
-    sorted_players = sorted(player_scores.items(), key=lambda x: x[1]['score'], reverse=True)
-    total_pages = math.ceil(len(sorted_players) / page_size)
-
-    display_players = sorted_players[(page - 1) * page_size:page * page_size]
-
-    reply = get_scoreboard_reply(display_players, page, total_pages)
-    bot.edit_message_text(reply, chat_id=callback_query.message.chat.id, message_id=callback_query.message.message_id,
-                          reply_markup=None)
 
 @bot.message_handler(commands=['українські_бали_правила'])
 def display_rules(message):
