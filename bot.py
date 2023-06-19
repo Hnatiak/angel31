@@ -736,9 +736,9 @@ def display_scores(message):
     page = 1  # Initial page number
     display_players = sorted_players[(page - 1) * page_size:page * page_size]
 
-    reply = get_scoreboard_reply(display_players, page, total_pages)
+    reply = get_scoreboard_reply(display_players, page, total_pages, message)
     bot.send_message(message.chat.id, reply)
-    
+
 def get_scoreboard_reply(players, current_page, total_pages, message):
     reply = "Рейтинг гравців:\n\n"
     for i, (player_id, player) in enumerate(players, start=1):
@@ -759,26 +759,6 @@ def get_scoreboard_reply(players, current_page, total_pages, message):
         reply += "\n\nНатисни кнопку, щоб переглянути інших учасників."
 
     return reply
-
-@bot.callback_query_handler(func=lambda call: True)
-def handle_pagination_buttons(callback_query):
-    query = callback_query.data.split(":")
-    button = query[0]
-    current_page = int(query[1])
-
-    if button == "prev_page":
-        page = current_page - 1
-    elif button == "next_page":
-        page = current_page + 1
-
-    sorted_players = sorted(player_scores.items(), key=lambda x: x[1]['score'], reverse=True)
-    total_pages = math.ceil(len(sorted_players) / page_size)
-
-    display_players = sorted_players[(page - 1) * page_size:page * page_size]
-
-    reply = get_scoreboard_reply(display_players, page, total_pages)
-    bot.edit_message_text(reply, chat_id=callback_query.message.chat.id, message_id=callback_query.message.message_id,
-                          reply_markup=None)
 
 @bot.message_handler(commands=['українські_бали_правила'])
 def display_rules(message):
