@@ -744,6 +744,7 @@ def get_scoreboard_reply(players, current_page, total_pages, message):
     for i, (player_id, player) in enumerate(players, start=1):
         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
         reply += f"{i}. {player_name} - {player['score']} {player['quests']} виконаних квестів\n"
+    reply += "\nЯкщо ти новенький, тоді пропиши /українські_бали_правила і прочитай які умови і як в це грати"
 
     reply += f"\nСторінка {current_page} з {total_pages}"
 
