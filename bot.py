@@ -26,6 +26,7 @@ from email.mime.multipart import MIMEMultipart
 import speakwithbot.communication as communication
 # import translate
 from langdetect import detect
+import YandexSpeller
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
