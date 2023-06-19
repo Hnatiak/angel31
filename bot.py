@@ -27,6 +27,8 @@ import speakwithbot.communication as communication
 # import translate
 from langdetect import detect
 from pyaspeller import YandexSpeller
+import math
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -714,15 +716,69 @@ def translate_russian_to_ukrainian(word):
     }
     return translation_dict.get(word, word)
 
+# @bot.message_handler(commands=['українські_бали'])
+# def display_scores(message):
+#     sorted_players = sorted(player_scores.items(), key=lambda x: x[1]['score'], reverse=True)
+#     reply = "Рейтинг гравців:\n\n"
+#     for i, (player_id, player) in enumerate(sorted_players, start=1):
+#         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
+#         reply += f"{i}. {player_name} - {player['score']} {player['quests']} виконаних квестів\n"
+#     reply += "\nЯкщо ти новенький, тоді пропиши /українські_бали_правила і прочитай які умови і як в це грати"
+#     bot.send_message(message.chat.id, reply)
+
 @bot.message_handler(commands=['українські_бали'])
 def display_scores(message):
     sorted_players = sorted(player_scores.items(), key=lambda x: x[1]['score'], reverse=True)
+    total_players = len(sorted_players)
+    page_size = 10  # Number of players to display per page
+    total_pages = math.ceil(total_players / page_size)
+
+    page = 1  # Initial page number
+    display_players = sorted_players[(page - 1) * page_size:page * page_size]
+
+    reply = get_scoreboard_reply(display_players, page, total_pages)
+    bot.send_message(message.chat.id, reply)
+
+def get_scoreboard_reply(players, current_page, total_pages):
     reply = "Рейтинг гравців:\n\n"
-    for i, (player_id, player) in enumerate(sorted_players, start=1):
+    for i, (player_id, player) in enumerate(players, start=1):
         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
         reply += f"{i}. {player_name} - {player['score']} {player['quests']} виконаних квестів\n"
-    reply += "\nЯкщо ти новенький, тоді пропиши /українські_бали_правила і прочитай які умови і як в це грати"
-    bot.send_message(message.chat.id, reply)
+
+    reply += f"\nСторінка {current_page} з {total_pages}"
+
+    if total_pages > 1:
+        keyboard = []
+        if current_page > 1:
+            prev_button = InlineKeyboardButton("<< Попередня", callback_data=f"prev_page:{current_page}")
+            keyboard.append(prev_button)
+        if current_page < total_pages:
+            next_button = InlineKeyboardButton("Наступна >>", callback_data=f"next_page:{current_page}")
+            keyboard.append(next_button)
+        reply_markup = InlineKeyboardMarkup([keyboard])
+        reply += "\n\nНатисни кнопку, щоб переглянути інших учасників."
+
+    return reply
+
+@bot.callback_query_handler(func=lambda call: True)
+def handle_pagination_buttons(callback_query):
+    query = callback_query.data.split(":")
+    button = query[0]
+    current_page = int(query[1])
+
+    if button == "prev_page":
+        page = current_page - 1
+    elif button == "next_page":
+        page = current_page + 1
+
+    sorted_players = sorted(player_scores.items(), key=lambda x: x[1]['score'], reverse=True)
+    total_pages = math.ceil(len(sorted_players) / page_size)
+
+    display_players = sorted_players[(page - 1) * page_size:page * page_size]
+
+    reply = get_scoreboard_reply(display_players, page, total_pages)
+    bot.edit_message_text(reply, chat_id=callback_query.message.chat.id, message_id=callback_query.message.message_id,
+                          reply_markup=None)
 
 @bot.message_handler(commands=['українські_бали_правила'])
 def display_rules(message):
