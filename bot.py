@@ -145,98 +145,98 @@ friendships = []
 
 
 
-ukrainian_alphabet = ['а', 'б', 'в', 'г', 'ґ', 'д', 'е', 'є', 'ж', 'з', 'і', 'ї', 'й', 'к', 'л', 'м', 'н', 'о',
-                      'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ю', 'я']
+# ukrainian_alphabet = ['а', 'б', 'в', 'г', 'ґ', 'д', 'е', 'є', 'ж', 'з', 'і', 'ї', 'й', 'к', 'л', 'м', 'н', 'о',
+#                       'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ю', 'я']
 
-excluded_words = ['сука', 'стриптиз', 'секс', 'апарат', 'апаратура', 'аромат', 'кріт', 'абориген', 'аплодисменти', 'апокаліпсис', 'аркада', 'аркади', 
-                  'кірка', 'ящірка', 'турція', 'тінь', 'аксесуар', 'анакондра', 'акорд', 'амілія', 'ярлик', 'шашлик', 'ананас', 'ренген', 'рись', 'павлін', 
-                  'романтичний', 'романтика', 'акордеон']
-special_ukrainian_words = {
-    'окунь': 'н',
-    'еге': 'г',
-    'ніготь': 'т',
-    'кіготь': 'т',
-    'ячмінь': 'н',
-    'лебідь': 'д',
-    'танець': 'ц',
-    'тернопіль': 'л',
-    'аркади': 'д',
-    'тінь': 'н',
-    'алкоголь': 'л',
-    'контроль': 'л',
-    'поршень': 'н',
-    'король': 'л',
-}
+# excluded_words = ['сука', 'стриптиз', 'секс', 'апарат', 'апаратура', 'аромат', 'кріт', 'абориген', 'аплодисменти', 'апокаліпсис', 'аркада', 'аркади', 
+#                   'кірка', 'ящірка', 'турція', 'тінь', 'аксесуар', 'анакондра', 'акорд', 'амілія', 'ярлик', 'шашлик', 'ананас', 'ренген', 'рись', 'павлін', 
+#                   'романтичний', 'романтика', 'акордеон']
+# special_ukrainian_words = {
+#     'окунь': 'н',
+#     'еге': 'г',
+#     'ніготь': 'т',
+#     'кіготь': 'т',
+#     'ячмінь': 'н',
+#     'лебідь': 'д',
+#     'танець': 'ц',
+#     'тернопіль': 'л',
+#     'аркади': 'д',
+#     'тінь': 'н',
+#     'алкоголь': 'л',
+#     'контроль': 'л',
+#     'поршень': 'н',
+#     'король': 'л',
+# }
 
-not_correct_ukrainian_words = ['продек', 'пкопр', 'пкойцв', 'цушгк', 'нейросеть', 'енор']
+# not_correct_ukrainian_words = ['продек', 'пкопр', 'пкойцв', 'цушгк', 'нейросеть', 'енор']
 
-pending_games = {}
+# pending_games = {}
 
-def is_ukrainian_word(word):
-    speller = YandexSpeller()
-    spelling = list(speller.spell(word))
-    return len(spelling) == 0 and len(word) > 1
+# def is_ukrainian_word(word):
+#     speller = YandexSpeller()
+#     spelling = list(speller.spell(word))
+#     return len(spelling) == 0 and len(word) > 1
 
-def is_not_correct_ukrainian_word(word):
-    return any(word.startswith(w) for w in not_correct_ukrainian_words)
+# def is_not_correct_ukrainian_word(word):
+#     return any(word.startswith(w) for w in not_correct_ukrainian_words)
 
-def get_next_letter(word):
-    if word in special_ukrainian_words:
-        return special_ukrainian_words[word]
-    return word[-1]
+# def get_next_letter(word):
+#     if word in special_ukrainian_words:
+#         return special_ukrainian_words[word]
+#     return word[-1]
 
-@bot.message_handler(commands=['гра_в_слова'])
-def start_word_game(message):
-    chat_id = message.chat.id
-    if chat_id in pending_games:
-        bot.send_message(chat_id, 'Гра вже розпочата. Дочекайтеся своєї черги.')
-    else:
-        pending_games[chat_id] = {'current_letter': '', 'participants': [], 'used_words': set()}
-        random_letter = random.choice(ukrainian_alphabet)
-        pending_games[chat_id]['current_letter'] = random_letter
-        bot.send_message(chat_id, f'Гра в слова почата. Перше слово починається на букву "{random_letter.upper()}"')
-
-
-@bot.message_handler(func=lambda message: re.match(r'^[а-яіїєґ]+$', message.text, re.IGNORECASE) is not None)
-def play_word_game(message):
-    chat_id = message.chat.id
-    if chat_id not in pending_games:
-        return
-
-    current_game = pending_games[chat_id]
-    current_letter = current_game['current_letter']
-    word = message.text.lower()
-
-    if not current_letter or word.startswith(current_letter):
-        if not is_ukrainian_word(word) or is_not_correct_ukrainian_word(word):
-            bot.send_message(chat_id, 'Це слово не є українським або містить лише одну літеру. Введіть нове слово.')
-            return
-
-        if word not in current_game['used_words']:
-            current_game['current_letter'] = get_next_letter(word)
-            current_game['participants'].append((message.from_user.username, word))
-            current_game['used_words'].add(word)
-            bot.send_message(chat_id, f'Наступне слово повинно починатися на букву "{current_game["current_letter"].upper()}"')
-        else:
-            bot.send_message(chat_id, 'Це слово вже було використано. Введіть нове слово.')
-    else:
-        bot.send_message(chat_id, f'Слово повинно починатися на букву "{current_letter.upper()}"')
+# @bot.message_handler(commands=['гра_в_слова'])
+# def start_word_game(message):
+#     chat_id = message.chat.id
+#     if chat_id in pending_games:
+#         bot.send_message(chat_id, 'Гра вже розпочата. Дочекайтеся своєї черги.')
+#     else:
+#         pending_games[chat_id] = {'current_letter': '', 'participants': [], 'used_words': set()}
+#         random_letter = random.choice(ukrainian_alphabet)
+#         pending_games[chat_id]['current_letter'] = random_letter
+#         bot.send_message(chat_id, f'Гра в слова почата. Перше слово починається на букву "{random_letter.upper()}"')
 
 
-@bot.message_handler(commands=['закінчити_гру_в_слова'])
-def end_word_game(message):
-    chat_id = message.chat.id
-    if chat_id not in pending_games:
-        bot.send_message(chat_id, 'Немає активної гри.')
-        return
+# @bot.message_handler(func=lambda message: re.match(r'^[а-яіїєґ]+$', message.text, re.IGNORECASE) is not None)
+# def play_word_game(message):
+#     chat_id = message.chat.id
+#     if chat_id not in pending_games:
+#         return
 
-    current_game = pending_games.pop(chat_id)
-    participants = current_game['participants']
-    if len(participants) == 0:
-        bot.send_message(chat_id, 'Гра завершена. Немає учасників.')
-    else:
-        result = '\n'.join([f'@{username}: {word}' for username, word in participants])
-        bot.send_message(chat_id, 'Гра завершена. Ось список учасників та слів:')
+#     current_game = pending_games[chat_id]
+#     current_letter = current_game['current_letter']
+#     word = message.text.lower()
+
+#     if not current_letter or word.startswith(current_letter):
+#         if not is_ukrainian_word(word) or is_not_correct_ukrainian_word(word):
+#             bot.send_message(chat_id, 'Це слово не є українським або містить лише одну літеру. Введіть нове слово.')
+#             return
+
+#         if word not in current_game['used_words']:
+#             current_game['current_letter'] = get_next_letter(word)
+#             current_game['participants'].append((message.from_user.username, word))
+#             current_game['used_words'].add(word)
+#             bot.send_message(chat_id, f'Наступне слово повинно починатися на букву "{current_game["current_letter"].upper()}"')
+#         else:
+#             bot.send_message(chat_id, 'Це слово вже було використано. Введіть нове слово.')
+#     else:
+#         bot.send_message(chat_id, f'Слово повинно починатися на букву "{current_letter.upper()}"')
+
+
+# @bot.message_handler(commands=['закінчити_гру_в_слова'])
+# def end_word_game(message):
+#     chat_id = message.chat.id
+#     if chat_id not in pending_games:
+#         bot.send_message(chat_id, 'Немає активної гри.')
+#         return
+
+#     current_game = pending_games.pop(chat_id)
+#     participants = current_game['participants']
+#     if len(participants) == 0:
+#         bot.send_message(chat_id, 'Гра завершена. Немає учасників.')
+#     else:
+#         result = '\n'.join([f'@{username}: {word}' for username, word in participants])
+#         bot.send_message(chat_id, 'Гра завершена. Ось список учасників та слів:')
         
         
         
