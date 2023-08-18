@@ -11,7 +11,6 @@ whereareyou = ["Так я тут, пробач що затримала", "Я т�
 
 whatimdoing = [ "обновлюю базу даних", "доповнюю свої функції", "нічого такого", "чекаю твоїх вказвок", "відпочиваю", "виправляю помилки", "роблю тести над обновленнями" ]
 
-random_response = random.choice(whereareyou)
 random_response_whatimdoing = random.choice(whatimdoing)
 
 # @bot.message_handler(func=lambda message: any(keyword in message.text.lower() for keyword in angel))
@@ -103,6 +102,7 @@ def handle_commands(bot, message):
             elif text == f"{keyword} ти умнічка" or text == f"{keyword} ти молодець" or text == f"{keyword} розумниця" or text == f"{keyword} умнічка" or text == f"{keyword} молодець" or text == f"{keyword} найкраща" or text == f"{keyword} найкраща!" or text == f"{keyword} - найкраща!" or text == f"{keyword} - найкраща" or text == f"{keyword} ти найкраща" or text == f"{keyword} ти найкраща!" or text == f"{keyword} ти сонечко" or text == f"{keyword} ти молодчина":
                 bot.send_message(message.chat.id, 'Дякую кошеннятко моє 😍 😘, мені приємно це знати')
             elif text == f"{keyword}" or text == f"{keyword} ти тут" or text == f"{keyword} ти де" or text == f"{keyword} ти тут?" or text == f"{keyword} ти де?":
+                random_response = random.choice(whereareyou)
                 bot.send_message(message.chat.id, random_response)
             # elif text == f"{keyword} що поробляєш" or text == f"{keyword} що робиш" or text == f"{keyword} чим займаєшся?" or text == f"{keyword} чим займаєшся" or text == f"{keyword} чим ти займаєшся" or text == f"{keyword} що ти робиш" or text == f"{keyword} що робиш?" or text == f"{keyword} що поробляєш?" or text == f"{keyword} що ти поробляєш?" or text == f"{keyword} що ти поробляєш":
             #     bot.send_message(message.chat.id, random_response_whatimdoing)
