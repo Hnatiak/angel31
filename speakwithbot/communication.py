@@ -7,6 +7,23 @@ bot = telebot.TeleBot(config.TOKEN)
 
 angel = ['ангелятко', 'ангел', 'ангелику', 'ангелочок']
 
+whereareyou = [
+    "Так я тут, пробач що затримала",
+    "Я тут",
+    "Рада бути тут!",
+    "Нема за що вибачатися, я завжди на зв'язку.",
+    "Нічого страшного, я завжди готова відповісти.",
+    "Я завжди на місці, не хвилюйтесь.",
+    "Вибачте, я тут. Все добре!",
+    "Привіт! Немає проблем зі затримкою.",
+    "Ви тут, і це головне. Я завжди на зв'язку.",
+    "Нема за що вибачатися, важливо, що ви знову зі мною.",
+    "Ви завжди можете розраховувати на мою відповідь.",
+    "Жодних проблем зі затримкою. Я готова допомогти!"
+]
+
+random_response = random.choice(whereareyou)
+
 # @bot.message_handler(func=lambda message: any(keyword in message.text.lower() for keyword in angel))
 def handle_commands(bot, message):
     text = message.text.lower()
@@ -98,8 +115,8 @@ def handle_commands(bot, message):
                 answered_question = True
             elif text == f"{keyword} ти умнічка" or text == f"{keyword} ти молодець" or text == f"{keyword} розумниця" or text == f"{keyword} умнічка" or text == f"{keyword} молодець" or text == f"{keyword} найкраща" or text == f"{keyword} найкраща!" or text == f"{keyword} - найкраща!" or text == f"{keyword} - найкраща" or text == f"{keyword} ти найкраща" or text == f"{keyword} ти найкраща!":
                 bot.send_message(message.chat.id, 'Дякую кошеннятко моє 😍 😘, мені приємно це знати')
-            elif text == f"{keyword}" or text == f"{keyword} ти тут" or text == f"{keyword} ти де":
-                bot.send_message(message.chat.id, 'Так я тут, пробач що затримала')
+            elif text == f"{keyword}" or text == f"{keyword} ти тут" or text == f"{keyword} ти де" or text == f"{keyword} ти тут?" or text == f"{keyword} ти де?":
+                bot.send_message(message.chat.id, random_response)
             elif text == f"показати ніжки" or text == f"ніжки" or text == f"{keyword} покажи ніжки" or text == f"{keyword} покажи свої ніжки" or text == f"покажи ніжки":
                 bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} вирішив(-ла) подивитися на ніжки")
                 photo_choices = ['static/legs/legs_(1).jpg', 'static/legs/legs_(2).jpg', 'static/legs/legs_(3).jpg',
