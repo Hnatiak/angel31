@@ -35,28 +35,6 @@ logger = logging.getLogger(__name__)
 
 bot = telebot.TeleBot(config.TOKEN)
 
-# @bot.message_handler(commands=['написати_власнику'])
-# def send_email(message):
-#     bot.send_message(message.chat.id, "Будь ласка введіть ваше повідомлення:")
-#     bot.register_next_step_handler(message, send_email_message)
-
-# def send_email_message(message):
-#     try:
-#         server = smtplib.SMTP('smtp.gmail.com', 587)
-#         server.starttls()
-#         server.login('romanhnatiak@gmail.com', config.email_password)
-#         to_email = 'romanhnatiak@gmail.com'
-#         subject = 'Повідомлення від користувача'
-#         email_text = f"Від: {message.from_user.username}\nСмс: {message.text}"
-#         message = 'Subject: {}\n\n{}'.format(subject, email_text)
-#         server.sendmail('angel31@gmail.com', to_email, message)
-#         server.quit()
-#         bot.send_message(message.chat.id, "Чудово, ваш лист надіслано!")
-#     except:
-#         bot.send_message(message.chat.id, "На жаль щось пішло не так, повторіть операцію пізніше.")
-
-
-
 pending_friendships = {}
 friendships = []
 
@@ -781,45 +759,45 @@ def display_scores(message):
 #     rules += "4. Після набору 1000 балів гравець отримує +1 виконаний квест, після чого його бали обнуляються автоматично.\n"
 #     bot.send_message(message.chat.id, rules)
 
-# @bot.message_handler(func=lambda message: True)
-# def handle_message(message):
-#     player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
-#     player_name = message.from_user.first_name  # Отримуємо ім'я гравця
+@bot.message_handler(func=lambda message: True)
+def handle_message(message):
+    player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
+    player_name = message.from_user.first_name  # Отримуємо ім'я гравця
 
-#     if player_id not in player_scores:
-#         player_scores[player_id] = {'score': 0, 'quests': 0}  # Ініціалізуємо бали гравця
+    if player_id not in player_scores:
+        player_scores[player_id] = {'score': 0, 'quests': 0}  # Ініціалізуємо бали гравця
 
-#     text = message.text.lower()
-#     words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
+    text = message.text.lower()
+    words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
 
-#     if len(words) > MIN_WORDS_THRESHOLD:
-#         translated_words = []
-#         for word in words:
-#             ukrainian_word = translate_russian_to_ukrainian(word)
-#             if word != ukrainian_word:
-#                 translated_words.append((word, ukrainian_word))
+    if len(words) > MIN_WORDS_THRESHOLD:
+        translated_words = []
+        for word in words:
+            ukrainian_word = translate_russian_to_ukrainian(word)
+            if word != ukrainian_word:
+                translated_words.append((word, ukrainian_word))
 
-#         if translated_words:
-#             reply = ""
-#             for word_pair in translated_words:
-#                 reply += f"{word_pair[0]}, "
-#             reply += "немає в українській мові, правильно "
-#             for word_pair in translated_words:
-#                 reply += f"{word_pair[1]} "
-#                 player_scores[player_id]['score'] -= 1
-#             bot.reply_to(message, reply)
-#         else:
-#             player_scores[player_id]['score'] += 1
+        if translated_words:
+            reply = ""
+            for word_pair in translated_words:
+                reply += f"{word_pair[0]}, "
+            reply += "немає в українській мові, правильно "
+            for word_pair in translated_words:
+                reply += f"{word_pair[1]} "
+                player_scores[player_id]['score'] -= 1
+            bot.reply_to(message, reply)
+        else:
+            player_scores[player_id]['score'] += 1
 
-#         # Перевірка наявності букв "ё" або "ы" э у слові
-#         for word in words:
-#             if 'ё' in word or 'ы' in word or 'э' in word:
-#                 player_scores[player_id]['score'] -= 1
+        # Перевірка наявності букв "ё" або "ы" э у слові
+        for word in words:
+            if 'ё' in word or 'ы' in word or 'э' in word:
+                player_scores[player_id]['score'] -= 1
 
-#         # Перевірка виконання квесту
-#         if player_scores[player_id]['score'] >= QUEST_THRESHOLD:
-#             player_scores[player_id]['quests'] += 1
-#             player_scores[player_id]['score'] = 0
+        # Перевірка виконання квесту
+        if player_scores[player_id]['score'] >= QUEST_THRESHOLD:
+            player_scores[player_id]['quests'] += 1
+            player_scores[player_id]['score'] = 0
 
 @bot.message_handler(func=lambda message: True)
 def handle_all_commands(message):
