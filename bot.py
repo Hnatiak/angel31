@@ -352,8 +352,8 @@ def hug_or_kiss(message):
         elif action == 'онанізм':
             bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} зайнявся(-лася) самозадоволенням\n{reason}")
             photo_choices = ['static/onanism/onanizm_one.jpg']
-        elif action in ('пробач', 'вибач', 'вибач мені люба', 'пробач кошеня', 'вибач кохана', 'вибач мені кохана', 'вибач мені кошеня', 'пробач мені люба' , 'пробач мені люба я не хотів'):
-            bot.send_message(message.chat.id, f"🥺 {message.from_user.first_name} просить пробачення у своєї половинки {reply_user.first_name}\n{reason}")
+        elif action in user_input and ('пробач' in user_input or 'вибач' in user_input):
+            bot.send_message(message.chat.id, f"🥺 {message.from_user.first_name} просить пробачення у своєї половинки {reply_user.first_name}")
             photo_choices = []
         else:
             bot.reply_to(message, "Помилка, команда неправильно прописана - перевірте її правильність. Для допомоги пропишіть /help_bot")
