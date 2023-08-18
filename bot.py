@@ -601,6 +601,7 @@ def translate_russian_to_ukrainian(word):
 
 # І
         'ічо': 'і що',
+        'і чо': 'і що',
 
 # Ї
 
