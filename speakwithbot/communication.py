@@ -107,9 +107,7 @@ def handle_commands(bot, message):
             elif text == f"{keyword}" or text == f"{keyword} ти тут" or text == f"{keyword} ти де" or text == f"{keyword} ти тут?" or text == f"{keyword} ти де?":
                 bot.send_message(message.chat.id, random_response)
             elif any(command in text for command in whatareyoudoing):
-                random_response_whatimdoing = random.choice(whatimdoing)
-                keyword_used = next(keyword for keyword in whatareyoudoing if keyword in text)
-                bot.send_message(message.chat.id, f"{keyword_used} {random_response_whatimdoing}")
+                bot.send_message(message.chat.id, f"{random_response_whatimdoing}")
             elif text.startswith(f"{keyword} ") and '?' in text:
                 bot.send_message(message.chat.id, random.choice(['Так', 'Ні']))
             elif text == f"показати ніжки" or text == f"ніжки" or text == f"{keyword} покажи ніжки" or text == f"{keyword} покажи свої ніжки" or text == f"покажи ніжки":
