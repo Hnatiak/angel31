@@ -14,7 +14,6 @@ whatareyoudoing = [ "що поробляєш", "що робиш", "чим зай
 whatimdoing = [ "обновлюю базу даних", "доповнюю свої функції", "нічого такого", "чекаю твоїх вказвок", "відпочиваю", "виправляю помилки", "роблю тести над обновленнями" ]
 
 random_response = random.choice(whereareyou)
-random_response_whatareyoudoing = random.choice(whatareyoudoing)
 random_response_whatimdoing = random.choice(whatimdoing)
 
 # @bot.message_handler(func=lambda message: any(keyword in message.text.lower() for keyword in angel))
@@ -107,8 +106,10 @@ def handle_commands(bot, message):
                 bot.send_message(message.chat.id, 'Дякую кошеннятко моє 😍 😘, мені приємно це знати')
             elif text == f"{keyword}" or text == f"{keyword} ти тут" or text == f"{keyword} ти де" or text == f"{keyword} ти тут?" or text == f"{keyword} ти де?":
                 bot.send_message(message.chat.id, random_response)
-            elif text == f"{keyword} {random_response_whatareyoudoing}":
-                bot.send_message(message.chat.id, random_response_whatimdoing)
+            elif any(command in text for command in whatareyoudoing):
+                random_response_whatimdoing = random.choice(whatimdoing)
+                keyword_used = next(keyword for keyword in whatareyoudoing if keyword in text)
+                bot.send_message(message.chat.id, f"{keyword_used} {random_response_whatimdoing}")
             elif text.startswith(f"{keyword} ") and '?' in text:
                 bot.send_message(message.chat.id, random.choice(['Так', 'Ні']))
             elif text == f"показати ніжки" or text == f"ніжки" or text == f"{keyword} покажи ніжки" or text == f"{keyword} покажи свої ніжки" or text == f"покажи ніжки":
