@@ -104,7 +104,10 @@ def handle_commands(bot, message):
                 bot.send_message(message.chat.id, 'Дякую кошеннятко моє 😍 😘, мені приємно це знати')
             elif text == f"{keyword}" or text == f"{keyword} ти тут" or text == f"{keyword} ти де" or text == f"{keyword} ти тут?" or text == f"{keyword} ти де?":
                 bot.send_message(message.chat.id, random_response)
-            elif text == f"{keyword} що поробляєш" or text == f"{keyword} що робиш" or text == f"{keyword} чим займаєшся?" or text == f"{keyword} чим займаєшся" or text == f"{keyword} чим ти займаєшся" or text == f"{keyword} що ти робиш" or text == f"{keyword} що робиш?" or text == f"{keyword} що поробляєш?" or text == f"{keyword} що ти поробляєш?" or text == f"{keyword} що ти поробляєш":
+            # elif text == f"{keyword} що поробляєш" or text == f"{keyword} що робиш" or text == f"{keyword} чим займаєшся?" or text == f"{keyword} чим займаєшся" or text == f"{keyword} чим ти займаєшся" or text == f"{keyword} що ти робиш" or text == f"{keyword} що робиш?" or text == f"{keyword} що поробляєш?" or text == f"{keyword} що ти поробляєш?" or text == f"{keyword} що ти поробляєш":
+            #     bot.send_message(message.chat.id, random_response_whatimdoing)
+            elif any(command in text for command in [ f"{keyword} що поробляєш", f"{keyword} що робиш", f"{keyword} чим займаєшся?", f"{keyword} чим займаєшся", f"{keyword} чим ти займаєшся", f"{keyword} що ти робиш", f"{keyword} що робиш?", f"{keyword} що поробляєш?", f"{keyword} що ти поробляєш?", f"{keyword} що ти поробляєш"]):
+                random_response_whatimdoing = random.choice(whatimdoing)  # Generate a new random response
                 bot.send_message(message.chat.id, random_response_whatimdoing)
             elif text.startswith(f"{keyword} ") and '?' in text:
                 bot.send_message(message.chat.id, random.choice(['Так', 'Ні']))
