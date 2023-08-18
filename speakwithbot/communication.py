@@ -67,8 +67,7 @@ def handle_commands(bot, message):
                 bot.send_photo(message.chat.id, photo)
             #        elif text in [f"{keyword} привіт", f"{keyword} привет", f"{keyword} хай", f"{keyword} здоров"]:
             #        bot.send_message(message.chat.id, 'Привіт')
-            elif text in [f"{keyword} як ти", f"{keyword} як справи", f"{keyword} ти як", f"{keyword} як ти?",
-                          f"{keyword}, ти як", f"{keyword}, ти як?"]:
+            elif text in [f"{keyword} як ти", f"{keyword} як справи", f"{keyword} ти як", f"{keyword} як ти?", f"{keyword}, ти як", f"{keyword}, ти як?"]:
                 bot.send_message(message.chat.id, 'Усе гаразд, а ти як?')
             elif text == f"{keyword} дякую" or text == f"дякую {keyword}":
                 bot.send_message(message.chat.id, 'Завжди прошу, моє кошенятко 😘')
@@ -104,7 +103,7 @@ def handle_commands(bot, message):
             elif re.search(r"\bангел\b.*\bскільки\b.*\bразів\b.*\bтиждень\b", text, re.IGNORECASE) and not answered_question:
                 bot.send_message(message.chat.id, 'Десь ' + str(random.randint(1, 10)) + ' разів на тиждень')
                 answered_question = True
-            elif text == f"{keyword} ти умнічка" or text == f"{keyword} ти молодець" or text == f"{keyword} розумниця" or text == f"{keyword} умнічка" or text == f"{keyword} молодець" or text == f"{keyword} найкраща" or text == f"{keyword} найкраща!" or text == f"{keyword} - найкраща!" or text == f"{keyword} - найкраща" or text == f"{keyword} ти найкраща" or text == f"{keyword} ти найкраща!":
+            elif text == f"{keyword} ти умнічка" or text == f"{keyword} ти молодець" or text == f"{keyword} розумниця" or text == f"{keyword} умнічка" or text == f"{keyword} молодець" or text == f"{keyword} найкраща" or text == f"{keyword} найкраща!" or text == f"{keyword} - найкраща!" or text == f"{keyword} - найкраща" or text == f"{keyword} ти найкраща" or text == f"{keyword} ти найкраща!" or text == f"{keyword} ти сонечко" or text == f"{keyword} ти молодчина":
                 bot.send_message(message.chat.id, 'Дякую кошеннятко моє 😍 😘, мені приємно це знати')
             elif text == f"{keyword}" or text == f"{keyword} ти тут" or text == f"{keyword} ти де" or text == f"{keyword} ти тут?" or text == f"{keyword} ти де?":
                 bot.send_message(message.chat.id, random_response)
