@@ -41,6 +41,7 @@ friendships = []
 player_scores = {}  # Словник для збереження балів гравців
 QUEST_THRESHOLD = 1000  # Поріг для виконання квесту
 MIN_WORDS_THRESHOLD = 3
+game_numbers = {}
 
 @bot.message_handler(commands=['гра_в_цифри'])
 def start_number_game(message):
