@@ -48,7 +48,7 @@ def handle_commands(bot, message):
         text = message.text.lower()
         answered_question = False
         for keyword in angel:
-            if text == f"{keyword} представся" or text == f"{keyword} представлення" or text == f"{keyword} хто ти" or text == f"{keyword} команди" or text == f"{keyword} що вмієш":
+            if text == f"{keyword} представся" or text == f"{keyword} представлення" or text == f"{keyword} хто ти" or text == f"{keyword} команди" or text == f"{keyword} що вмієш" or text == f"{keyword} що ти можеш" or text == f"{keyword} та що ти можеш" or text == f"{keyword} що вмієш?" or text == f"{keyword} що ти вмієш?" or text == f"{keyword} хто ти?" or text == f"{keyword} що ти можеш?" or text == f"{keyword} та що ти можеш?":
                 bot.send_message(message.chat.id,
                                  'Привіт, я ангел, я можу спілкуватися з вами або ж виконувати команди такі як:'
                                  '\n\n<b>/від вдарити</b>, \n<b>/від обняти</b>, \n<b>/від поцілувати</b> \n<b>/від образити</b>'
