@@ -17,7 +17,7 @@ random_response_whatimdoing = random.choice(whatimdoing)
 def handle_commands(bot, message):
     text = message.text.lower()
 
-    hello = {"ангел привіт", "ангел здоров", "ангел хай"}
+    hello = {"ангел привіт", "ангел здоров", "ангел хай", "ангел дарова", "ангел здоров", "ангел хелоу", "ангел хай"}
     how_are_you = {"ангел як справи", "ангел ти як"}
     how_are_you_second = {"як справи", "ти як", "як ти", "як ся маєш", "як", "", ""}
 
@@ -61,18 +61,12 @@ def handle_commands(bot, message):
                 photo_choices = ['static/01.jpg']
                 photo = open(random.choice(photo_choices), 'rb')
                 bot.send_photo(message.chat.id, photo)
-            #        elif text in [f"{keyword} привіт", f"{keyword} привет", f"{keyword} хай", f"{keyword} здоров"]:
-            #        bot.send_message(message.chat.id, 'Привіт')
             elif text in [f"{keyword} як ти", f"{keyword} як справи", f"{keyword} ти як", f"{keyword} як ти?", f"{keyword}, ти як", f"{keyword}, ти як?"]:
                 bot.send_message(message.chat.id, 'Усе гаразд, а ти як?')
             elif text == f"{keyword} дякую" or text == f"дякую {keyword}":
                 bot.send_message(message.chat.id, 'Завжди прошу, моє кошенятко 😘')
-            # elif text == f"{keyword} що ти вмієш?" or text == f"{keyword} що ти можеш?":
-            #    bot.send_message(message.chat.id, 'Я можу відповісти на твої запитання, показати картинки, розповісти анекдоти і багато іншого!')
-            # elif text == f"{keyword} допоможи" or text == f"{keyword} допоможи мені":
-            #    bot.send_message(message.chat.id, 'Звісно, що допоможу! Що тобі потрібно?')
-            # elif text == f"{keyword} дай пораду" or text == f"{keyword} порадь":
-            #    bot.send_message(message.chat.id, 'Моя порада: будь завжди веселим і позитивним!')
+            elif text == f"{keyword} дай пораду" or text == f"{keyword} порадь":
+               bot.send_message(message.chat.id, 'Моя порада: будь завжди веселим і позитивним!')
             elif text == f"{keyword} до побачення" or text == f"{keyword} бувай":
                 bot.send_message(message.chat.id, 'До зустрічі! Бувай ❤')
             elif text == f"{keyword} на добраніч" or text == f"{keyword} спокійної ночі" or text == f"{keyword} надобраніч":
@@ -104,8 +98,6 @@ def handle_commands(bot, message):
             elif text == f"{keyword}" or text == f"{keyword} ти тут" or text == f"{keyword} ти де" or text == f"{keyword} ти тут?" or text == f"{keyword} ти де?":
                 random_response = random.choice(whereareyou)
                 bot.send_message(message.chat.id, random_response)
-            # elif text == f"{keyword} що поробляєш" or text == f"{keyword} що робиш" or text == f"{keyword} чим займаєшся?" or text == f"{keyword} чим займаєшся" or text == f"{keyword} чим ти займаєшся" or text == f"{keyword} що ти робиш" or text == f"{keyword} що робиш?" or text == f"{keyword} що поробляєш?" or text == f"{keyword} що ти поробляєш?" or text == f"{keyword} що ти поробляєш":
-            #     bot.send_message(message.chat.id, random_response_whatimdoing)
             elif any(command in text for command in [ f"{keyword} що поробляєш", f"{keyword} що робиш", f"{keyword} чим займаєшся?", f"{keyword} чим займаєшся", f"{keyword} чим ти займаєшся", f"{keyword} що ти робиш", f"{keyword} що робиш?", f"{keyword} що поробляєш?", f"{keyword} що ти поробляєш?", f"{keyword} що ти поробляєш"]):
                 random_response_whatimdoing = random.choice(whatimdoing)  # Generate a new random response
                 bot.send_message(message.chat.id, random_response_whatimdoing)
