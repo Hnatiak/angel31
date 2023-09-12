@@ -120,5 +120,5 @@ def handle_commands(bot, message):
                 photo_path = random.choice(photo_choices)
                 with open(photo_path, 'rb') as photo_file:
                     bot.send_photo(message.chat.id, photo_file)
-    else:
-        bot.send_message(message.chat.id, "Я не розумію тебе")
+    # else:
+    #     bot.send_message(message.chat.id, "Я не розумію тебе")
