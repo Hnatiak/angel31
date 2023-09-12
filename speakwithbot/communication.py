@@ -7,10 +7,6 @@ bot = telebot.TeleBot(config.TOKEN)
 
 angel = [ 'ангелятко', 'ангел', 'ангелику', 'ангелочок' ]
 
-words = text.split()
-
-text = "скажи наскільки він розумний"
-
 whereareyou = ["Так я тут, пробач що затримала", "Я тут", "Я завжди на місці, не хвилюйся.", "Вибач, я тут. Все добре!", "Ти тут, і це головне. І я також на зв'язку." ]
 
 whatimdoing = [ "обновлюю базу даних", "доповнюю свої функції", "нічого такого", "чекаю твоїх вказвок", "відпочиваю", "виправляю помилки", "роблю тести над обновленнями" ]
@@ -89,18 +85,21 @@ def handle_commands(bot, message):
             # elif text == f"{keyword} скажи наскільки він розумний?" or text == f"{keyword} скажи наскільки він розумний" or text == f"{keyword} на скільки він розумний":
             #    bot.send_message(message.chat.id, f"Небеса кажуть що він розумний на {random.randint(0, 100)}%")
 
-            elif any(word in words for word in [f"{keyword} скажи", f"{keyword} напиши", "як", "ти", "думаєш"]):
-                if "розумний" in words:
-                    bot.send_message(message.chat.id, f"Небеса кажуть що він розумний на {random.randint(0, 100)}%")
-                elif "дурний" in words:
-                    bot.send_message(message.chat.id, f"Небеса кажуть що він дурний на {random.randint(0, 100)}%")
+            elif f"{keyword} скажи наскільки він розумний" in text or f"{keyword} напиши наскільки він розумний" in text or f"{keyword} як ти думаєш наскільки він розумний" in text:
+                bot.send_message(message.chat.id, f"Небеса кажуть що він розумний на {random.randint(0, 100)}%")
+            elif f"{keyword} скажи наскільки він дурний" in text or f"{keyword} напиши наскільки він дурний" in text or f"{keyword} як ти думаєш наскільки він дурний" in text:
+                bot.send_message(message.chat.id, f"Небеса кажуть що він дурний на {random.randint(0, 100)}%")
+            elif f"{keyword} скажи наскільки вона розумна" in text or f"{keyword} напиши наскільки вона розумна" in text or f"{keyword} як ти думаєш наскільки вона розумна" in text:
+                bot.send_message(message.chat.id, f"Небеса кажуть що вона розумна на {random.randint(0, 100)}%")
+            elif f"{keyword} скажи наскільки вона дурна" in text or f"{keyword} напиши наскільки вона дурна" in text or f"{keyword} як ти думаєш наскільки вона дурна" in text:
+                bot.send_message(message.chat.id, f"Небеса кажуть що вона дурна на {random.randint(0, 100)}%")
                 
-            elif message.reply_to_message is not None and message.text.lower() in [f'{keyword} скажи наскільки вона розумна', f'{keyword} на скільки вона розумна']:
-               bot.send_message(message.chat.id, f"Небеса кажуть що вона розумна на {random.randint(0, 100)}%")
-            elif message.reply_to_message is not None and message.text.lower() == 'ангел скажи наскільки він дурний?':
-               bot.send_message(message.chat.id, f"Небеса кажуть що він дурний на {random.randint(0, 100)}%")
-            elif message.reply_to_message is not None and message.text.lower() == 'ангел скажи наскільки вона дурна?':
-               bot.send_message(message.chat.id, f"Небеса кажуть що вона дурна на {random.randint(0, 100)}%")
+            # elif message.reply_to_message is not None and message.text.lower() in [f'{keyword} скажи наскільки вона розумна', f'{keyword} на скільки вона розумна']:
+            #    bot.send_message(message.chat.id, f"Небеса кажуть що вона розумна на {random.randint(0, 100)}%")
+            # elif message.reply_to_message is not None and message.text.lower() == 'ангел скажи наскільки він дурний?':
+            #    bot.send_message(message.chat.id, f"Небеса кажуть що він дурний на {random.randint(0, 100)}%")
+            # elif message.reply_to_message is not None and message.text.lower() == 'ангел скажи наскільки вона дурна?':
+            #    bot.send_message(message.chat.id, f"Небеса кажуть що вона дурна на {random.randint(0, 100)}%")
                 
             elif text.startswith(f"{keyword}") and 'хто' in text:
                 bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто', 'Він/Вона']))
