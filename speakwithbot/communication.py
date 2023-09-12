@@ -75,9 +75,13 @@ def handle_commands(bot, message):
                 bot.send_message(message.chat.id,
                                  'А ось і мій вірш:\nТи мій ангел, що з неба злетів,\nЩоб мені допомогти в біді,\nЗавжди поруч, коли я сам,\nТи мій ангел, мій друг і мій брат.')
                 
-            elif message.reply_to_message is not None and message.text.lower() in ['ангел скажи наскільки він розумний', 'ангел скажи наскільки він розумний?']:
+            # elif message.reply_to_message is not None and message.text.lower() in [f'{keyword} скажи наскільки він розумний', f'{keyword} скажи наскільки він розумний?', f'{keyword} на скільки він розумний']:
+            #    bot.send_message(message.chat.id, f"Небеса кажуть що він розумний на {random.randint(0, 100)}%")
+
+            elif text == f"{keyword} скажи наскільки він розумний?" or text == f"{keyword} скажи наскільки він розумний" or text == f"{keyword} на скільки він розумний":
                bot.send_message(message.chat.id, f"Небеса кажуть що він розумний на {random.randint(0, 100)}%")
-            elif message.reply_to_message is not None and message.text.lower() in ['ангел скажи наскільки вона розумна', 'ангел на скільки вона розумна']:
+                
+            elif message.reply_to_message is not None and message.text.lower() in [f'{keyword} скажи наскільки вона розумна', f'{keyword} на скільки вона розумна']:
                bot.send_message(message.chat.id, f"Небеса кажуть що вона розумна на {random.randint(0, 100)}%")
             elif message.reply_to_message is not None and message.text.lower() == 'ангел скажи наскільки він дурний?':
                bot.send_message(message.chat.id, f"Небеса кажуть що він дурний на {random.randint(0, 100)}%")
