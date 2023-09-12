@@ -39,7 +39,7 @@ def handle_commands(bot, message):
             bot.send_message(message.chat.id, str(random.randint(start_num, end_num)))
         else:
             bot.send_message(message.chat.id, "Перепрошую, але наступне число, яке ви вказали, не є більше " + str(start_num))
-    elif:
+    else:
 # else
         text = message.text.lower()
         answered_question = False
