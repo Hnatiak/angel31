@@ -39,7 +39,7 @@ def handle_commands(bot, message):
             bot.send_message(message.chat.id, str(random.randint(start_num, end_num)))
         else:
             bot.send_message(message.chat.id, "Перепрошую, але наступне число, яке ви вказали, не є більше " + str(start_num))
-    else:
+    elif:
 # else
         text = message.text.lower()
         answered_question = False
@@ -88,6 +88,9 @@ def handle_commands(bot, message):
                 bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто з вас', 'Він', 'Ви обоє']))
             elif text.startswith(f"{keyword}") and 'вона чи я' in text:
                 bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто з вас', 'Вона', 'Ви обоє']))
+            # elif re.search(fr"\b{keyword}\b.*\bскільки\b.*\bразів\b.*\bтиждень\b", text, re.IGNORECASE) and not answered_question:
+            #     bot.send_message(message.chat.id, 'Десь ' + str(random.randint(1, 10)) + ' разів на тиждень')
+            #     answered_question = True
             elif re.search(fr"\b{keyword}\b.*\bскільки\b.*\bразів\b.*\bтиждень\b", text, re.IGNORECASE) and not answered_question:
                 bot.send_message(message.chat.id, 'Десь ' + str(random.randint(1, 10)) + ' разів на тиждень')
                 answered_question = True
@@ -117,3 +120,5 @@ def handle_commands(bot, message):
                 photo_path = random.choice(photo_choices)
                 with open(photo_path, 'rb') as photo_file:
                     bot.send_photo(message.chat.id, photo_file)
+    else:
+        bot.send_message(message.chat.id, "Я не розумію тебе")
