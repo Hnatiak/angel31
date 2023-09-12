@@ -74,32 +74,13 @@ def handle_commands(bot, message):
             elif text == f"{keyword} вірш" or text == f"{keyword} поезія":
                 bot.send_message(message.chat.id,
                                  'А ось і мій вірш:\nТи мій ангел, що з неба злетів,\nЩоб мені допомогти в біді,\nЗавжди поруч, коли я сам,\nТи мій ангел, мій друг і мій брат.')
-                
-            # elif message.reply_to_message is not None and message.text.lower() in [f'{keyword} скажи наскільки він розумний', f'{keyword} скажи наскільки він розумний?', f'{keyword} на скільки він розумний']:
-            #    bot.send_message(message.chat.id, f"Небеса кажуть що він розумний на {random.randint(0, 100)}%")
 
-            # elif text == f"{keyword} скажи наскільки він розумний?" or text == f"{keyword} скажи наскільки він розумний" or text == f"{keyword} на скільки він розумний":
-            #    bot.send_message(message.chat.id, f"Небеса кажуть що він розумний на {random.randint(0, 100)}%")
-            # elif text == f"{keyword} скажи наскільки вона розумна" or text == f"{keyword} скажи наскільки вона розумна?" or text == f"{keyword} на скільки вона розумна" or text == f"{keyword} на скільки вона розумне":
-            #    bot.send_message(message.chat.id, f"Небеса кажуть що він розумний на {random.randint(0, 100)}%")
-            # elif text == f"{keyword} скажи наскільки він розумний?" or text == f"{keyword} скажи наскільки він розумний" or text == f"{keyword} на скільки він розумний":
-            #    bot.send_message(message.chat.id, f"Небеса кажуть що він розумний на {random.randint(0, 100)}%")
-
-            elif f"{keyword} скажи наскільки він розумний" in text or f"{keyword} напиши наскільки він розумний" in text or f"{keyword} як ти думаєш наскільки він розумний" in text:
-                bot.send_message(message.chat.id, f"Небеса кажуть що він розумний на {random.randint(0, 100)}%")
-            elif f"{keyword} скажи наскільки він дурний" in text or f"{keyword} напиши наскільки він дурний" in text or f"{keyword} як ти думаєш наскільки він дурний" in text:
-                bot.send_message(message.chat.id, f"Небеса кажуть що він дурний на {random.randint(0, 100)}%")
-            elif f"{keyword} скажи наскільки вона розумна" in text or f"{keyword} напиши наскільки вона розумна" in text or f"{keyword} як ти думаєш наскільки вона розумна" in text:
-                bot.send_message(message.chat.id, f"Небеса кажуть що вона розумна на {random.randint(0, 100)}%")
-            elif f"{keyword} скажи наскільки вона дурна" in text or f"{keyword} напиши наскільки вона дурна" in text or f"{keyword} як ти думаєш наскільки вона дурна" in text:
-                bot.send_message(message.chat.id, f"Небеса кажуть що вона дурна на {random.randint(0, 100)}%")
-                
-            # elif message.reply_to_message is not None and message.text.lower() in [f'{keyword} скажи наскільки вона розумна', f'{keyword} на скільки вона розумна']:
-            #    bot.send_message(message.chat.id, f"Небеса кажуть що вона розумна на {random.randint(0, 100)}%")
-            # elif message.reply_to_message is not None and message.text.lower() == 'ангел скажи наскільки він дурний?':
-            #    bot.send_message(message.chat.id, f"Небеса кажуть що він дурний на {random.randint(0, 100)}%")
-            # elif message.reply_to_message is not None and message.text.lower() == 'ангел скажи наскільки вона дурна?':
-            #    bot.send_message(message.chat.id, f"Небеса кажуть що вона дурна на {random.randint(0, 100)}%")
+            elif text == f"{keyword} скажи наскільки він розумний?" or text == f"{keyword} скажи наскільки він розумний" or text == f"{keyword} напиши наскільки він розумний" or text == f"{keyword} як ти думаєш наскільки він розумний" or text == f"{keyword} напиши наскільки він розумний?" or text == f"{keyword} як ти думаєш наскільки він розумний?":
+               bot.send_message(message.chat.id, f"Небеса кажуть що він розумний на {random.randint(0, 100)}%")
+            elif text == f"{keyword} скажи наскільки вона розумна?" or text == f"{keyword} скажи наскільки вона розумна" or text == f"{keyword} напиши наскільки вона розумна" or text == f"{keyword} як ти думаєш наскільки вона розумна" or text == f"{keyword} напиши наскільки вона розумна?" or text == f"{keyword} як ти думаєш наскільки вона розумна?":
+               bot.send_message(message.chat.id, f"Небеса кажуть що вона розумна на {random.randint(0, 100)}%")
+            elif text == f"{keyword} скажи наскільки він дурний?" or text == f"{keyword} скажи наскільки він дурний" or text == f"{keyword} напиши наскільки він дурний" or text == f"{keyword} як ти думаєш наскільки він дурний" or text == f"{keyword} напиши наскільки він дурний?" or text == f"{keyword} як ти думаєш наскільки він дурний?":
+               bot.send_message(message.chat.id, f"Небеса кажуть що він дурний на {random.randint(0, 100)}%")
                 
             elif text.startswith(f"{keyword}") and 'хто' in text:
                 bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто', 'Він/Вона']))
@@ -107,7 +88,7 @@ def handle_commands(bot, message):
                 bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто з вас', 'Він', 'Ви обоє']))
             elif text.startswith(f"{keyword}") and 'вона чи я' in text:
                 bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто з вас', 'Вона', 'Ви обоє']))
-            elif re.search(r"\bангел\b.*\bскільки\b.*\bразів\b.*\bтиждень\b", text, re.IGNORECASE) and not answered_question:
+            elif re.search(fr"\b{keyword}\b.*\bскільки\b.*\bразів\b.*\bтиждень\b", text, re.IGNORECASE) and not answered_question:
                 bot.send_message(message.chat.id, 'Десь ' + str(random.randint(1, 10)) + ' разів на тиждень')
                 answered_question = True
             elif text == f"{keyword} ти умнічка" or text == f"{keyword} ти молодець" or text == f"{keyword} розумниця" or text == f"{keyword} умнічка" or text == f"{keyword} молодець" or text == f"{keyword} найкраща" or text == f"{keyword} найкраща!" or text == f"{keyword} - найкраща!" or text == f"{keyword} - найкраща" or text == f"{keyword} ти найкраща" or text == f"{keyword} ти найкраща!" or text == f"{keyword} ти сонечко" or text == f"{keyword} ти молодчина":
@@ -120,7 +101,7 @@ def handle_commands(bot, message):
                 bot.send_message(message.chat.id, random_response_whatimdoing)
             elif text.startswith(f"{keyword} ") and '?' in text:
                 bot.send_message(message.chat.id, random.choice(['Так', 'Ні']))
-            elif text == f"показати ніжки" or text == f"ніжки" or text == f"{keyword} покажи ніжки" or text == f"{keyword} покажи свої ніжки" or text == f"покажи ніжки":
+            elif text == "показати ніжки" or text == "ніжки" or text == f"{keyword} покажи ніжки" or text == f"{keyword} покажи свої ніжки" or text == f"покажи ніжки":
                 bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} вирішив(-ла) подивитися на ніжки")
                 photo_choices = ['static/legs/legs_(1).jpg', 'static/legs/legs_(2).jpg', 'static/legs/legs_(3).jpg',
                                  'static/legs/legs_(4).jpg', 'static/legs/legs_(5).jpg', 'static/legs/legs_(6).jpg',
