@@ -24,7 +24,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import speakwithbot.communication as communication
-# import translate
+import translate
 from langdetect import detect
 from pyaspeller import YandexSpeller
 import math
