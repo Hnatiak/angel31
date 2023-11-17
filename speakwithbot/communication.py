@@ -17,8 +17,8 @@ random_response_whatimdoing = random.choice(whatimdoing)
 def handle_commands(bot, message):
     text = message.text.lower()
 
-    hello = {"ангел привіт", "ангел здоров", "ангел хай", "ангел дарова", "ангел здоров", "ангел хелоу", "ангел хай"}
-    how_are_you = {"ангел як справи", "ангел ти як"}
+    hello = {"ангел привіт", "ангел здоров", "ангел хай", "ангел дарова", "ангел здоров", "ангел хелоу", "ангел хай", "ангел салют", "ангел салю"}
+    how_are_you = {"ангел як справи", "ангел ти як", "ангел як почуваєшся"}
     how_are_you_second = {"як справи", "ти як", "як ти", "як ся маєш", "як", "", ""}
 
     if any(command in text for command in hello):
@@ -122,3 +122,7 @@ def handle_commands(bot, message):
                     bot.send_photo(message.chat.id, photo_file)
     # else:
     #     bot.send_message(message.chat.id, "Я не розумію тебе")
+    
+    
+# if __name__ == '__main__':
+#     bot.polling(none_stop=True)
