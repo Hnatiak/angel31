@@ -702,25 +702,25 @@ def translate_russian_to_ukrainian(word):
 
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
-     player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
+    player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
 
-     text = message.text.lower()
-     words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
+    text = message.text.lower()
+    words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
 
-     translated_words = []
-     for word in words:
-         ukrainian_word = translate_russian_to_ukrainian(word)
-         if word != ukrainian_word:
+    translated_words = []
+    for word in words:
+        ukrainian_word = translate_russian_to_ukrainian(word)
+        if word != ukrainian_word:
              translated_words.append((word, ukrainian_word))
 
-     if translated_words:
-         reply = ""
-         for word_pair in translated_words:
-             reply += f"{word_pair[0]}, "
-         reply += "немає в українській мові, правильно "
-         for word_pair in translated_words:
-             reply += f"{word_pair[1]} "
-         bot.reply_to(message, reply)
+    if translated_words:
+        reply = ""
+        for word_pair in translated_words:
+            reply += f"{word_pair[0]}, "
+        reply += "немає в українській мові, правильно "
+        for word_pair in translated_words:
+            reply += f"{word_pair[1]} "
+        bot.reply_to(message, reply)
 
 
 
