@@ -701,7 +701,7 @@ def translate_russian_to_ukrainian(word):
 
 
 @bot.message_handler(func=lambda message: True)
-  def handle_message(message):
+def handle_message(message):
      player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
 
      text = message.text.lower()
