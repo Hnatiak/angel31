@@ -19,7 +19,7 @@ random_response_whatimdoing = random.choice(whatimdoing)
 def get_weather(city):
     api_key = '3f46be9e408103aa48212de1a723584f'
     base_url = 'http://api.openweathermap.org/data/2.5/weather'
-    params = {'q': city, 'appid': api_key, 'units': 'metric'}  # Використовуйте 'imperial' для температури в Фаренгейтах
+    params = {'q': city, 'appid': api_key, 'units': 'metric'}
     response = requests.get(base_url, params=params)
     weather_data = response.json()
 
@@ -29,21 +29,17 @@ def get_weather(city):
     else:
         return 'Не вдалося отримати дані про погоду.'
 
-# @bot.message_handler(func=lambda message: 'ангел яка погода в' in message.text.lower())
-# def handle_weather_command(message):
-#     city = message.text.split('в')[1].strip()
-#     weather_response = get_weather(city)
-#     bot.send_message(message.chat.id, weather_response)
-
-@bot.message_handler(func=lambda message: re.search(r'\bангел яка погода в\b', message.text.lower()))
+@bot.message_handler(func=lambda message: re.search(r'\bангел, яка погода в\b', message.text.lower()))
 def handle_weather_command(message):
-    match = re.search(r'\bангел яка погода в\b(.+)', message.text, re.IGNORECASE)
+    match = re.search(r'\bангел, яка погода в\b(.+)', message.text, re.IGNORECASE)
     if match:
         city = match.group(1).strip()
         weather_response = get_weather(city)
         bot.send_message(message.chat.id, weather_response)
     else:
         bot.send_message(message.chat.id, 'Не вдалося визначити місто у запитанні про погоду.')
+        
+
 
 
 
