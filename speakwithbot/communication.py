@@ -3,10 +3,8 @@ import re
 import telebot
 import config
 import requests
-from pyowm import OWM
 
 bot = telebot.TeleBot(config.TOKEN)
-OWM_TOKEN = '0faf4cc80c125af41e3c5cc64ff38cc5'
 
 angel = [ 'ангелятко', 'ангел', 'ангелику', 'ангелочок' ]
 
@@ -15,30 +13,6 @@ whereareyou = ["Так я тут, пробач що затримала", "Я т�
 whatimdoing = [ "обновлюю базу даних", "доповнюю свої функції", "нічого такого", "чекаю твоїх вказвок", "відпочиваю", "виправляю помилки", "роблю тести над обновленнями" ]
 
 random_response_whatimdoing = random.choice(whatimdoing)
-
-owm = OWM(OWM_TOKEN)
-
-
-
-
-@bot.message_handler(func=lambda message: 'ангел яка погода в' in message.text.lower())
-def get_weather(message):
-    try:
-        city = message.text.split('ангел яка погода в')[1].strip()
-        observation = owm.weather_manager().weather_at_place(city)
-        w = observation.weather
-
-        temperature = w.temperature('celsius')['temp']
-        description = w.detailed_status
-
-        response = f'У місті {city} зараз {temperature} °C, {description}.'
-        bot.send_message(message.chat.id, response)
-    except Exception as e:
-        bot.send_message(message.chat.id, f'Не вдалося отримати дані про погоду для міста {city}.')
-        
-
-
-
 
 
 
