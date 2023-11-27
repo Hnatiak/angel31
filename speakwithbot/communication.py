@@ -69,17 +69,14 @@ def get_weather(city):
 @bot.message_handler(func=lambda message: re.search(r'\bангел, яка погода в\b', message.text.lower()))
 def handle_weather_command(bot, message):
     match = re.search(r'\bангел, яка погода в\b(.+)', message.text, re.IGNORECASE)
-    try:
-        if match:
-            city = match.group(1).strip()
-            print(f"Місто: {city}")
-            weather_response = get_weather(city)
-            print(f"Відповідь про погоду: {weather_response}")
-            bot.send_message(message.chat.id, weather_response)
-        else:
-            bot.send_message(message.chat.id, 'Не вдалося визначити місто у запитанні про погоду.')
-    except Exception as e:
-        bot.send_message(message.chat.id, f'Помилка при обробці запитання про погоду: {str(e)}')
+    if match:
+        city = match.group(1).strip()
+        print(f"Місто: {city}")
+        weather_response = get_weather(city)
+        print(f"Відповідь про погоду: {weather_response}")
+        bot.send_message(message.chat.id, weather_response)
+    else:
+        bot.send_message(message.chat.id, 'Не вдалося визначити місто у запитанні про погоду.')
         
 
 
