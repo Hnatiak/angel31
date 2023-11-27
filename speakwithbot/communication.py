@@ -67,7 +67,7 @@ def get_weather(city):
 
 
 @bot.message_handler(func=lambda message: re.search(r'\bангел, яка погода в\b', message.text.lower()))
-def handle_weather_command(bot, message):
+def handle_weather_command(message):
     match = re.search(r'\bангел, яка погода в\b(.+)', message.text, re.IGNORECASE)
     if match:
         city = match.group(1).strip()
