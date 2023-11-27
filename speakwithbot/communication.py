@@ -29,9 +29,10 @@ def get_weather(city):
     else:
         return 'Не вдалося отримати дані про погоду.'
 
-# @bot.message_handler(func=lambda message: re.search(r'ангел, яка погода в\b', message.text.lower()))
-def handle_weather_command(bot, message):
-    match = re.search(r'ангел, яка погода в\b(.+)', message.text, re.IGNORECASE)
+
+@bot.message_handler(func=lambda message: re.search(r'\bангел, яка погода в\b', message.text.lower()))
+def handle_weather_command(message):
+    match = re.search(r'\bангел, яка погода в\b(.+)', message.text, re.IGNORECASE)
     if match:
         city = match.group(1).strip()
         print(f"Місто: {city}")
@@ -158,5 +159,5 @@ def handle_commands(bot, message):
     #     bot.send_message(message.chat.id, "Я не розумію тебе")
     
     
-# if __name__ == '__main__':
-#     bot.polling(none_stop=True)
+if __name__ == '__main__':
+    bot.polling(none_stop=True)
