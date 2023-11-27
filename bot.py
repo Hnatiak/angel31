@@ -840,8 +840,32 @@ def translate_russian_to_ukrainian(word):
     return translation_dict.get(word, word)
 
 
+# @bot.message_handler(func=lambda message: True)
+# def handle_message(message):
+#     player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
+
+#     text = message.text.lower()
+#     words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
+
+#     translated_words = []
+#     for word in words:
+#         ukrainian_word = translate_russian_to_ukrainian(word)
+#         if word != ukrainian_word:
+#              translated_words.append((word, ukrainian_word))
+
+#     if translated_words:
+#         reply = ""
+#         for word_pair in translated_words:
+#             reply += f"{word_pair[0]}, "
+#         reply += "немає в українській мові, правильно "
+#         for word_pair in translated_words:
+#             reply += f"{word_pair[1]} "
+#         bot.reply_to(message, reply)
+
+
+
 @bot.message_handler(func=lambda message: True)
-def handle_message(message):
+def handle_all_commands(message):
     player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
 
     text = message.text.lower()
@@ -861,6 +885,11 @@ def handle_message(message):
         for word_pair in translated_words:
             reply += f"{word_pair[1]} "
         bot.reply_to(message, reply)
+
+    communication.handle_commands(bot, message)
+
+
+
 
 
 
@@ -960,9 +989,13 @@ def handle_message(message):
 #             player_scores[player_id]['quests'] += 1
 #             player_scores[player_id]['score'] = 0
 
-@bot.message_handler(func=lambda message: True)
-def handle_all_commands(message):
-    communication.handle_commands(bot, message)
+
+
+
+
+# @bot.message_handler(func=lambda message: True)
+# def handle_all_commands(message):
+#     communication.handle_commands(bot, message)
     # translate.handle_message(bot, message)
 
 # @bot.message_handler(func=lambda message: True)
