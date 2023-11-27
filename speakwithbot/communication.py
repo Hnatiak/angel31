@@ -17,17 +17,18 @@ random_response_whatimdoing = random.choice(whatimdoing)
 
 
 def get_weather(city):
-    api_key = '0faf4cc80c125af41e3c5cc64ff38cc5'
-    base_url = 'http://api.openweathermap.org/data/2.5/weather'
-    params = {'q': city, 'appid': api_key, 'units': 'metric'}
-    response = requests.get(base_url, params=params)
-    weather_data = response.json()
+    try:
+        api_key = '0faf4cc80c125af41e3c5cc64ff38cc5'
+        base_url = 'http://api.openweathermap.org/data/2.5/weather'
+        params = {'q': city, 'appid': api_key, 'units': 'metric'}
+        response = requests.get(base_url, params=params)
+        response.raise_for_status()  # Генерує виняток, якщо HTTP-запит завершиться неуспішно
+        weather_data = response.json()
 
-    if response.status_code == 200:
         temperature = weather_data['main']['temp']
         return f'У {city} зараз {temperature} градусів за Цельсієм.'
-    else:
-        return 'Не вдалося отримати дані про погоду.'
+    except Exception as e:
+        return f'Не вдалося отримати дані про погоду. Помилка: {str(e)}'
 
 
 @bot.message_handler(func=lambda message: re.search(r'\bангел, яка погода в\b', message.text.lower()))
