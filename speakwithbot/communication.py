@@ -16,6 +16,9 @@ random_response_whatimdoing = random.choice(whatimdoing)
 
 
 
+
+
+
 def get_weather(city):
     try:
         api_key = '0faf4cc80c125af41e3c5cc64ff38cc5'
@@ -33,15 +36,47 @@ def get_weather(city):
 
 @bot.message_handler(func=lambda message: re.search(r'\bангел, яка погода в\b', message.text.lower()))
 def handle_weather_command(message):
-    match = re.search(r'\bангел, яка погода в\b(.+)', message.text, re.IGNORECASE)
-    if match:
-        city = match.group(1).strip()
-        print(f"Місто: {city}")
-        weather_response = get_weather(city)
-        print(f"Відповідь про погоду: {weather_response}")
-        bot.send_message(message.chat.id, weather_response)
-    else:
-        bot.send_message(message.chat.id, 'Не вдалося визначити місто у запитанні про погоду.')
+    try:
+        match = re.search(r'\bангел, яка погода в\b(.+)', message.text, re.IGNORECASE)
+        if match:
+            city = match.group(1).strip()
+            print(f"Місто: {city}")
+            weather_response = get_weather(city)
+            print(f"Відповідь про погоду: {weather_response}")
+            bot.send_message(message.chat.id, weather_response)
+        else:
+            bot.send_message(message.chat.id, 'Не вдалося визначити місто у запитанні про погоду.')
+    except Exception as e:
+        bot.send_message(message.chat.id, f'Помилка при обробці запитання про погоду: {str(e)}')
+
+
+
+# def get_weather(city):
+#     try:
+#         api_key = '0faf4cc80c125af41e3c5cc64ff38cc5'
+#         base_url = 'http://api.openweathermap.org/data/2.5/weather'
+#         params = {'q': city, 'appid': api_key, 'units': 'metric'}
+#         response = requests.get(base_url, params=params)
+#         response.raise_for_status()  # Генерує виняток, якщо HTTP-запит завершиться неуспішно
+#         weather_data = response.json()
+
+#         temperature = weather_data['main']['temp']
+#         return f'У {city} зараз {temperature} градусів за Цельсієм.'
+#     except Exception as e:
+#         return f'Не вдалося отримати дані про погоду. Помилка: {str(e)}'
+
+
+# @bot.message_handler(func=lambda message: re.search(r'\bангел, яка погода в\b', message.text.lower()))
+# def handle_weather_command(message):
+#     match = re.search(r'\bангел, яка погода в\b(.+)', message.text, re.IGNORECASE)
+#     if match:
+#         city = match.group(1).strip()
+#         print(f"Місто: {city}")
+#         weather_response = get_weather(city)
+#         print(f"Відповідь про погоду: {weather_response}")
+#         bot.send_message(message.chat.id, weather_response)
+#     else:
+#         bot.send_message(message.chat.id, 'Не вдалося визначити місто у запитанні про погоду.')
         
 
 
