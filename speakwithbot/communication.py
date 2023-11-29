@@ -82,14 +82,15 @@ def handle_commands(bot, message):
                         'Факт: Однією з “родзинок” української мови є те, що вона багата на зменшувальні форми. Навіть слово “вороги” має зменшувально-пестливу форму, яка вживається в гімні України. Пам’ятаєте: “…згинуть наші вороженьки, як роса на сонці”.',
                         'Факт: Українську мову офіційно визнали літературною після видання “Енеїди” Івана Котляревського. Відтак, Котляревського вважають основоположником нової української мови.',
                     ]
+                
                     random_response = random.choice(responses)
                     bot.send_message(message.chat.id, random_response)
             # elif text == f"{keyword} слава україні" or text == f"{keyword} Слава Україні" or text == f"{keyword} слава Україні" or text == f"{keyword} Слава україні":
             #     bot.send_message(message.chat.id, 'Героям слава!')
-            elif text == f"{keyword} герої не вмирають" or text == f"{keyword} Герої не вмирають" or text == f"{keyword} Герої Не Вмирають":
-                bot.send_message(message.chat.id, 'Вмирають Вороги!')
-            elif text == f"{keyword} Україна" or text == f"{keyword} україна":
-                bot.send_message(message.chat.id, 'Понад усе!')
+            # elif text == f"{keyword} герої не вмирають" or text == f"{keyword} Герої не вмирають" or text == f"{keyword} Герої Не Вмирають":
+            #     bot.send_message(message.chat.id, 'Вмирають Вороги!')
+            # elif text == f"{keyword} Україна" or text == f"{keyword} україна":
+            #     bot.send_message(message.chat.id, 'Понад усе!')
             elif text == f"{keyword} до побачення" or text == f"{keyword} бувай":
                 bot.send_message(message.chat.id, 'До зустрічі! Бувай ❤')
             elif text == f"{keyword} на добраніч" or text == f"{keyword} спокійної ночі" or text == f"{keyword} надобраніч":
