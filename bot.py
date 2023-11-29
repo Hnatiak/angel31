@@ -466,7 +466,6 @@ def handle_insult(message):
         bot.send_message(message.chat.id, f"мут 1 хвилину {user_mention}", reply_to_message_id=message.message_id)
         bot.reply_to(message, "Тепер подумай над своєю поведінкою")
     except Exception as e:
-        print(e)
         bot.send_message(message.chat.id, "Мені взагаліто обідно")
 
 
@@ -502,7 +501,6 @@ def handle_shower_command(message):
                 message, "Не гарно підглядати за дівчиною в душі! Тепер подумай, як воно!"
             )
         except Exception as e:
-            print(e)
             bot.send_message(message.chat.id, "Гей, перестань, мені не приємно!")
     else:
         bot.reply_to(message, 'Ця команда доступна лише з 19:00 до 20:00')
@@ -872,7 +870,11 @@ def handle_all_commands(message):
 
     text = message.text.lower()
     words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
-    bot.send_message(message.chat.id, f"мут 1 хвилину {user_mention}", reply_to_message_id=message.message_id),
+    try:
+        user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
+        bot.send_message(message.chat.id, f"мут 1 хвилину {user_mention}", reply_to_message_id=message.message_id),
+    except Exception as e:
+        bot.send_message(message.chat.id, "ВІДКРИЙ УКРАЇНСЬКИЙ ТЛУМАЧНИЙ СЛОВНИК! ПОЗОРИЩЕ!")
 
     translated_words = []
     for word in words:
