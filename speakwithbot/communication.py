@@ -142,7 +142,7 @@ def handle_commands(bot, message):
                 photo_path = random.choice(photo_choices)
                 with open(photo_path, 'rb') as photo_file:
                     bot.send_photo(message.chat.id, photo_file)
-            elif text.lower() == f"{keyword} гімн України" or text.lower() == f"{keyword} Гімн України" or text.lower() == f"{keyword} прошу Гімн України" or text.lower() == f"{keyword} прошу гімн України" or text.lower() == f"{keyword} Український гімн":
+            elif any(keyword in text.lower() for keyword in ["гімн", "України"]):
                 bot.send_message(message.chat.id, 'Ще не вмерла України і слава, і воля,\nЩе нам, браття молодії, усміхнеться доля.\nЗгинуть наші воріженьки, як роса на сонці,\n\nЗапануєм і ми, браття, у своїй сторонці.\nДушу й тіло ми положим за нашу свободу,\nІ покажем, що ми, браття, козацького роду!')
     # else:
     #     bot.send_message(message.chat.id, "Я не розумію тебе")
