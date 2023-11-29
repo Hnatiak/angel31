@@ -883,7 +883,7 @@ def handle_all_commands(message):
             user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
             bot.send_message(message.chat.id, f"мут 1 хвилину {user_mention}", reply_to_message_id=message.message_id),
         except Exception as e:
-        bot.send_message(message.chat.id, "ВІДКРИЙ УКРАЇНСЬКИЙ ТЛУМАЧНИЙ СЛОВНИК! ПОЗОРИЩЕ!")
+            bot.send_message(message.chat.id, "ВІДКРИЙ УКРАЇНСЬКИЙ ТЛУМАЧНИЙ СЛОВНИК! ПОЗОРИЩЕ!")
         for word_pair in translated_words:
             reply += f"{word_pair[0]}, "
         reply += "немає в українській мові, правильно "
