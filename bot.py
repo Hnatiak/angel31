@@ -919,14 +919,12 @@ def handle_all_commands(message):
         for word_pair in translated_words:
             reply += f"{word_pair[0]}, "
 
-        reply += "немає в українській мові, правильно "
+            reply += "немає в українській мові, правильно "
         for word_pair in translated_words:
             reply += f"{word_pair[1]} "
 
-        # Замініть кому на крапку з комою або інший розділовий знак, якщо потрібно
         bot.reply_to(message, reply)
     
-    # Потрібно імпортувати або визначити змінну communication
     communication.handle_commands(bot, message)
 
 
