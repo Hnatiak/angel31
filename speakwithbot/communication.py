@@ -84,10 +84,18 @@ def handle_commands(bot, message):
                 ]
                 random_response = random.choice(responses)
                 bot.send_message(message.chat.id, random_response)
-            elif text == f"{keyword} гімн україни" or text == f"{keyword} гім України":
+
+
+            
+            elif text.lower() == f"{keyword} гімн україни":
                 bot.send_message(message.chat.id, 'Ще не вмерла України і слава, і воля,\nЩе нам, браття молодії, усміхнеться доля.\nЗгинуть наші воріженьки, як роса на сонці,\n\nЗапануєм і ми, браття, у своїй сторонці.\nДушу й тіло ми положим за нашу свободу,\nІ покажем, що ми, браття, козацького роду!')
-            elif text == f"{keyword} Слава Україні" or text == f"{keyword} слава україні":
+            elif text.lower() == f"{keyword} слава україні":
                 bot.send_message(message.chat.id, 'Героям Слава!')
+            elif text.lower() == f"{keyword} герої не вмирають":
+                bot.send_message(message.chat.id, 'Вмирають Вороги!')
+            elif text.lower() == f"{keyword} Україна":
+                bot.send_message(message.chat.id, 'Понад усе!')
+                
             elif text == f"{keyword} до побачення" or text == f"{keyword} бувай":
                 bot.send_message(message.chat.id, 'До зустрічі! Бувай ❤')
             elif text == f"{keyword} на добраніч" or text == f"{keyword} спокійної ночі" or text == f"{keyword} надобраніч":
