@@ -86,8 +86,8 @@ def handle_commands(bot, message):
                 bot.send_message(message.chat.id, random_response)
             elif text == f"{keyword} гімн україни" or text == f"{keyword} гім України":
                 bot.send_message(message.chat.id, 'Ще не вмерла України і слава, і воля,\nЩе нам, браття молодії, усміхнеться доля.\nЗгинуть наші воріженьки, як роса на сонці,\nЗапануєм і ми, браття, у своїй сторонці.\n\nДушу й тіло ми положим за нашу свободу,\nІ покажем, що ми, браття, козацького роду!')
-            # elif text == f"{keyword} Слава Україні" or text == f"{keyword} слава україні" or text == f"{keyword} слава Україні" or f"{keyword} Слава Україні!" or f"{keyword} Слава україні!" or text == f"{keyword} слава україні!" or text == f"{keyword} слава Україні!" or text == f"{keyword} Слава україні!":
-            #     bot.send_message(message.chat.id, 'Героям Слава!')
+            elif text == f"{keyword} Слава Україні" or text == f"{keyword} слава україні":
+                bot.send_message(message.chat.id, 'Героям Слава!')
             elif text == f"{keyword} до побачення" or text == f"{keyword} бувай":
                 bot.send_message(message.chat.id, 'До зустрічі! Бувай ❤')
             elif text == f"{keyword} на добраніч" or text == f"{keyword} спокійної ночі" or text == f"{keyword} надобраніч":
@@ -114,7 +114,7 @@ def handle_commands(bot, message):
             elif re.search(fr"\b{keyword}\b.*\bскільки\b.*\bразів\b.*\bтиждень\b", text, re.IGNORECASE) and not answered_question:
                 bot.send_message(message.chat.id, 'Десь ' + str(random.randint(1, 10)) + ' разів на тиждень')
                 answered_question = True
-            elif text == f"{keyword} ти умнічка" or text == f"{keyword} ти молодець" or text == f"{keyword} розумниця" or text == f"{keyword} умнічка" or text == f"{keyword} молодець" or text == f"{keyword} найкраща" or text == f"{keyword} найкраща!" or text == f"{keyword} - найкраща!" or text == f"{keyword} - найкраща" or text == f"{keyword} ти найкраща" or text == f"{keyword} ти найкраща!" or text == f"{keyword} ти сонечко" or text == f"{keyword} ти молодчина":
+            elif text == f"{keyword} ти умнічка" or text == f"{keyword} ти молодець" or text == f"{keyword} розумниця" or text == f"{keyword} умнічка" or text == f"{keyword} молодець" or text == f"{keyword} найкраща" or text == f"{keyword} найкраща!" or text == f"{keyword} - найкраща!" or text == f"{keyword} - найкраща" or text == f"{keyword} ти найкраща" or text == f"{keyword} ти найкраща!" or text == f"{keyword} ти сонечко" or text == f"{keyword} ти молодчина" or text == f"{keyword} ти молодчинка":
                 bot.send_message(message.chat.id, 'Дякую кошеннятко моє 😍 😘, мені приємно це знати')
             elif text == f"{keyword}" or text == f"{keyword} ти тут" or text == f"{keyword} ти де" or text == f"{keyword} ти тут?" or text == f"{keyword} ти де?":
                 random_response = random.choice(whereareyou)
