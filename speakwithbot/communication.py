@@ -90,8 +90,6 @@ def handle_commands(bot, message):
                 bot.send_message(message.chat.id, 'Героям слава!')
             elif text == f"{keyword} герої не вмирають" or text == f"{keyword} Герої не вмирають" or text == f"{keyword} Герої Не Вмирають":
                 bot.send_message(message.chat.id, 'Вмирають Вороги!')
-            elif text == f"{keyword} гімн України" or text == f"{keyword} гімн україни" or text == f"{keyword} Гімн України":
-                bot.send_message(message.chat.id, 'Ще не вмерла України...')
             elif text == f"{keyword} Україна" or text == f"{keyword} україна":
                 bot.send_message(message.chat.id, 'Понад усе!')
             elif text == f"{keyword} до побачення" or text == f"{keyword} бувай":
