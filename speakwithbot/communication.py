@@ -37,7 +37,7 @@ def handle_commands(bot, message):
         match = re.search(r"\bангел число від (\d+) до (\d+)\b", text, re.IGNORECASE)
         start_num = int(match.group(1))
         end_num = int(match.group(2))
-
+        
         if start_num <= end_num:
             bot.send_message(message.chat.id, str(random.randint(start_num, end_num)))
         else:
@@ -84,9 +84,6 @@ def handle_commands(bot, message):
                 ]
                 random_response = random.choice(responses)
                 bot.send_message(message.chat.id, random_response)
-
-
-            
             elif f"{keyword} гімн україни" in text:
                 bot.send_message(message.chat.id, 'Ще не вмерла України і слава, і воля,\nЩе нам, браття молодії, усміхнеться доля.\nЗгинуть наші воріженьки, як роса на сонці,\n\nЗапануєм і ми, браття, у своїй сторонці.\nДушу й тіло ми положим за нашу свободу,\nІ покажем, що ми, браття, козацького роду!')
             elif "ангел слава Україні" in text:
@@ -95,21 +92,18 @@ def handle_commands(bot, message):
                 bot.send_message(message.chat.id, 'Вмирають Вороги!')
             elif text == f"{keyword} Україна":
                 bot.send_message(message.chat.id, 'Понад усе!')
-                
             elif text == f"{keyword} до побачення" or text == f"{keyword} бувай":
                 bot.send_message(message.chat.id, 'До зустрічі! Бувай ❤')
             elif text == f"{keyword} на добраніч" or text == f"{keyword} спокійної ночі" or text == f"{keyword} надобраніч":
                 bot.send_message(message.chat.id, 'На добраніч моє кошеня 😘❤')
             elif text == f"{keyword} вірш" or text == f"{keyword} поезія":
                 bot.send_message(message.chat.id, 'А ось і мій вірш:\nТи мій ангел, що з неба злетів,\nЩоб мені допомогти в біді,\nЗавжди поруч, коли я сам,\nТи мій ангел, мій друг і мій брат.')
-
             elif text == f"{keyword} скажи наскільки він розумний?" or text == f"{keyword} скажи наскільки він розумний" or text == f"{keyword} напиши наскільки він розумний" or text == f"{keyword} як ти думаєш наскільки він розумний" or text == f"{keyword} напиши наскільки він розумний?" or text == f"{keyword} як ти думаєш наскільки він розумний?":
                bot.send_message(message.chat.id, f"Небеса кажуть що він розумний на {random.randint(0, 100)}%")
             elif text == f"{keyword} скажи наскільки вона розумна?" or text == f"{keyword} скажи наскільки вона розумна" or text == f"{keyword} напиши наскільки вона розумна" or text == f"{keyword} як ти думаєш наскільки вона розумна" or text == f"{keyword} напиши наскільки вона розумна?" or text == f"{keyword} як ти думаєш наскільки вона розумна?":
                bot.send_message(message.chat.id, f"Небеса кажуть що вона розумна на {random.randint(0, 100)}%")
             elif text == f"{keyword} скажи наскільки він дурний?" or text == f"{keyword} скажи наскільки він дурний" or text == f"{keyword} напиши наскільки він дурний" or text == f"{keyword} як ти думаєш наскільки він дурний" or text == f"{keyword} напиши наскільки він дурний?" or text == f"{keyword} як ти думаєш наскільки він дурний?":
                bot.send_message(message.chat.id, f"Небеса кажуть що він дурний на {random.randint(0, 100)}%")
-                
             elif text.startswith(f"{keyword}") and 'хто' in text:
                 bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто', 'Він/Вона']))
             elif text.startswith(f"{keyword}") and 'він чи я' in text:
