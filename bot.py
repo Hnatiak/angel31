@@ -361,19 +361,56 @@ def handle_insult(message):
 is_shower_time = False
 
 
+# @bot.message_handler(commands=['вдуш'])
+# def handle_shower_command(message):
+#     global is_shower_time
+
+#     current_time = datetime.utcnow().time()
+
+#     if current_time >= time(19, 0) and current_time <= time(20, 0):
+#         is_shower_time = True
+#         bot.reply_to(message, 'Я відійшла в душ')
+#         time.sleep(1800)  # Почекати 30 хвилин (1800 секунд)
+#         bot.send_message(message.chat.id, 'Фух, все, я прийняла душ. Отже, що тепер робитимемо?')
+#         is_shower_time = False
+#     elif current_time < time(19, 0) or current_time > time(20, 0):
+#         try:
+#             bot.restrict_chat_member(
+#                 message.chat.id, message.from_user.id,
+#                 until_date=int((datetime.now() + timedelta(minutes=1)).timestamp())
+#             )
+#             user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
+#             bot.send_message(
+#                 message.chat.id, f"Мут на 1 хвилину для {user_mention}",
+#                 reply_to_message_id=message.message_id
+#             )
+#             bot.reply_to(
+#                 message, "Не гарно підглядати за дівчиною в душі! Тепер подумай, як воно!"
+#             )
+#         except Exception as e:
+#             bot.send_message(message.chat.id, "Гей, перестань, мені не приємно!")
+#     else:
+#         bot.reply_to(message, 'Ця команда доступна лише з 19:00 до 20:00')
+
+
 @bot.message_handler(commands=['вдуш'])
 def handle_shower_command(message):
     global is_shower_time
 
     current_time = datetime.utcnow().time()
 
+    # Check if it's shower time (from 19:00 to 20:00)
     if current_time >= time(19, 0) and current_time <= time(20, 0):
         is_shower_time = True
         bot.reply_to(message, 'Я відійшла в душ')
-        time.sleep(1800)  # Почекати 30 хвилин (1800 секунд)
+        time.sleep(1800)  # Wait for 30 minutes (1800 seconds)
         bot.send_message(message.chat.id, 'Фух, все, я прийняла душ. Отже, що тепер робитимемо?')
         is_shower_time = False
-    elif current_time < time(19, 0) or current_time > time(20, 0):
+    else:
+        # If it's not shower time, inform the user about the restricted command
+        bot.reply_to(message, 'Ця команда доступна лише з 19:00 до 20:00')
+
+        # If someone tries to use the command outside shower time, restrict them
         try:
             bot.restrict_chat_member(
                 message.chat.id, message.from_user.id,
@@ -389,8 +426,6 @@ def handle_shower_command(message):
             )
         except Exception as e:
             bot.send_message(message.chat.id, "Гей, перестань, мені не приємно!")
-    else:
-        bot.reply_to(message, 'Ця команда доступна лише з 19:00 до 20:00')
 
 
 def translate_russian_to_ukrainian(word):
