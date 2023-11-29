@@ -894,6 +894,41 @@ def translate_russian_to_ukrainian(word):
 #     communication.handle_commands(bot, message)
 
 
+# @bot.message_handler(func=lambda message: True)
+# def handle_all_commands(message):
+#     player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
+
+#     text = message.text.lower()
+#     words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
+
+#     translated_words = []
+#     for word in words:
+#         ukrainian_word = translate_russian_to_ukrainian(word)
+#         if word != ukrainian_word:
+#             translated_words.append((word, ukrainian_word))
+
+#     if translated_words:
+#         reply = ""
+#         try:
+#             bot.restrict_chat_member(message.chat.id, message.from_user.id, until_date=int((datetime.now() + timedelta(minutes=1)).timestamp()))
+#             user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
+#             bot.send_message(message.chat.id, f"мут 1 хвилину {user_mention}", reply_to_message_id=message.message_id)
+#         except Exception as e:
+#             bot.send_message(message.chat.id, "ВІДКРИЙ УКРАЇНСЬКИЙ ТЛУМАЧНИЙ СЛОВНИК! ПОЗОРИЩЕ!")
+
+#         for word_pair in translated_words:
+#             reply += f"{word_pair[0]}, "
+
+#             reply += "немає в українській мові, правильно "
+#         for word_pair in translated_words:
+#             reply += f"{word_pair[1]} "
+
+#         bot.reply_to(message, reply)
+    
+#     communication.handle_commands(bot, message)
+
+
+
 @bot.message_handler(func=lambda message: True)
 def handle_all_commands(message):
     player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
@@ -924,8 +959,15 @@ def handle_all_commands(message):
             reply += f"{word_pair[1]} "
 
         bot.reply_to(message, reply)
-    
-    communication.handle_commands(bot, message)
+    else:
+        try:
+            bot.restrict_chat_member(message.chat.id, message.from_user.id, until_date=int((datetime.now() + timedelta(minutes=1)).timestamp()))
+            user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
+            bot.send_message(message.chat.id, f"мут 1 хвилину {user_mention}", reply_to_message_id=message.message_id)
+        except Exception as e:
+            bot.send_message(message.chat.id, "ВІДКРИЙ УКРАЇНСЬКИЙ ТЛУМАЧНИЙ СЛОВНИК! ПОЗОРИЩЕ!")
+
+        communication.handle_commands(bot, message)
 
 
 
