@@ -84,11 +84,11 @@ def handle_commands(bot, message):
                     ]
                     random_response = random.choice(responses)
                     bot.send_message(message.chat.id, random_response)
-            elif text == f"{keyword} слава україні" or text == f"{keyword} Слава Україні" or text == f"{keyword} слава Україні" or text == f"{keyword} Слава україні":
-                bot.send_message(message.chat.id, 'Героям слава!')
+            # elif text == f"{keyword} слава україні" or text == f"{keyword} Слава Україні" or text == f"{keyword} слава Україні" or text == f"{keyword} Слава україні":
+            #     bot.send_message(message.chat.id, 'Героям слава!')
             elif text == f"{keyword} герої не вмирають" or text == f"{keyword} Герої не вмирають" or text == f"{keyword} Герої Не Вмирають":
                 bot.send_message(message.chat.id, 'Вмирають Вороги!')
-            elif text == f"{keyword} Анїарку":
+            elif text == f"{keyword} Україна" or text == f"{keyword} україна" or:
                 bot.send_message(message.chat.id, 'Понад усе!')
             elif text == f"{keyword} до побачення" or text == f"{keyword} бувай":
                 bot.send_message(message.chat.id, 'До зустрічі! Бувай ❤')
