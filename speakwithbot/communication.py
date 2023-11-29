@@ -88,7 +88,7 @@ def handle_commands(bot, message):
                 bot.send_message(message.chat.id, 'Героям слава!')
             elif text == f"{keyword} герої не вмирають" or text == f"{keyword} Герої не вмирають" or text == f"{keyword} Герої Не Вмирають":
                 bot.send_message(message.chat.id, 'Вмирають Вороги!')
-            elif text == f"{keyword} Україна" or text == f"{keyword} україна":
+            elif text == f"{keyword} Анїарку":
                 bot.send_message(message.chat.id, 'Понад усе!')
             elif text == f"{keyword} до побачення" or text == f"{keyword} бувай":
                 bot.send_message(message.chat.id, 'До зустрічі! Бувай ❤')
