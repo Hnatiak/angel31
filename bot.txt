@@ -5,14 +5,26 @@ import telebot
 import config
 import random
 import logging
+#import datetime
+#from datetime import datetime
 import time
+#from telebot import types
+#import sqlite3
+#from sqlite3 import Error
 from telebot import TeleBot, types
+#from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
+#from telegram.ext import CallbackContext
+# from datetime import datetime, timedelta, time
+# import time
 from datetime import datetime, timedelta, time
+#import json
 import re
+#import yagmail
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import speakwithbot.communication as communication
+# import translate
 from langdetect import detect
 from pyaspeller import YandexSpeller
 import math
@@ -26,8 +38,8 @@ bot = telebot.TeleBot(config.TOKEN)
 pending_friendships = {}
 friendships = []
 
-player_scores = {}
-QUEST_THRESHOLD = 1000
+player_scores = {}  # Словник для збереження балів гравців
+QUEST_THRESHOLD = 1000  # Поріг для виконання квесту
 MIN_WORDS_THRESHOLD = 3
 game_numbers = {}
 
@@ -106,9 +118,108 @@ def end_game(message):
     else:
         bot.send_message(chat_id=message.chat.id, text='Ви не брали участі в жодній грі.')
 
+
+
+
+
+# ukrainian_alphabet = ['а', 'б', 'в', 'г', 'ґ', 'д', 'е', 'є', 'ж', 'з', 'і', 'ї', 'й', 'к', 'л', 'м', 'н', 'о',
+#                       'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ю', 'я']
+
+# excluded_words = ['сука', 'стриптиз', 'секс', 'апарат', 'апаратура', 'аромат', 'кріт', 'абориген', 'аплодисменти', 'апокаліпсис', 'аркада', 'аркади', 
+#                   'кірка', 'ящірка', 'турція', 'тінь', 'аксесуар', 'анакондра', 'акорд', 'амілія', 'ярлик', 'шашлик', 'ананас', 'ренген', 'рись', 'павлін', 
+#                   'романтичний', 'романтика', 'акордеон']
+# special_ukrainian_words = {
+#     'окунь': 'н',
+#     'еге': 'г',
+#     'ніготь': 'т',
+#     'кіготь': 'т',
+#     'ячмінь': 'н',
+#     'лебідь': 'д',
+#     'танець': 'ц',
+#     'тернопіль': 'л',
+#     'аркади': 'д',
+#     'тінь': 'н',
+#     'алкоголь': 'л',
+#     'контроль': 'л',
+#     'поршень': 'н',
+#     'король': 'л',
+# }
+
+# not_correct_ukrainian_words = ['продек', 'пкопр', 'пкойцв', 'цушгк', 'нейросеть', 'енор']
+
+# pending_games = {}
+
+# def is_ukrainian_word(word):
+#     speller = YandexSpeller()
+#     spelling = list(speller.spell(word))
+#     return len(spelling) == 0 and len(word) > 1
+
+# def is_not_correct_ukrainian_word(word):
+#     return any(word.startswith(w) for w in not_correct_ukrainian_words)
+
+# def get_next_letter(word):
+#     if word in special_ukrainian_words:
+#         return special_ukrainian_words[word]
+#     return word[-1]
+
+# @bot.message_handler(commands=['гра_в_слова'])
+# def start_word_game(message):
+#     chat_id = message.chat.id
+#     if chat_id in pending_games:
+#         bot.send_message(chat_id, 'Гра вже розпочата. Дочекайтеся своєї черги.')
+#     else:
+#         pending_games[chat_id] = {'current_letter': '', 'participants': [], 'used_words': set()}
+#         random_letter = random.choice(ukrainian_alphabet)
+#         pending_games[chat_id]['current_letter'] = random_letter
+#         bot.send_message(chat_id, f'Гра в слова почата. Перше слово починається на букву "{random_letter.upper()}"')
+
+
+# @bot.message_handler(func=lambda message: re.match(r'^[а-яіїєґ]+$', message.text, re.IGNORECASE) is not None)
+# def play_word_game(message):
+#     chat_id = message.chat.id
+#     if chat_id not in pending_games:
+#         return
+
+#     current_game = pending_games[chat_id]
+#     current_letter = current_game['current_letter']
+#     word = message.text.lower()
+
+#     if not current_letter or word.startswith(current_letter):
+#         if not is_ukrainian_word(word) or is_not_correct_ukrainian_word(word):
+#             bot.send_message(chat_id, 'Це слово не є українським або містить лише одну літеру. Введіть нове слово.')
+#             return
+
+#         if word not in current_game['used_words']:
+#             current_game['current_letter'] = get_next_letter(word)
+#             current_game['participants'].append((message.from_user.username, word))
+#             current_game['used_words'].add(word)
+#             bot.send_message(chat_id, f'Наступне слово повинно починатися на букву "{current_game["current_letter"].upper()}"')
+#         else:
+#             bot.send_message(chat_id, 'Це слово вже було використано. Введіть нове слово.')
+#     else:
+#         bot.send_message(chat_id, f'Слово повинно починатися на букву "{current_letter.upper()}"')
+
+
+# @bot.message_handler(commands=['закінчити_гру_в_слова'])
+# def end_word_game(message):
+#     chat_id = message.chat.id
+#     if chat_id not in pending_games:
+#         bot.send_message(chat_id, 'Немає активної гри.')
+#         return
+
+#     current_game = pending_games.pop(chat_id)
+#     participants = current_game['participants']
+#     if len(participants) == 0:
+#         bot.send_message(chat_id, 'Гра завершена. Немає учасників.')
+#     else:
+#         result = '\n'.join([f'@{username}: {word}' for username, word in participants])
+#         bot.send_message(chat_id, 'Гра завершена. Ось список учасників та слів:')
+
+
 user_choices = {}
 
 gender = ""
+
 
 @bot.message_handler(commands=['стать'])
 def handle_gender_choice(message):
@@ -267,8 +378,10 @@ def handle_gender_callback(call):
     elif call.data == 'Жіноча':
         bot.send_message(chat_id=call.message.chat.id, text='Ваша стать обрана: Жіноча')
 
+    # обробляємо команди, які використовують get_user_gender
     if call.data in ['обняти', 'поцілувати', 'вдарити', 'образити', 'чмок', 'шльоп', 'сильнийшльоп', 'кекс', 'шури-мури', 'онанізм']:
         gender = get_user_gender(user_id)
+        # здійснюємо потрібну дію залежно від статі користувача
 
 
 @bot.message_handler(commands=['змінити_стать'])
@@ -729,9 +842,10 @@ def translate_russian_to_ukrainian(word):
 
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
-    player_id = message.from_user.id
+    player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
+
     text = message.text.lower()
-    words = re.findall(r'\b\w+\b', text)
+    words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
 
     translated_words = []
     for word in words:
@@ -749,5 +863,116 @@ def handle_message(message):
         bot.reply_to(message, reply)
 
     communication.handle_commands(bot, message)
+
+
+
+# @bot.message_handler(commands=['українські_бали'])
+# def display_scores(message):
+#     sorted_players = sorted(player_scores.items(), key=lambda x: x[1]['score'], reverse=True)
+#     reply = "Рейтинг гравців:\n\n"
+#     for i, (player_id, player) in enumerate(sorted_players, start=1):
+#         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
+#         reply += f"{i}. {player_name} - {player['score']} {player['quests']} виконаних квестів\n"
+#     reply += "\nЯкщо ти новенький, тоді пропиши /українські_бали_правила і прочитай які умови і як в це грати"
+#     bot.send_message(message.chat.id, reply)
+
+# @bot.message_handler(commands=['українські_бали'])
+# def display_scores(message):
+#     sorted_players = sorted(player_scores.items(), key=lambda x: x[1]['score'], reverse=True)
+#     total_players = len(sorted_players)
+#     page_size = 10  # Number of players to display per page
+#     total_pages = math.ceil(total_players / page_size)
+
+#     page = 1  # Initial page number
+#     display_players = sorted_players[(page - 1) * page_size:page * page_size]
+
+#     reply = get_scoreboard_reply(display_players, page, total_pages, message)
+#     bot.send_message(message.chat.id, reply)
+
+# def get_scoreboard_reply(players, current_page, total_pages, message, sorted_players):
+#     reply = "Рейтинг гравців:\n\n"
+#     for i, (player_id, player) in enumerate(sorted_players, start=1):
+#         player_name = bot.get_chat_member(message.chat.id, player_id).user.first_name
+#         reply += f"{i}. {player_name} - {player['score']} {player['quests']} виконаних квестів\n"
+#     reply += "\nЯкщо ти новенький, тоді пропиши /українські_бали_правила і прочитай які умови і як в це грати"
+
+#     reply += f"\nСторінка {current_page} з {total_pages}"
+
+#     if total_pages > 1:
+#         keyboard = []
+#         if current_page > 1:
+#             prev_button = InlineKeyboardButton("<< Попередня", callback_data=f"prev_page:{current_page}")
+#             keyboard.append(prev_button)
+#         if current_page < total_pages:
+#             next_button = InlineKeyboardButton("Наступна >>", callback_data=f"next_page:{current_page}")
+#             keyboard.append(next_button)
+#         reply_markup = InlineKeyboardMarkup([keyboard])
+#         reply += "\n\nНатисни кнопку, щоб переглянути інших учасників."
+
+#     return reply
+
+# @bot.message_handler(commands=['українські_бали_правила'])
+# def display_rules(message):
+#     rules = "Правила гри:\n"
+#     rules += "1. Бали нараховуються за кожне правильне слово українською мовою.\n"
+#     rules += "2. За кожне слово, яке НЕ існує в українській мові, гравцю знімається 1 бал.\n"
+#     rules += "3. Якщо слово містить букви 'ё' або 'ы', гравцю також знімається 1 бал.\n"
+#     rules += "4. Після набору 1000 балів гравець отримує +1 виконаний квест, після чого його бали обнуляються автоматично.\n"
+#     bot.send_message(message.chat.id, rules)
+
+
+
+# @bot.message_handler(func=lambda message: True)
+# def handle_message(message):
+#     player_id = message.from_user.id  # Отримуємо ідентифікатор гравця
+#     player_name = message.from_user.first_name  # Отримуємо ім'я гравця
+
+#     if player_id not in player_scores:
+#         player_scores[player_id] = {'score': 0, 'quests': 0}  # Ініціалізуємо бали гравця
+
+#     text = message.text.lower()
+#     words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
+
+#     if len(words) > MIN_WORDS_THRESHOLD:
+#         translated_words = []
+#         for word in words:
+#             ukrainian_word = translate_russian_to_ukrainian(word)
+#             if word != ukrainian_word:
+#                 translated_words.append((word, ukrainian_word))
+
+#         if translated_words:
+#             reply = ""
+#             for word_pair in translated_words:
+#                 reply += f"{word_pair[0]}, "
+#             reply += "немає в українській мові, правильно "
+#             for word_pair in translated_words:
+#                 reply += f"{word_pair[1]} "
+#                 player_scores[player_id]['score'] -= 1
+#             bot.reply_to(message, reply)
+#         else:
+#             player_scores[player_id]['score'] += 1
+
+#         # Перевірка наявності букв "ё" або "ы" э у слові
+#         for word in words:
+#             if 'ё' in word or 'ы' in word or 'э' in word:
+#                 player_scores[player_id]['score'] -= 1
+
+#         # Перевірка виконання квесту
+#         if player_scores[player_id]['score'] >= QUEST_THRESHOLD:
+#             player_scores[player_id]['quests'] += 1
+#             player_scores[player_id]['score'] = 0
+
+
+
+
+
+# @bot.message_handler(func=lambda message: True)
+# def handle_all_commands(message):
+#     communication.handle_commands(bot, message)
+    # translate.handle_message(bot, message)
+
+# @bot.message_handler(func=lambda message: True)
+# def handle_all_messages(message):
+#     translate.handle_message(bot, message)
 
 bot.polling(none_stop=True)
