@@ -455,10 +455,10 @@ def handle_buy_command(message):
 
 
 angel = ['ангелятко', 'ангел', 'ангелику', 'ангелочок']
-insult = {'дурак', 'ідіот', 'лох', 'дибілка', 'ідіотка', 'дура', 'сядешь мені на хуй', 'сядь мені на хуй', 'пошла на хуй', 'ти сосешь', 'станеш раком', 'стань раком', 'дибіл', 'дебіл', 'дебілка', 'дура', 'дурна', 'гей', 'лесбіянка', 'лисбіянка', 'самий уйобний бот', 'иди нахуй', 'будеш сосать члена', 'будеш сосать', 'сосать', 'соси', 'соси член'}
+insult = {'дурак', 'ідіот', 'лох', 'дибілка', 'ідіотка', 'дура', 'сядешь мені на хуй', 'від сосешь мені', 'сядь мені на хуй', 'пошла на хуй', 'ти сосешь', 'станеш раком', 'стань раком', 'дибіл', 'дебіл', 'дебілка', 'дура', 'дурна', 'гей', 'лесбіянка', 'лисбіянка', 'самий уйобний бот', 'иди нахуй', 'будеш сосать члена', 'будеш сосать', 'сосать', 'соси', 'соси член'}
 
 
-@bot.message_handler(func=lambda message: any(word in message.text.lower() for word in insult) and any(word in message.text.lower() for word in ["ангел ти", "особа ти", "ангел"]))
+@bot.message_handler(func=lambda message: any(word in message.text.lower() for word in insult) and any(word in message.text.lower() for word in ["ангел ти", "особа ти", "ангел", 'ангел ', 'Ангел ', 'Ангел', 'Ангел ти ']))
 def handle_insult(message):
     try:
         bot.restrict_chat_member(message.chat.id, message.from_user.id, until_date=int((datetime.now() + timedelta(minutes=1)).timestamp()))
