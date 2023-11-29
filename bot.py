@@ -967,7 +967,7 @@ def handle_all_commands(message):
         except Exception as e:
             bot.send_message(message.chat.id, "ВІДКРИЙ УКРАЇНСЬКИЙ ТЛУМАЧНИЙ СЛОВНИК! ПОЗОРИЩЕ!")
 
-        communication.handle_commands(bot, message)
+    communication.handle_commands(bot, message)
 
 
 
