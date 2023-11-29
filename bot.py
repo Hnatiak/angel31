@@ -455,7 +455,7 @@ def handle_buy_command(message):
 
 
 angel = ['ангелятко', 'ангел', 'ангелику', 'ангелочок']
-insult = {'дурак', 'ідіот', 'лох', 'дибілка', 'ідіотка', 'дура', 'дибіл', 'дебіл', 'дебілка', 'дура', 'дурна', 'гей', 'лесбіянка', 'лисбіянка', 'самий уйобний бот', 'иди нахуй'}
+insult = {'дурак', 'ідіот', 'лох', 'дибілка', 'ідіотка', 'дура', 'ти сосешь', 'станеш раком', 'стань раком', 'дибіл', 'дебіл', 'дебілка', 'дура', 'дурна', 'гей', 'лесбіянка', 'лисбіянка', 'самий уйобний бот', 'иди нахуй', 'будеш сосать члена', 'будеш сосать', 'сосать', 'соси', 'соси член'}
 
 
 @bot.message_handler(func=lambda message: any(word in message.text.lower() for word in insult) and any(word in message.text.lower() for word in ["ангел ти", "особа ти", "ангел"]))
@@ -910,6 +910,7 @@ def handle_all_commands(message):
     if translated_words:
         reply = ""
         try:
+            bot.restrict_chat_member(message.chat.id, message.from_user.id, until_date=int((datetime.now() + timedelta(minutes=1)).timestamp()))
             user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
             bot.send_message(message.chat.id, f"мут 1 хвилину {user_mention}", reply_to_message_id=message.message_id)
         except Exception as e:
