@@ -410,22 +410,24 @@ def handle_shower_command(message):
         # If it's not shower time, inform the user about the restricted command
         bot.reply_to(message, 'Ця команда доступна лише з 19:00 до 20:00')
 
-        # If someone tries to use the command outside shower time, restrict them
-        try:
-            bot.restrict_chat_member(
-                message.chat.id, message.from_user.id,
-                until_date=int((datetime.now() + timedelta(minutes=1)).timestamp())
-            )
-            user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
-            bot.send_message(
-                message.chat.id, f"Мут на 1 хвилину для {user_mention}",
-                reply_to_message_id=message.message_id
-            )
-            bot.reply_to(
-                message, "Не гарно підглядати за дівчиною в душі! Тепер подумай, як воно!"
-            )
-        except Exception as e:
-            bot.send_message(message.chat.id, "Гей, перестань, мені не приємно!")
+        # If someone tries to use the command outside shower time (from 19:00 to 20:00)
+        # inform them that the command is restricted during this time
+        if current_time < time(19, 0) or current_time > time(20, 0):
+            try:
+                bot.restrict_chat_member(
+                    message.chat.id, message.from_user.id,
+                    until_date=int((datetime.now() + timedelta(minutes=1)).timestamp())
+                )
+                user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
+                bot.send_message(
+                    message.chat.id, f"Мут на 1 хвилину для {user_mention}",
+                    reply_to_message_id=message.message_id
+                )
+                bot.reply_to(
+                    message, "Не гарно підглядати за дівчиною в душі! Тепер подумай, як воно!"
+                )
+            except Exception as e:
+                bot.send_message(message.chat.id, "Гей, перестань, мені не приємно!")
 
 
 def translate_russian_to_ukrainian(word):
