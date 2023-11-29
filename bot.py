@@ -872,7 +872,7 @@ def handle_all_commands(message):
 
     text = message.text.lower()
     words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
-    bot.send_message(message.chat.id, f"мут 1 хвилину {user_mention}",
+    bot.send_message(message.chat.id, f"мут 1 хвилину {user_mention}", reply_to_message_id=message.message_id),
 
     translated_words = []
     for word in words:
