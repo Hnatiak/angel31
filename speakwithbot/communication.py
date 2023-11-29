@@ -87,11 +87,11 @@ def handle_commands(bot, message):
 
 
             
-            elif text == f"{keyword} гімн україни":
+            elif f"{keyword} гімн україни" in text:
                 bot.send_message(message.chat.id, 'Ще не вмерла України і слава, і воля,\nЩе нам, браття молодії, усміхнеться доля.\nЗгинуть наші воріженьки, як роса на сонці,\n\nЗапануєм і ми, браття, у своїй сторонці.\nДушу й тіло ми положим за нашу свободу,\nІ покажем, що ми, браття, козацького роду!')
-            elif text == f"{keyword} слава україні":
+            elif f"{keyword} слава україні" in text:
                 bot.send_message(message.chat.id, 'Героям Слава!')
-            elif text == f"{keyword} герої не вмирають":
+            elif f"{keyword} герої не вмирають" in text:
                 bot.send_message(message.chat.id, 'Вмирають Вороги!')
             elif text == f"{keyword} Україна":
                 bot.send_message(message.chat.id, 'Понад усе!')
