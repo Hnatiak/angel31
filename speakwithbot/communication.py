@@ -84,13 +84,13 @@ def handle_commands(bot, message):
                 ]
                 random_response = random.choice(responses)
                 bot.send_message(message.chat.id, random_response)
-            elif f"{keyword} гімн україни" in text:
+            elif text == f"{keyword} гімн України" or text == f"{keyword} Гімн України":
                 bot.send_message(message.chat.id, 'Ще не вмерла України і слава, і воля,\nЩе нам, браття молодії, усміхнеться доля.\nЗгинуть наші воріженьки, як роса на сонці,\n\nЗапануєм і ми, браття, у своїй сторонці.\nДушу й тіло ми положим за нашу свободу,\nІ покажем, що ми, браття, козацького роду!')
-            elif "ангел слава Україні" in text:
+            elif text == f"{keyword} слава україні" or text == f"{keyword} Слава Україні" or text == f"{keyword} слава Україні" or text == f"{keyword} Слава україні":
                 bot.send_message(message.chat.id, 'Героям слава!')
-            elif f"{keyword} герої не вмирають" in text:
+            elif text == f"{keyword} герої не вмирають" or text == f"{keyword} Герої не вмирають" or text == f"{keyword} Герої Не Вмирають":
                 bot.send_message(message.chat.id, 'Вмирають Вороги!')
-            elif text == f"{keyword} Україна":
+            elif text == f"{keyword} Україна" or text == f"{keyword} україна":
                 bot.send_message(message.chat.id, 'Понад усе!')
             elif text == f"{keyword} до побачення" or text == f"{keyword} бувай":
                 bot.send_message(message.chat.id, 'До зустрічі! Бувай ❤')
