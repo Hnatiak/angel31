@@ -86,8 +86,6 @@ def handle_commands(bot, message):
                 
                     random_response = random.choice(responses)
                     bot.send_message(message.chat.id, random_response)
-            elif text == f"{keyword} гімн України" or text == f"{keyword} Гімн України":
-                bot.send_message(message.chat.id, 'Ще не вмерла України і слава, і воля,\nЩе нам, браття молодії, усміхнеться доля.\nЗгинуть наші воріженьки, як роса на сонці,\n\nЗапануєм і ми, браття, у своїй сторонці.\nДушу й тіло ми положим за нашу свободу,\nІ покажем, що ми, браття, козацького роду!')
             elif text == f"{keyword} слава україні" or text == f"{keyword} Слава Україні" or text == f"{keyword} слава Україні" or text == f"{keyword} Слава україні":
                 bot.send_message(message.chat.id, 'Героям слава!')
             elif text == f"{keyword} герої не вмирають" or text == f"{keyword} Герої не вмирають" or text == f"{keyword} Герої Не Вмирають":
@@ -144,6 +142,8 @@ def handle_commands(bot, message):
                 photo_path = random.choice(photo_choices)
                 with open(photo_path, 'rb') as photo_file:
                     bot.send_photo(message.chat.id, photo_file)
+            elif text == f"{keyword} гімн України" or text == f"{keyword} Гімн України" or text == f"{keyword} прошу Гімн України" or text == f"{keyword} прошу гімн України" or text == f"{keyword} Український гімн":
+                bot.send_message(message.chat.id, 'Ще не вмерла України і слава, і воля,\nЩе нам, браття молодії, усміхнеться доля.\nЗгинуть наші воріженьки, як роса на сонці,\n\nЗапануєм і ми, браття, у своїй сторонці.\nДушу й тіло ми положим за нашу свободу,\nІ покажем, що ми, браття, козацького роду!')
     # else:
     #     bot.send_message(message.chat.id, "Я не розумію тебе")
     
