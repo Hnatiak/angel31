@@ -538,6 +538,7 @@ def translate_russian_to_ukrainian(word):
         'беспокоить': 'турбує/хвилює',
         'было': 'було',
         'будешь': 'будеш',
+        'блять': 'блінчик',
 # В
         'вашем': 'вашу',
         'вопрос': 'питання/запитання',
@@ -782,6 +783,7 @@ def translate_russian_to_ukrainian(word):
         'сказать': 'сказати',
         'сможешь': 'зможеш',
         'создав': 'створив',
+        'сука': 'зараза',
 # Т
         'такое': 'таке',
 #       'тебе': 'тобі', ВИКЛЮЧЕННЯ
@@ -870,6 +872,7 @@ def handle_all_commands(message):
 
     text = message.text.lower()
     words = re.findall(r'\b\w+\b', text)  # Знаходимо окремі слова в тексті
+    bot.send_message(message.chat.id, f"мут 1 хвилину {user_mention}",
 
     translated_words = []
     for word in words:
