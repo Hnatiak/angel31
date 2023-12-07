@@ -274,7 +274,7 @@ def hug_or_kiss(message):
             photo_choices = []
         elif action == 'вдочерити':
             bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} вдочерив(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/ideas/ideas_one.gif']
+            photo_choices = []
         elif action == 'онанізм':
             bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} зайнявся(-лася) самозадоволенням\n{reason}")
             photo_choices = ['static/onanism/onanizm_one.jpg']
