@@ -171,41 +171,101 @@ def hug_or_kiss(message):
         reply_user = message.reply_to_message.from_user
         action = message.text.split(' ')[1].lower()
         reason = ' '.join(message.text.split(' ')[2:]) if len(message.text.split(' ')) > 2 else ''
-        if action == 'обняти':
+        if action in ('обняти', 'обійняти'):
             bot.send_message(message.chat.id, f"😘 {message.from_user.first_name} обняв(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/hugs/hugs_one.jpg', 'static/hugs/hugs_two.jpg', 'static/hugs/hugs_three.jpg',
-                             'static/hugs/hugs_four.jpg', 'static/hugs/hugs_five.jpg', 'static/hugs/hugs_six.jpg',
-                             'static/hugs/hugs_seven.jpg', 'static/hugs/hugs_eight.jpg', 'static/hugs/hugs_nine.jpg',
+            photo_choices = ['static/hugs/hugs_one.jpg', 
+                             'static/hugs/hugs_two.jpg', 
+                             'static/hugs/hugs_three.jpg',
+                             'static/hugs/hugs_four.jpg', 
+                             'static/hugs/hugs_five.jpg', 
+                             'static/hugs/hugs_six.jpg',
+                             'static/hugs/hugs_seven.jpg', 
+                             'static/hugs/hugs_eight.jpg', 
+                             'static/hugs/hugs_nine.jpg',
                              'static/hugs/hugs_ten.jpg']
-        elif action == 'поцілувати':
+        elif action in ('поцілувати', 'поцілунок'):
             bot.send_message(message.chat.id, f" 😘 {message.from_user.first_name} поцілував(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/kisses/kiss_one.jpg', 'static/kisses/kiss_two.jpg', 'static/kisses/kiss_three.jpg',
-                             'static/kisses/kiss_four.jpg', 'static/kisses/kiss_one.jpg', 'static/kisses/kiss_five.jpg',
-                             'static/kisses/kiss_six.jpg', 'static/kisses/kiss_seven.jpg', 'static/kisses/kiss_one.gif']
+            photo_choices = ['static/kisses/kiss_one.jpg', 
+                             'static/kisses/kiss_two.jpg', 
+                             'static/kisses/kiss_three.jpg',
+                             'static/kisses/kiss_four.jpg', 
+                             'static/kisses/kiss_five.jpg',
+                             'static/kisses/kiss_six.jpg', 
+                             'static/kisses/kiss_seven.jpg', 
+                            #  'static/kisses/kiss_eight.gif',
+                             'static/kisses/kiss_nine.jpg', 
+                             'static/kisses/kiss_ten.jpg', 
+                             'static/kisses/kiss_eleven.jpg', 
+                             'static/kisses/kiss_twelve.jpg', 
+                             'static/kisses/kiss_thirteen.jpg', 
+                             'static/kisses/kiss_fourteen.jpg', 
+                             'static/kisses/kiss_fifteen.jpg', 
+                             'static/kisses/kiss_sixteen.jpg',
+                             'static/kisses/kiss_seventeen.jpg',
+                             'static/kisses/kiss_eighteen.jpg',]
         elif action in ('вдарити', 'удар', 'ударити', 'гримнути'):
             bot.send_message(message.chat.id, f" 🤜🤕 {message.from_user.first_name} вдарив(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/bully/bully_one.gif', 'static/bully/bully_two.gif', 'static/bully/bully_three.gif', 'static/bully/bully_four.gif', 'static/bully/bully_five.gif', 'static/bully/bully_six.gif', 'static/bully/bully_seven.gif', 'static/bully/bully_eight.gif', 'static/bully/bully_nine.gif', 'static/bully/bully_ten.gif']
+            photo_choices = ['static/bully/bully_one.gif', 
+                             'static/bully/bully_two.gif', 
+                             'static/bully/bully_three.gif', 
+                             'static/bully/bully_four.gif', 
+                             'static/bully/bully_five.gif', 
+                             'static/bully/bully_six.gif', 
+                             'static/bully/bully_seven.gif', 
+                             'static/bully/bully_eight.gif', 
+                             'static/bully/bully_nine.gif', 
+                             'static/bully/bully_ten.gif']
         elif action == 'образити':
             bot.send_message(message.chat.id, f"😒 {message.from_user.first_name} образив(-ла) {reply_user.first_name}\n{reason}")
             photo_choices = []
         elif action in ['потиснути руку', 'пожати руку', 'пожати']:
-            bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} пожав руку {reply_user.first_name}\n{reason}")
+            bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} потиснув руку {reply_user.first_name}\n{reason}")
             photo_choices = []
         elif action == 'чмок':
             bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} чмокнув(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/kisses/kiss_one.jpg', 'static/kisses/kiss_two.jpg', 'static/kisses/kiss_three.jpg', 'static/kisses/kiss_four.jpg', 'static/kisses/kiss_one.jpg', 'static/kisses/kiss_five.jpg', 'static/kisses/kiss_six.jpg', 'static/kisses/kiss_seven.jpg']
-        elif action == 'шльоп':
+            photo_choices = ['static/kisses/kiss_one.jpg', 
+                             'static/kisses/kiss_two.jpg', 
+                             'static/kisses/kiss_three.jpg', 
+                             'static/kisses/kiss_four.jpg', 
+                             'static/kisses/kiss_one.jpg', 
+                             'static/kisses/kiss_five.jpg', 
+                             'static/kisses/kiss_six.jpg', 
+                             'static/kisses/kiss_seven.jpg']
+        elif action in ('шльоп', 'шльп'):
             bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} шльопнув(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/slaps/slap_one.gif', 'static/slaps/slap_two.gif', 'static/slaps/slap_three.gif', 'static/slaps/slap_four.gif']
-        elif action == 'сильнийшльоп':
+            photo_choices = ['static/slaps/slap_one.gif', 
+                             'static/slaps/slap_two.gif', 
+                             'static/slaps/slap_three.gif', 
+                             'static/slaps/slap_four.gif']
+        elif action in ('сильнийшльоп', 'сильний шльоп', 'відшльопати сильно'):
             bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} зі всієї дурі шльопнув(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/slaps/slap_one.gif', 'static/slaps/slap_two.gif', 'static/slaps/slap_three.gif', 'static/slaps/slap_four.gif']
+            photo_choices = ['static/slaps/slap_one.gif', 
+                             'static/slaps/slap_two.gif', 
+                             'static/slaps/slap_three.gif', 
+                             'static/slaps/slap_four.gif']
         elif action in ('кекс', 'секс'):
             bot.send_message(message.chat.id, f"🥵😫 {message.from_user.first_name} трахнув(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/se/se_one.gif', 'static/se/se_two.gif']
+            photo_choices = ['static/se/se_one.gif', 
+                             'static/se/se_two.gif']
         elif action == 'засос':
             bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} зацілував(-ла) свою половинку {reply_user.first_name}")
-            photo_choices = ['static/strong_kiss/strong_kiss_one.gif', 'static/strong_kiss/strong_kiss_two.gif', 'static/strong_kiss/strong_kiss_three.webp']
+            photo_choices = ['static/strong_kiss/strong_kiss_one.gif', 
+                             'static/strong_kiss/strong_kiss_two.gif', 
+                             'static/strong_kiss/strong_kiss_three.webp']
+            
+            
+        elif action in ('полизати', 'пососати', 'відсмоктати'):
+            bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} пососала своїй половинці {reply_user.first_name}")
+            photo_choices = ['static/smok/smok_one.jpg', 
+                             'static/smok/smok_two.jpg', 
+                             'static/smok/smok_three.jpg',
+                             'static/smok/smok_four.jpg']
+        elif action == 'куні':
+            bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} полизав(-ла) своїй половинці {reply_user.first_name}")
+            photo_choices = ['static/kuni/kuni_one.jpg',
+                             'static/kuni/kuni_two.jpg', 
+                             'static/kuni/kuni_three.jpg',
+                             'static/kuni/kuni_four.jpg']
         elif action == 'шури-мури':
             bot.send_message(message.chat.id, f"🤭 {message.from_user.first_name} пошури-мурив(-ла) {reply_user.first_name}")
             photo_choices = []
