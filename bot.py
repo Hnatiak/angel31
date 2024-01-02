@@ -267,27 +267,29 @@ def hug_or_kiss(message):
             photo_choices = ['static/se/se_one.gif', 
                              'static/se/se_two.gif']
         elif action == 'засос':
-            bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} зацілував(-ла) свою половинку {reply_user.first_name}")
+            bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} зацілував(-ла) свою половинку {reply_user.first_name}\n{reason}")
             photo_choices = ['static/strong_kiss/strong_kiss_one.gif', 
                              'static/strong_kiss/strong_kiss_two.gif', 
                              'static/strong_kiss/strong_kiss_three.gif']
         elif action in ('полизати', 'пососати', 'відсмоктати'):
-            bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} пососала своїй половинці {reply_user.first_name}")
+            bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} пососала своїй половинці {reply_user.first_name}\n{reason}")
             photo_choices = ['static/smok/smok_one.jpg', 
                              'static/smok/smok_two.jpg', 
                              'static/smok/smok_three.jpg',
                              'static/smok/smok_four.jpg']
         elif action == 'куні':
-            bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} полизав(-ла) своїй половинці {reply_user.first_name}")
+            bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} полизав(-ла) своїй половинці {reply_user.first_name}\n{reason}")
             photo_choices = ['static/kuni/kuni_one.jpg',
                              'static/kuni/kuni_two.jpg', 
                              'static/kuni/kuni_three.jpg',
                              'static/kuni/kuni_four.jpg']
+        elif action in ('вбити', 'убити', 'прибити', 'знищити'):
+            bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} убив(-ла) {reply_user.first_name}\n{reason}")
         elif action == 'шури-мури':
-            bot.send_message(message.chat.id, f"🤭 {message.from_user.first_name} пошури-мурив(-ла) {reply_user.first_name}")
+            bot.send_message(message.chat.id, f"🤭 {message.from_user.first_name} пошури-мурив(-ла) {reply_user.first_name}\n{reason}")
             photo_choices = []
         elif action == 'відрізати':
-            bot.send_message(message.chat.id, f"🤭 {message.from_user.first_name} відрізав(-ла) {reply_user.first_name}")
+            bot.send_message(message.chat.id, f"🤭 {message.from_user.first_name} відрізав(-ла) {reply_user.first_name}\n{reason}")
             photo_choices = []
         elif action == 'вдочерити':
             bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} вдочерив(-ла) {reply_user.first_name}\n{reason}")
@@ -296,7 +298,7 @@ def hug_or_kiss(message):
             bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} зайнявся(-лася) самозадоволенням\n{reason}")
             photo_choices = ['static/onanism/onanizm_one.jpg']
         elif action in ('пробач', 'вибач'):
-            bot.send_message(message.chat.id, f"🥺 {message.from_user.first_name} просить пробачення у своєї половинки {reply_user.first_name}")
+            bot.send_message(message.chat.id, f"🥺 {message.from_user.first_name} просить пробачення у своєї половинки {reply_user.first_name}\n{reason}")
             photo_choices = []
         else:
             bot.reply_to(message, "Помилка, команда неправильно прописана - перевірте її правильність. Для допомоги пропишіть /help_bot")
