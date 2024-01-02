@@ -284,7 +284,8 @@ def hug_or_kiss(message):
                              'static/kuni/kuni_three.jpg',
                              'static/kuni/kuni_four.jpg']
         elif action in ('вбити', 'убити', 'прибити', 'знищити'):
-            bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} убив(-ла) {reply_user.first_name}\n{reason}")
+            bot.send_message(message.chat.id, f"☠️ {message.from_user.first_name} убив(-ла) {reply_user.first_name}\n{reason}")
+            photo_choices = []
         elif action == 'шури-мури':
             bot.send_message(message.chat.id, f"🤭 {message.from_user.first_name} пошури-мурив(-ла) {reply_user.first_name}\n{reason}")
             photo_choices = []
