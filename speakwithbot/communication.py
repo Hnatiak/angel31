@@ -69,8 +69,9 @@ def handle_commands(bot, message):
             elif text == f"{keyword} герої не вмирають" or text == f"{keyword} Герої не вмирають" or text == f"{keyword} Герої Не Вмирають" or text == f"герої не вмирають" or text == f"Герої не вмирають" or text == f"Герої Не Вмирають":
                 bot.send_message(message.chat.id, 'Вмирають Вороги!')
             # elif text == f"{keyword} Україна" or text == f"{keyword} україна" or text == f"Україна" or text == f"україна":
-            elif any(command in text for command in [f"{keyword} Україна", f"{keyword} україна", f"Україна", f"україна"]):
+            elif any(command in text for command in [f"{keyword} Україна", f"{keyword} україна", f"Україна", f"україна"]) and not answered_question:
                 bot.send_message(message.chat.id, 'Понад усе!')
+                answered_question = True
             elif text == f"{keyword} Слава нації" or text == f"{keyword} Слава Нації" or text == f"Слава Нації" or text == f"Слава нації":
                 bot.send_message(message.chat.id, 'Смерть ворогам!')
             elif text == f"{keyword} факт":
