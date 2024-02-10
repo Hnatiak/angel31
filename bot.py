@@ -37,7 +37,8 @@ def start(message):
         'Привіт, я ангел, я можу спілкуватися з вами або ж виконувати команди такі як:'
         '\n\n<b>/від вдарити</b>, \n<b>/від обняти</b>, \n<b>/від поцілувати</b> \n<b>/від образити</b>'
         '\n<b>/від чмок</b>\n<b>/від шльоп</b>\n<b>/від сильнийшльоп</b>\n<b>/від кекс або ж /від секс</b>\n<b>/від онанізм</b>'
-        '\n<b>/від засос</b>\n<b>/від куні</b>\n<b>/від пососати</b>\n<b>/стать</b>'
+        '\n<b>/від засос</b>\n<b>/від куні</b>\n<b>/від пососати</b>\n<b>/стать</b>\n<b>/від лоскотати</b>\n<b>/від відрізати</b>'
+        '\n<b>/від пробач</b>\n<b>/від вбити</b>\n<b>/від потиснути руку</b>\n<b>/від полизати</b>\n<b>/від шури-мури</b>'
         '\n<b>Відповідати на запитання на скільки хтось розумний чи дурний</b>\n<b>Відповідати на запитання так чи ні '
         '(В кінці обовязково напиши ?, для прикладу: ангел таке можливе?)</b>\n\nТакож я маю звичайні команди як:'
         '\n\n<b>показати ніжки</b>\n\n<b>А також я можу надавати інформацію про те як купити піар або адмінку, просто '
@@ -266,6 +267,9 @@ def hug_or_kiss(message):
             bot.send_message(message.chat.id, f"🥵😫 {message.from_user.first_name} трахнув(-ла) {reply_user.first_name}\n{reason}")
             photo_choices = ['static/se/se_one.gif', 
                              'static/se/se_two.gif']
+        elif action in ('залоскотати', 'полоскотати', 'лоскотати', 'лоскотувати'):
+            bot.send_message(message.chat.id, f"🥵😫 {message.from_user.first_name} полоскотав(-ла) {reply_user.first_name}\n{reason}")
+            photo_choices = ['static/tickling/tickling_one.gif', 'static/tickling/tickling_two.gif']
         elif action == 'засос':
             bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} зацілував(-ла) свою половинку {reply_user.first_name}\n{reason}")
             photo_choices = ['static/strong_kiss/strong_kiss_one.gif', 
@@ -290,7 +294,7 @@ def hug_or_kiss(message):
             bot.send_message(message.chat.id, f"🤭 {message.from_user.first_name} пошури-мурив(-ла) {reply_user.first_name}\n{reason}")
             photo_choices = []
         elif action == 'відрізати':
-            bot.send_message(message.chat.id, f"🤭 {message.from_user.first_name} відрізав(-ла) {reply_user.first_name}\n{reason}")
+            bot.send_message(message.chat.id, f"🤭 {message.from_user.first_name} кастрував(-ла) {reply_user.first_name}\n{reason}")
             photo_choices = []
         elif action == 'вдочерити':
             bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} вдочерив(-ла) {reply_user.first_name}\n{reason}")
