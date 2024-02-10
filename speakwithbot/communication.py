@@ -64,16 +64,18 @@ def handle_commands(bot, message):
                bot.send_message(message.chat.id, 'Моя порада: будь завжди веселим і позитивним!')
             elif text in [f"{keyword} де пропадала?", f"{keyword} де пропадала", f"{keyword}де ти була", f"{keyword} де ти була?", f"{keyword} де ти пропадала?", f"{keyword} де ти пропадала", f"{keyword} де ти пропала", f"{keyword} де ти пропала?", f"{keyword} де ти пропала"]:
                 bot.send_message(message.chat.id, 'Пробач, я змушена була відійти')
-            elif text == f"{keyword} слава україні" or text == f"{keyword} Слава Україні" or text == f"{keyword} слава Україні" or text == f"{keyword} Слава україні" or text == f"слава україні" or text == f"Слава Україні" or text == f"слава Україні" or text == f"Слава україні":
+            elif any(command in text for command in [f"{keyword} слава україні", f"{keyword} Слава Україні", f"{keyword} слава Україні", f"{keyword} Слава україні", f"слава україні", f"Слава Україні", f"слава Україні", f"Слава україні"]) and not answered_question:
                 bot.send_message(message.chat.id, 'Героям слава!')
-            elif text == f"{keyword} герої не вмирають" or text == f"{keyword} Герої не вмирають" or text == f"{keyword} Герої Не Вмирають" or text == f"герої не вмирають" or text == f"Герої не вмирають" or text == f"Герої Не Вмирають":
+                answered_question = True
+            elif any(command in text for command in [f"{keyword} герої не вмирають", f"{keyword} Герої не вмирають", f"{keyword} Герої Не Вмирають", f"герої не вмирають", f"Герої не вмирають", f"Герої Не Вмирають"]) and not answered_question:
                 bot.send_message(message.chat.id, 'Вмирають Вороги!')
-            # elif text == f"{keyword} Україна" or text == f"{keyword} україна" or text == f"Україна" or text == f"україна":
+                answered_question = True
             elif any(command in text for command in [f"{keyword} Україна", f"{keyword} україна", f"Україна", f"україна"]) and not answered_question:
                 bot.send_message(message.chat.id, 'Понад усе!')
                 answered_question = True
-            elif text == f"{keyword} Слава нації" or text == f"{keyword} Слава Нації" or text == f"Слава Нації" or text == f"Слава нації":
+            elif any(command in text for command in [f"{keyword} Слава нації", f"{keyword} Слава Нації", f"Слава Нації", f"Слава нації"]) and not answered_question:
                 bot.send_message(message.chat.id, 'Смерть ворогам!')
+                answered_question = True
             elif text == f"{keyword} факт":
                     responses = [
                         'Факт: Історично Україна існує з 1187 року, тоді як Росія сформувалася в XV (15) столітті.',
