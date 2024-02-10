@@ -21,17 +21,9 @@ def handle_commands(bot, message):
     text = message.text.lower()
 
     hello = {"ангел привіт", "ангел здоров", "ангел хай", "ангел дарова", "ангел здоров", "ангел хелоу", "ангел хай", "ангел салют", "ангел салю"}
-    how_are_you = {"ангел як справи", "ангел ти як", "ангел як почуваєшся"}
-    how_are_you_second = {"як справи", "ти як", "як ти", "як ся маєш", "як", "", ""}
+    # how_are_you = {"ангел як справи", "ангел ти як", "ангел як почуваєшся"}
+    how_are_you = {"як справи", "ти як", "як ти", "як ся маєш", "як почуваєшся", "як здоров'я", "як ти почуваєшся"}
     where_did_you_are = {}
-
-    if any(command in text for command in hello):
-        bot.send_message(message.chat.id, "Привіт!")
-    elif any(command in text for command in how_are_you):
-        if "доречі привіт" in text:
-            bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
-        else:
-            bot.send_message(message.chat.id, "Усе добре, а в тебе?")
 #     elif any(command in text for command in hello | how_are_you_second):
 #         bot.send_message(message.chat.id, "Привіт, усе добре, а в тебе?")
     if re.search(r"\bангел число від (\d+) до (\d+)\b", text, re.IGNORECASE):
@@ -65,7 +57,7 @@ def handle_commands(bot, message):
                 photo_choices = ['static/01.jpg']
                 photo = open(random.choice(photo_choices), 'rb')
                 bot.send_photo(message.chat.id, photo)
-            elif text in [f"{keyword} як ти", f"{keyword} як справи", f"{keyword} ти як", f"{keyword} як ти?", f"{keyword}, ти як", f"{keyword}, ти як?"]:
+            elif text.startswith(f"{keyword} ") in how_are_you:
                 bot.send_message(message.chat.id, 'Усе гаразд, а ти як?')
             elif text == f"{keyword} дякую" or text == f"дякую {keyword}":
                 bot.send_message(message.chat.id, 'Завжди прошу, моє кошенятко 😘')
