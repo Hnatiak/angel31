@@ -57,7 +57,7 @@ def handle_commands(bot, message):
                 photo_choices = ['static/01.jpg']
                 photo = open(random.choice(photo_choices), 'rb')
                 bot.send_photo(message.chat.id, photo)
-            elif text.startswith(f"{keyword} ") in how_are_you:
+            elif any(keyword in text for keyword in how_are_you):
                 bot.send_message(message.chat.id, 'Усе гаразд, а ти як?')
             elif text == f"{keyword} дякую" or text == f"дякую {keyword}":
                 bot.send_message(message.chat.id, 'Завжди прошу, моє кошенятко 😘')
