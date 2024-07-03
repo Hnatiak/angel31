@@ -45,11 +45,11 @@ def process_command(message):
 
     for command in commands_data['commands']:
         if command_text == '/' + command['command']:
-            # sender = message.from_user.first_name
+            answer = command['answer']
             bot_name = bot.get_me().first_name
 
             if 'answer_bot' in command:
-                reply = command['answer_bot'].format(sender=sender, bot=bot_name)
+                reply = random.choice(answer).format(sender=sender, bot=bot_name)
                 bot.send_message(message.chat.id, reply, parse_mode='HTML')
 
             photos = command.get('photos', [])
