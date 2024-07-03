@@ -62,7 +62,7 @@
       },
       {
         "action": ["кекс", "секс"],
-        "message_template": ["🥵😫 {sender} трахнув(-ла) {receiver}\n{reason}"],
+        "message_template": "🥵😫 {sender} трахнув(-ла) {receiver}\n{reason}",
         "photos": ["static/se/se_one.gif", "static/se/se_two.gif"]
       },
       {
