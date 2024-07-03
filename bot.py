@@ -76,23 +76,21 @@ def handle_commands(message):
     text = message.text.lower()
     sender = message.from_user.first_name
 
-    # Витягнення лише тієї частини тексту, яка йде після ключового слова
     for keyword in angel:
         if text.startswith(keyword):
             text_after_keyword = text[len(keyword):].strip()
             break
     
-    answered_question = False  # Перевірка чи було вже відповіді на питання
+    answered_question = False
 
-    # Перевірка наявності відповіді для витягнутих ключових слів з JSON
     for command in commands_data['speak_with_bot']:
         for keyword in command['say']:
             if keyword in text_after_keyword:
-                answer = command['answer']
+                answer = command['answer'].format(sender=sender)
                 bot_name = bot.get_me().first_name
                 
                 if isinstance(answer, list):
-                    reply = random.choice(answer).format(sender=message.from_user.first_name, bot=bot_name)
+                    reply = random.choice(answer).format(bot=bot_name)
                 else:
                     reply = answer
                 
