@@ -382,64 +382,64 @@ def handle_insult(message):
 # =====================================================================================================================================================================
 # /ВДУШ
 # ===================================================================================================================================================================== 
-is_shower_time = False
+# is_shower_time = False
 
-def current_time():
-    return time.strftime("%H:%M:%S", time.localtime())
+# def current_time():
+#     return time.strftime("%H:%M:%S", time.localtime())
 
-@bot.message_handler(commands=['вдуш'])
-def handle_shower_command(message):
-    global is_shower_time
+# @bot.message_handler(commands=['вдуш'])
+# def handle_shower_command(message):
+#     global is_shower_time
 
-    current_hour = int(time.strftime("%H", time.localtime()))
+#     current_hour = int(time.strftime("%H", time.localtime()))
 
-    if current_hour == 19:
-        is_shower_time = True
-        bot.send_message(message.chat.id, 'Я відійшла в душ, тому тепер всі команди будуть не доступні (/вдуш). Я повернусь через 30 хвилин.')
+#     if current_hour == 19:
+#         is_shower_time = True
+#         bot.send_message(message.chat.id, 'Я відійшла в душ, тому тепер всі команди будуть не доступні (/вдуш). Я повернусь через 30 хвилин.')
 
-        start_time = time.time()
+#         start_time = time.time()
 
-        while time.time() - start_time <= 1800:
-            time.sleep(1)
+#         while time.time() - start_time <= 1800:
+#             time.sleep(1)
 
-        bot.send_message(message.chat.id, 'Фух, все, я прийняла душ. Отже, що тепер робитимемо?')
+#         bot.send_message(message.chat.id, 'Фух, все, я прийняла душ. Отже, що тепер робитимемо?')
 
-        try:
-            user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
-            bot.send_message(message.chat.id, f"Мут на 1 хвилину для {user_mention}", reply_to_message_id=message.message_id)
-            bot.restrict_chat_member(message.chat.id, message.from_user.id, until_date=int(time.time()) + 60)
-            bot.reply_to(message, "НАВІЩО ТИ НАМАГАВСЯ ПІДГЛЯНУТИ ЗА МНОЮ КОЛИ Я ПРИЙМАЛА ДУШ? Тепер посиди і подумай що ти накоїв!")
-        except Exception as e:
-            bot.send_message(message.chat.id, "Блінчик, ну прошу, не ргоби так більше, мені це неприємно 🥺")
+#         try:
+#             user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
+#             bot.send_message(message.chat.id, f"Мут на 1 хвилину для {user_mention}", reply_to_message_id=message.message_id)
+#             bot.restrict_chat_member(message.chat.id, message.from_user.id, until_date=int(time.time()) + 60)
+#             bot.reply_to(message, "НАВІЩО ТИ НАМАГАВСЯ ПІДГЛЯНУТИ ЗА МНОЮ КОЛИ Я ПРИЙМАЛА ДУШ? Тепер посиди і подумай що ти накоїв!")
+#         except Exception as e:
+#             bot.send_message(message.chat.id, "Блінчик, ну прошу, не ргоби так більше, мені це неприємно 🥺")
 
-        is_shower_time = False
-    else:
-        bot.reply_to(message, 'Ця команда доступна лише о 19:00')
+#         is_shower_time = False
+#     else:
+#         bot.reply_to(message, 'Ця команда доступна лише о 19:00')
 
-def auto_shower():
-    global is_shower_time
+# def auto_shower():
+#     global is_shower_time
 
-    start_time = time.time()
+#     start_time = time.time()
 
-    while True:
-        current_hour = int(time.strftime("%H", time.localtime()))
+#     while True:
+#         current_hour = int(time.strftime("%H", time.localtime()))
 
-        if current_hour == 19 and not is_shower_time and time.time() - start_time <= 1800:
-            is_shower_time = True
-            bot.send_message(chat_id, 'Доброго вечора, пішла в душ. Повернусь через 30 хвилин.')
+#         if current_hour == 19 and not is_shower_time and time.time() - start_time <= 1800:
+#             is_shower_time = True
+#             bot.send_message(chat_id, 'Доброго вечора, пішла в душ. Повернусь через 30 хвилин.')
 
-            shower_start_time = time.time()
+#             shower_start_time = time.time()
 
-            while time.time() - shower_start_time <= 1800:
-                time.sleep(1)
+#             while time.time() - shower_start_time <= 1800:
+#                 time.sleep(1)
 
-            bot.send_message(chat_id, 'Все, я вже прийшла з душу душ. Тепер всі команди знову доступні. Отже з чого розпочнемо?')
+#             bot.send_message(chat_id, 'Все, я вже прийшла з душу душ. Тепер всі команди знову доступні. Отже з чого розпочнемо?')
 
-            is_shower_time = False
+#             is_shower_time = False
 
-        time.sleep(60)
+#         time.sleep(60)
 
-auto_shower()
+# auto_shower()
 
 # =====================================================================================================================================================================
 # ПЕРЕКЛАД З АНГЛ НА УКР
