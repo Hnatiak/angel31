@@ -90,9 +90,13 @@ def handle_commands(message):
                 bot_name = bot.get_me().first_name
                 
                 if isinstance(answer, list):
-                    reply = random.choice(answer).format(bot=bot_name)
+                    chosen_answer = random.choice(answer)
+                    if '{sender}' in chosen_answer:
+                        reply = chosen_answer.format(sender=sender)
+                    else:
+                        reply = chosen_answer.format(bot=bot_name)
                 else:
-                    reply = answer
+                    reply = answer.format(sender=sender)
                 
                 bot.reply_to(message, reply)
                 answered_question = True
