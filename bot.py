@@ -88,11 +88,11 @@ def handle_commands(message):
     for command in commands_data['speak_with_bot']:
         for keyword in command['say']:
             if keyword in text_after_keyword:
-                answer = command['answer'].format(sender=message.from_user.first_name)
+                answer = command['answer']
                 bot_name = bot.get_me().first_name
                 
                 if isinstance(answer, list):
-                    reply = random.choice(answer).format(sender=sender, bot=bot_name)
+                    reply = random.choice(answer).format(sender=message.from_user.first_name, bot=bot_name)
                 else:
                     reply = answer
                 
