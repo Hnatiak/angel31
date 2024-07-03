@@ -184,8 +184,11 @@
         },
         {
             "say": ["показати ніжки", "ніжки", "покажи свої ніжки"],
-            "answer": ["🤗 {message.from_user.first_name} вирішив(-ла) подивитися на ніжки"],
-            "photos": ["static/legs/legs_(1).jpg", "static/legs/legs_(2).jpg", "static/legs/legs_(3).jpg",
+            "answer": "🤗 {sender} вирішив(-ла) подивитися на ніжки",
+            "photos": [
+              "static/legs/legs_(1).jpg", 
+              "static/legs/legs_(2).jpg", 
+              "static/legs/legs_(3).jpg",
             "static/legs/legs_(4).jpg", "static/legs/legs_(5).jpg", "static/legs/legs_(6).jpg",
             "static/legs/legs_(7).jpg", "static/legs/legs_(8).jpg", "static/legs/legs_(9).jpg",
             "static/legs/legs_(10).jpg", "static/legs/legs_(11).jpg", "static/legs/legs_(12).jpg",

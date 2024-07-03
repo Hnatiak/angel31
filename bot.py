@@ -48,7 +48,7 @@ def process_command(message):
             bot_name = bot.get_me().first_name
 
             if 'answer_bot' in command:
-                reply = command['answer_bot'].format(sender=sender, bot=bot_name)
+                reply = command['answer_bot'].format(sender=message.from_user.first_name, bot=bot_name)
                 bot.send_message(message.chat.id, reply, parse_mode='HTML')
 
             photos = command.get('photos', [])
