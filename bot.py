@@ -60,7 +60,7 @@ def process_command(message):
 
     bot.reply_to(message, "Невідома команда. Спробуйте ще раз.")
     
-@bot.message_handler(commands=['start', 'від', 'команди', 'формати-запитання', 'ігри'])  # Додаткові команди, які обробляються безпосередньо
+@bot.message_handler(commands=['start', 'команди', 'формати-запитання', 'ігри'])  # Додаткові команди, які обробляються безпосередньо
 def handle_commands(message):
     process_command(message)
     
