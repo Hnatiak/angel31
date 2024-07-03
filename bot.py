@@ -107,7 +107,6 @@ def handle_commands(message):
 
                 return
 
-    # Додаткові спеціальні відповіді
     if not answered_question:
         if text_after_keyword in ["скажи наскільки він розумний?", "скажи наскільки він розумний", "напиши наскільки він розумний", "як ти думаєш наскільки він розумний", "напиши наскільки він розумний?", "як ти думаєш наскільки він розумний?"]:
             bot.send_message(message.chat.id, f"Небеса кажуть що він розумний на {random.randint(0, 100)}%")
@@ -133,10 +132,8 @@ def handle_commands(message):
         elif '?' in text_after_keyword:
             bot.send_message(message.chat.id, random.choice(['Так', 'Ні']))
             answered_question = True
-
-    # Відповідь на запити, які не розпізнані
-    if not answered_question:
-        bot.reply_to(message, "Вибач, я не розумію твого запиту.")
+        else:
+            bot.reply_to(message, "Вибач, я не розумію твого запиту.")
 
     # bot.reply_to(message, "Вибач, я не розумію вашого запиту.")
 
