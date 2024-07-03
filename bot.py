@@ -88,7 +88,7 @@ def handle_commands(message):
     for command in commands_data['speak_with_bot']:
         for keyword in command['say']:
             if keyword in text_after_keyword:
-                answer = command['answer'].format(sender=message.from_user.first_name, receiver=target.first_name, reason=reason)
+                answer = command['answer'].format(sender=message.from_user.first_name)
                 bot_name = bot.get_me().first_name
                 
                 if isinstance(answer, list):
