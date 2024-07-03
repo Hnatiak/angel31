@@ -408,7 +408,7 @@ def handle_insult(message):
         bot.send_message(message.chat.id, f"мут 1 хвилину {user_mention}", reply_to_message_id=message.message_id)
         bot.reply_to(message, "Тепер подумай над своєю поведінкою")
     except Exception as e:
-        bot.send_message(message.chat.id, "Мені взагаліто обідно")
+        bot.send_message(message.chat.id, "Мені взагаліто не приємно")
 
 
 
