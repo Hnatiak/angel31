@@ -6,9 +6,9 @@ import telebot
 import config
 import random
 import logging
-import time
 from telebot import TeleBot, types
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta
+import time
 import re
 import smtplib
 from email.mime.text import MIMEText
@@ -419,82 +419,67 @@ def handle_insult(message):
         bot.send_message(message.chat.id, "Мені взагаліто не приємно")
 
 
-
-        
-is_shower_time = False
-
-
-# @bot.message_handler(commands=['вдуш'])
-# def handle_shower_command(message):
-#     global is_shower_time
-
-#     current_time = datetime.utcnow().time()
-
-#     if current_time >= time(19, 0) and current_time <= time(20, 0):
-#         is_shower_time = True
-#         bot.reply_to(message, 'Я відійшла в душ')
-#         time.sleep(1800)  # Почекати 30 хвилин (1800 секунд)
-#         bot.send_message(message.chat.id, 'Фух, все, я прийняла душ. Отже, що тепер робитимемо?')
-#         is_shower_time = False
-#     elif current_time < time(19, 0) or current_time > time(20, 0):
-#         try:
-#             bot.restrict_chat_member(
-#                 message.chat.id, message.from_user.id,
-#                 until_date=int((datetime.now() + timedelta(minutes=1)).timestamp())
-#             )
-#             user_mention = f"@{message.from_user.username}" if message.from_user.username else sender
-#             bot.send_message(
-#                 message.chat.id, f"Мут на 1 хвилину для {user_mention}",
-#                 reply_to_message_id=message.message_id
-#             )
-#             bot.reply_to(
-#                 message, "Не гарно підглядати за дівчиною в душі! Тепер подумай, як воно!"
-#             )
-#         except Exception as e:
-#             bot.send_message(message.chat.id, "Гей, перестань, мені не приємно!")
-#     else:
-#         bot.reply_to(message, 'Ця команда доступна лише з 19:00 до 20:00')
-
-
 # =====================================================================================================================================================================
 # ВДУШ
-# =====================================================================================================================================================================
+# ===================================================================================================================================================================== 
+is_shower_time = False
+
+def current_time():
+    return time.strftime("%H:%M:%S", time.localtime())
 
 @bot.message_handler(commands=['вдуш'])
 def handle_shower_command(message):
     global is_shower_time
 
-    current_time = datetime.utcnow().time()
+    current_hour = int(time.strftime("%H", time.localtime()))
 
-    # Check if it's shower time (from 19:00 to 20:00)
-    if current_time >= time(19, 0) and current_time <= time(20, 0):
+    if current_hour == 19:
         is_shower_time = True
-        bot.reply_to(message, 'Я відійшла в душ')
-        time.sleep(1800)  # Wait for 30 minutes (1800 seconds)
+        bot.send_message(message.chat.id, 'Я відійшла в душ, тому тепер всі команди будуть не доступні (/вдуш). Я повернусь через 30 хвилин.')
+
+        start_time = time.time()
+
+        while time.time() - start_time <= 1800:
+            time.sleep(1)
+
         bot.send_message(message.chat.id, 'Фух, все, я прийняла душ. Отже, що тепер робитимемо?')
+
+        try:
+            user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
+            bot.send_message(message.chat.id, f"Мут на 1 хвилину для {user_mention}", reply_to_message_id=message.message_id)
+            bot.restrict_chat_member(message.chat.id, message.from_user.id, until_date=int(time.time()) + 60)
+            bot.reply_to(message, "НАВІЩО ТИ НАМАГАВСЯ ПІДГЛЯНУТИ ЗА МНОЮ КОЛИ Я ПРИЙМАЛА ДУШ? Тепер посиди і подумай що ти накоїв!")
+        except Exception as e:
+            bot.send_message(message.chat.id, "Блінчик, ну прошу, не ргоби так більше, мені це неприємно 🥺")
+
         is_shower_time = False
     else:
-        # If it's not shower time, inform the user about the restricted command
-        bot.reply_to(message, 'Ця команда доступна лише з 19:00 до 20:00')
+        bot.reply_to(message, 'Ця команда доступна лише о 19:00')
 
-        # If someone tries to use the command outside shower time (from 19:00 to 20:00)
-        # inform them that the command is restricted during this time
-        if current_time < time(19, 0) or current_time > time(20, 0):
-            try:
-                bot.restrict_chat_member(
-                    message.chat.id, message.from_user.id,
-                    until_date=int((datetime.now() + timedelta(minutes=1)).timestamp())
-                )
-                user_mention = f"@{message.from_user.username}" if message.from_user.username else sender
-                bot.send_message(
-                    message.chat.id, f"Мут на 1 хвилину для {user_mention}",
-                    reply_to_message_id=message.message_id
-                )
-                bot.reply_to(
-                    message, "Не гарно підглядати за дівчиною в душі! Тепер подумай, як воно!"
-                )
-            except Exception as e:
-                bot.send_message(message.chat.id, "Гей, перестань, мені не приємно!")
+def auto_shower():
+    global is_shower_time
+
+    start_time = time.time()
+
+    while True:
+        current_hour = int(time.strftime("%H", time.localtime()))
+
+        if current_hour == 19 and not is_shower_time and time.time() - start_time <= 1800:
+            is_shower_time = True
+            bot.send_message(chat_id, 'Доброго вечора, пішла в душ. Повернусь через 30 хвилин.')
+
+            shower_start_time = time.time()
+
+            while time.time() - shower_start_time <= 1800:
+                time.sleep(1)
+
+            bot.send_message(chat_id, 'Все, я вже прийшла з душу душ. Тепер всі команди знову доступні. Отже з чого розпочнемо?')
+
+            is_shower_time = False
+
+        time.sleep(60)
+
+auto_shower()
 
 # =====================================================================================================================================================================
 # ПЕРЕКЛАД З АНГЛ НА УКР
