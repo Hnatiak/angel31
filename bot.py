@@ -96,7 +96,10 @@ def handle_commands(message):
                     else:
                         reply = chosen_answer.format(bot=bot_name)
                 else:
-                    reply = answer.format(sender=sender)
+                    if '{sender}' in answer:
+                        reply = answer.format(sender=sender)
+                    else:
+                        reply = answer
                 
                 bot.reply_to(message, reply)
                 answered_question = True
