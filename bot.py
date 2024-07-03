@@ -250,7 +250,7 @@ def handle_command_vid(message):
     try:
         for action in commands_data['actions']:
             if action_text in action['action']:
-                reply = action['message_template'].format(sender=sender, receiver=target.first_name, reason=reason)
+                reply = action['message_template'].format(sender=message.from_user.first_name, receiver=target.first_name, reason=reason)
                 bot.send_message(message.chat.id, reply)
                 
                 photos = action.get('photos', [])
