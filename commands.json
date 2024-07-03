@@ -199,6 +199,10 @@
             "static/legs/legs_(25).jpg", "static/legs/legs_(26).jpg", "static/legs/legs_(27).jpg",
             "static/legs/legs_(28).jpg", "static/legs/legs_(29).jpg", "static/legs/legs_(30).jpg",
             "static/legs/legs_(31).jpg", "static/legs/legs_(32).jpg"]
+        }, 
+        {
+          "say": ["бреше", "кажеш не правду", "брешеш", "ти брешеш"],
+          "answer": ["Неправда, я не брешу 😱, я ж янгол! 🥺", "Я протестую, і я можу це доказати ☺️", "Я заперечую! 😭"]
         }
     ],
     "translation_dict": [ 
