@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import json
 import types
 import telebot
 import config
@@ -12,7 +13,7 @@ import re
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-import speakwithbot.communication as communication
+from games import bot, start_number_game, start_number_game_with_attempts, guess_number, end_number_game, start_word_game, play_word_game, end_word_game
 from langdetect import detect
 from pyaspeller import YandexSpeller
 import math
@@ -31,100 +32,149 @@ QUEST_THRESHOLD = 1000
 MIN_WORDS_THRESHOLD = 3
 game_numbers = {}
 
-@bot.message_handler(commands=['start'])
-def start(message):
-    bot.send_message(message.chat.id,
-        'Привіт, я ангел, я можу спілкуватися з вами або ж виконувати команди такі як:'
-        '\n\n<b>/від вдарити</b>, \n<b>/від обняти</b>, \n<b>/від поцілувати</b> \n<b>/від образити</b>'
-        '\n<b>/від чмок</b>\n<b>/від шльоп</b>\n<b>/від сильнийшльоп</b>\n<b>/від кекс або ж /від секс</b>\n<b>/від онанізм</b>'
-        '\n<b>/від засос</b>\n<b>/від куні</b>\n<b>/від пососати</b>\n<b>/стать</b>\n<b>/від лоскотати</b>\n<b>/від відрізати</b>'
-        '\n<b>/від пробач</b>\n<b>/від вбити</b>\n<b>/від потиснути руку</b>\n<b>/від полизати</b>\n<b>/від шури-мури</b>'
-        '\n<b>Відповідати на запитання на скільки хтось розумний чи дурний</b>\n<b>Відповідати на запитання так чи ні '
-        '(В кінці обовязково напиши ?, для прикладу: ангел таке можливе?)</b>\n\nТакож я маю звичайні команди як:'
-        '\n\n<b>показати ніжки</b>\n\n<b>А також я можу надавати інформацію про те як купити піар або адмінку, просто '
-        'пропиши: купити піар, або купити адмінку</b>\n\nТакож у мене є ігри як:\n\n/гра_в_цифри\n\nА і ще одне, з 19:00 до 19:30 я іду в душ, кожного дня, тому хлопчики - '
-        'не заглядати, а то покараю\n'
-        '\nІ хлопчики, будь ласка, будьте зі мною лагідні а також із своїми дівчатками'.format(
-                                     message.from_user, bot.get_me()),
-                                 parse_mode='html')
-    photo_choices = ['static/01.jpg']
-    photo = open(random.choice(photo_choices), 'rb')
-    bot.send_photo(message.chat.id, photo)
+with open('commands.json', 'r', encoding='utf-8') as file:
+    commands_data = json.load(file)
+    
+# =====================================================================================================================================================================
+# ПОЧАТКОВІ КОМАНДИ
+# =====================================================================================================================================================================
+
+def process_command(message):
+    command_text = message.text.lower().split()[0]
+
+    for command in commands_data['commands']:
+        if command_text == '/' + command['command']:
+            sender = message.from_user.first_name
+            bot_name = bot.get_me().first_name
+
+            if 'answer_bot' in command:
+                reply = command['answer_bot'].format(sender=sender, bot=bot_name)
+                bot.send_message(message.chat.id, reply, parse_mode='HTML')
+
+            photos = command.get('photos', [])
+            for photo_path in photos:
+                with open(photo_path, 'rb') as photo_file:
+                    bot.send_photo(message.chat.id, photo_file)
+
+            return
+
+    bot.reply_to(message, "Невідома команда. Спробуйте ще раз.")
+    
+@bot.message_handler(commands=['start', 'від', 'команди', 'формати-запитання', 'ігри'])  # Додаткові команди, які обробляються безпосередньо
+def handle_commands(message):
+    process_command(message)
+    
+    
+# =====================================================================================================================================================================
+# РОЗМОВА З БОТОМ
+# =====================================================================================================================================================================
+
+angel = ['ангелятко', 'ангел', 'ангелику', 'ангелочок']
+
+@bot.message_handler(func=lambda message: any(message.text.lower().startswith(keyword) for keyword in angel))
+def handle_commands(message):
+    text = message.text.lower()
+    sender = message.from_user.first_name
+
+    # Витягнення лише тієї частини тексту, яка йде після ключового слова
+    for keyword in angel:
+        if text.startswith(keyword):
+            text_after_keyword = text[len(keyword):].strip()
+            break
+    
+    answered_question = False  # Перевірка чи було вже відповіді на питання
+
+    # Перевірка наявності відповіді для витягнутих ключових слів з JSON
+    for command in commands_data['speak_with_bot']:
+        for keyword in command['say']:
+            if keyword in text_after_keyword:
+                answer = command['answer']
+                if isinstance(answer, list):
+                    reply = random.choice(answer)
+                else:
+                    reply = answer
+                
+                bot.reply_to(message, reply)
+                answered_question = True  # Маркування, що питання було відповідено
+
+                photos = command.get('photos', [])
+                if photos:
+                    photo_path = random.choice(photos)
+                    with open(photo_path, 'rb') as photo_file:
+                        bot.send_photo(message.chat.id, photo_file)
+
+                return
+
+    # Додаткові спеціальні відповіді
+    if not answered_question:
+        if text_after_keyword in ["скажи наскільки він розумний?", "скажи наскільки він розумний", "напиши наскільки він розумний", "як ти думаєш наскільки він розумний", "напиши наскільки він розумний?", "як ти думаєш наскільки він розумний?"]:
+            bot.send_message(message.chat.id, f"Небеса кажуть що він розумний на {random.randint(0, 100)}%")
+            answered_question = True
+        elif text_after_keyword in ["скажи наскільки вона розумна?", "скажи наскільки вона розумна", "напиши наскільки вона розумна", "як ти думаєш наскільки вона розумна", "напиши наскільки вона розумна?", "як ти думаєш наскільки вона розумна?"]:
+            bot.send_message(message.chat.id, f"Небеса кажуть що вона розумна на {random.randint(0, 100)}%")
+            answered_question = True
+        elif text_after_keyword in ["скажи наскільки він дурний?", "скажи наскільки він дурний", "напиши наскільки він дурний", "як ти думаєш наскільки він дурний", "напиши наскільки він дурний?", "як ти думаєш наскільки він дурний?"]:
+            bot.send_message(message.chat.id, f"Небеса кажуть що він дурний на {random.randint(0, 100)}%")
+            answered_question = True
+        elif text_after_keyword.startswith('хто') and '?' in text_after_keyword:
+            bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто', 'Він/Вона']))
+            answered_question = True
+        elif text_after_keyword.startswith('він чи я') and '?' in text_after_keyword:
+            bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто з вас', 'Він', 'Ви обоє']))
+            answered_question = True
+        elif text_after_keyword.startswith('вона чи я') and '?' in text_after_keyword:
+            bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто з вас', 'Вона', 'Ви обоє']))
+            answered_question = True
+        elif re.search(r"\bскільки\b.*\bразів\b.*\bтиждень\b", text_after_keyword):
+            bot.send_message(message.chat.id, 'Десь ' + str(random.randint(1, 10)) + ' разів на тиждень')
+            answered_question = True
+        elif '?' in text_after_keyword:
+            bot.send_message(message.chat.id, random.choice(['Так', 'Ні']))
+            answered_question = True
+
+    # Відповідь на запити, які не розпізнані
+    if not answered_question:
+        bot.reply_to(message, "Вибач, я не розумію твого запиту.")
+
+    # bot.reply_to(message, "Вибач, я не розумію вашого запиту.")
+
+
+# =====================================================================================================================================================================
+# ГРА В ЦИФРИ
+# =====================================================================================================================================================================
 
 @bot.message_handler(commands=['гра_в_цифри'])
-def start_number_game(message):
-    user_id = message.from_user.id
-
-    if user_id in game_numbers:
-        bot.send_message(chat_id=message.chat.id, text='Ви вже граєте в гру. Спробуйте закінчити попередню гру, прописавши команду /закінчити_гру.')
-        return
-
-    game_numbers[user_id] = {
-        'number': random.randint(1, 100),
-        'attempts_left': None
-    }
-
-    bot.send_message(chat_id=message.chat.id, text='Гра "Вгадай число" розпочата. Вгадайте число від 1 до 100.')
+def handle_start_number_game(message):
+    start_number_game(message)
 
 @bot.message_handler(commands=['гра_в_цифри_10', 'гра_в_цифри_9', 'гра_в_цифри_8', 'гра_в_цифри_7', 'гра_в_цифри_6', 'гра_в_цифри_5', 'гра_в_цифри_4', 'гра_в_цифри_3', 'гра_в_цифри_2', 'гра_в_цифри_1'])
-def start_number_game_with_attempts(message):
-    user_id = message.from_user.id
-
-    if user_id in game_numbers:
-        bot.send_message(chat_id=message.chat.id, text='Ви вже граєте в гру. Спробуйте закінчити попередню гру, прописавши команду /закінчити_гру.')
-        return
-
-    attempts_left = int(message.text.split('_')[-1])
-    if attempts_left < 1 or attempts_left > 10:
-        bot.send_message(chat_id=message.chat.id, text='Кількість спроб має бути від 1 до 10.')
-        return
-
-    game_numbers[user_id] = {
-        'number': random.randint(1, 100),
-        'attempts_left': attempts_left
-    }
-
-    bot.send_message(chat_id=message.chat.id, text=f'Гра "Вгадай число" розпочата. Вгадайте число від 1 до 100. У вас є {attempts_left} спроб.')
+def handle_start_number_game_with_attempts(message):
+    start_number_game_with_attempts(message)
 
 @bot.message_handler(func=lambda message: message.text.isdigit())
-def guess_number(message):
-    user_id = message.from_user.id
-
-    if user_id not in game_numbers:
-        bot.send_message(chat_id=message.chat.id, text='Ви ще не почали гру. Почніть гру командою /гра_в_цифри або /гра_в_цифри_(число від 1 - 10 спроб).')
-        return
-
-    game = game_numbers[user_id]
-    number = game['number']
-    attempts_left = game['attempts_left']
-
-    guess = int(message.text)
-
-    if guess == number:
-        bot.send_message(chat_id=message.chat.id, text='Вітаю! Ви вгадали число!')
-        del game_numbers[user_id]
-    elif guess < number:
-        bot.send_message(chat_id=message.chat.id, text='Загадане число більше.')
-    else:
-        bot.send_message(chat_id=message.chat.id, text='Загадане число менше.')
-
-    if attempts_left is not None:
-        game['attempts_left'] -= 1
-        if game['attempts_left'] == 0:
-            bot.send_message(chat_id=message.chat.id, text=f'Гра закінчена. Ви вичерпали всі спроби. Загадане число було {number}.')
-            del game_numbers[user_id]
-        else:
-            bot.send_message(chat_id=message.chat.id, text=f'У вас залишилося {game["attempts_left"]} спроб.')
+def handle_guess_number(message):
+    guess_number(message)
 
 @bot.message_handler(commands=['закінчити_гру_в_цифри'])
-def end_game(message):
-    user_id = message.from_user.id
+def handle_end_number_game(message):
+    end_number_game(message)
 
-    if user_id in game_numbers:
-        del game_numbers[user_id]
-        bot.send_message(chat_id=message.chat.id, text='Гра була закінчена.')
-    else:
-        bot.send_message(chat_id=message.chat.id, text='Ви не брали участі в жодній грі.')
+@bot.message_handler(commands=['гра_в_слова'])
+def handle_start_word_game(message):
+    start_word_game(message)
+
+@bot.message_handler(func=lambda message: re.match(r'^[а-яіїєґ]+$', message.text, re.IGNORECASE) is not None)
+def handle_play_word_game(message):
+    play_word_game(message)
+
+@bot.message_handler(commands=['закінчити_гру_в_слова'])
+def handle_end_word_game(message):
+    end_word_game(message)
+
+
+# =====================================================================================================================================================================
+# СТАТЬ
+# =====================================================================================================================================================================
 
 user_choices = {}
 
@@ -176,144 +226,59 @@ def handle_gender(message):
     else:
         bot.send_message(chat_id=message.chat.id, text='Ви ще не обрали свою стать, для того щоб її обрати пропишіть    /стать')
 
+# =====================================================================================================================================================================
+# /ВІД КОМАНДИ
+# =====================================================================================================================================================================
 
 @bot.message_handler(commands=['від'])
-def hug_or_kiss(message):
+def handle_command_vid(message):
     words = message.text.lower().split()
     if len(words) < 2:
         bot.reply_to(message, "Виберіть дію щоб виконати цю команду")
-    else:
-        action = words[1]
-        target = message.reply_to_message.from_user if message.reply_to_message else None
-        if not target:
-            bot.reply_to(message, "Виберіть користувача щоб виконати цю команду")
-            return
-        reply_user = message.reply_to_message.from_user
-        action = message.text.split(' ')[1].lower()
-        reason = ' '.join(message.text.split(' ')[2:]) if len(message.text.split(' ')) > 2 else ''
-        if action in ('обняти', 'обійняти'):
-            bot.send_message(message.chat.id, f"😘 {message.from_user.first_name} обняв(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/hugs/hugs_one.jpg', 
-                             'static/hugs/hugs_two.jpg', 
-                             'static/hugs/hugs_three.jpg',
-                             'static/hugs/hugs_four.jpg', 
-                             'static/hugs/hugs_five.jpg', 
-                             'static/hugs/hugs_six.jpg',
-                             'static/hugs/hugs_seven.jpg', 
-                             'static/hugs/hugs_eight.jpg', 
-                             'static/hugs/hugs_nine.jpg',
-                             'static/hugs/hugs_ten.jpg']
-        elif action in ('поцілувати', 'поцілунок'):
-            bot.send_message(message.chat.id, f" 😘 {message.from_user.first_name} поцілував(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/kisses/kiss_one.jpg', 
-                             'static/kisses/kiss_two.jpg', 
-                             'static/kisses/kiss_three.jpg',
-                             'static/kisses/kiss_four.jpg', 
-                             'static/kisses/kiss_five.jpg',
-                             'static/kisses/kiss_six.jpg', 
-                             'static/kisses/kiss_seven.jpg', 
-                            #  'static/kisses/kiss_eight.gif',
-                             'static/kisses/kiss_nine.jpg', 
-                             'static/kisses/kiss_ten.jpg', 
-                             'static/kisses/kiss_eleven.jpg', 
-                             'static/kisses/kiss_twelve.jpg', 
-                             'static/kisses/kiss_thirteen.jpg', 
-                             'static/kisses/kiss_fourteen.jpg', 
-                             'static/kisses/kiss_fifteen.jpg', 
-                             'static/kisses/kiss_sixteen.jpg',
-                             'static/kisses/kiss_seventeen.jpg',
-                             'static/kisses/kiss_eighteen.jpg',]
-        elif action in ('вдарити', 'удар', 'ударити', 'гримнути'):
-            bot.send_message(message.chat.id, f" 🤜🤕 {message.from_user.first_name} вдарив(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/bully/bully_one.gif', 
-                             'static/bully/bully_two.gif', 
-                             'static/bully/bully_three.gif', 
-                             'static/bully/bully_four.gif', 
-                             'static/bully/bully_five.gif', 
-                             'static/bully/bully_six.gif', 
-                             'static/bully/bully_seven.gif', 
-                             'static/bully/bully_eight.gif', 
-                             'static/bully/bully_nine.gif', 
-                             'static/bully/bully_ten.gif']
-        elif action == 'образити':
-            bot.send_message(message.chat.id, f"😒 {message.from_user.first_name} образив(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = []
-        elif action in ['потиснути руку', 'пожати руку', 'пожати']:
-            bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} потиснув руку {reply_user.first_name}\n{reason}")
-            photo_choices = []
-        elif action == 'чмок':
-            bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} чмокнув(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/kisses/kiss_one.jpg', 
-                             'static/kisses/kiss_two.jpg', 
-                             'static/kisses/kiss_three.jpg', 
-                             'static/kisses/kiss_four.jpg', 
-                             'static/kisses/kiss_one.jpg', 
-                             'static/kisses/kiss_five.jpg', 
-                             'static/kisses/kiss_six.jpg', 
-                             'static/kisses/kiss_seven.jpg']
-        elif action in ('шльоп', 'шльп'):
-            bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} шльопнув(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/slaps/slap_one.gif', 
-                             'static/slaps/slap_two.gif', 
-                             'static/slaps/slap_three.gif', 
-                             'static/slaps/slap_four.gif']
-        elif action in ('сильнийшльоп', 'сильний шльоп', 'відшльопати сильно'):
-            bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} зі всієї дурі шльопнув(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/slaps/slap_one.gif', 
-                             'static/slaps/slap_two.gif', 
-                             'static/slaps/slap_three.gif', 
-                             'static/slaps/slap_four.gif']
-        elif action in ('кекс', 'секс'):
-            bot.send_message(message.chat.id, f"🥵😫 {message.from_user.first_name} трахнув(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/se/se_one.gif', 
-                             'static/se/se_two.gif']
-        elif action in ('залоскотати', 'полоскотати', 'лоскотати', 'лоскотувати'):
-            bot.send_message(message.chat.id, f"🥵😫 {message.from_user.first_name} полоскотав(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/tickling/tickling_one.gif', 'static/tickling/tickling_two.gif']
-        elif action == 'засос':
-            bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} зацілував(-ла) свою половинку {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/strong_kiss/strong_kiss_one.gif', 
-                             'static/strong_kiss/strong_kiss_two.gif', 
-                             'static/strong_kiss/strong_kiss_three.gif']
-        elif action in ('полизати', 'пососати', 'відсмоктати'):
-            bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} пососала своїй половинці {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/smok/smok_one.jpg', 
-                             'static/smok/smok_two.jpg', 
-                             'static/smok/smok_three.jpg',
-                             'static/smok/smok_four.jpg']
-        elif action == 'куні':
-            bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} полизав(-ла) своїй половинці {reply_user.first_name}\n{reason}")
-            photo_choices = ['static/kuni/kuni_one.jpg',
-                             'static/kuni/kuni_two.jpg', 
-                             'static/kuni/kuni_three.jpg',
-                             'static/kuni/kuni_four.jpg']
-        elif action in ('вбити', 'убити', 'прибити', 'знищити'):
-            bot.send_message(message.chat.id, f"☠️ {message.from_user.first_name} убив(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = []
-        elif action == 'шури-мури':
-            bot.send_message(message.chat.id, f"🤭 {message.from_user.first_name} пошури-мурив(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = []
-        elif action == 'відрізати':
-            bot.send_message(message.chat.id, f"🤭 {message.from_user.first_name} кастрував(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = []
-        elif action == 'вдочерити':
-            bot.send_message(message.chat.id, f"🤗 {message.from_user.first_name} вдочерив(-ла) {reply_user.first_name}\n{reason}")
-            photo_choices = []
-        elif action == 'онанізм':
-            bot.send_message(message.chat.id, f"🥵 {message.from_user.first_name} зайнявся(-лася) самозадоволенням\n{reason}")
-            photo_choices = ['static/onanism/onanizm_one.jpg']
-        elif action in ('пробач', 'вибач'):
-            bot.send_message(message.chat.id, f"🥺 {message.from_user.first_name} просить пробачення у своєї половинки {reply_user.first_name}\n{reason}")
-            photo_choices = []
+        return
+
+    action_text = words[1]
+    target = message.reply_to_message.from_user if message.reply_to_message else None
+    if not target:
+        bot.reply_to(message, "Виберіть користувача щоб виконати цю команду")
+        return
+
+    reason = ' '.join(words[2:]) if len(words) > 2 else ''
+    
+    try:
+        for action in commands_data['actions']:
+            if action_text in action['action']:
+                reply = action['message_template'].format(sender=sender, receiver=target.first_name, reason=reason)
+                bot.send_message(message.chat.id, reply)
+                
+                photos = action.get('photos', [])
+                if photos:
+                    photo_path = random.choice(photos)
+                    if photo_path.endswith('.gif'):
+                        with open(photo_path, 'rb') as photo_file:
+                            bot.send_animation(message.chat.id, photo_file)
+                    else:
+                        with open(photo_path, 'rb') as photo_file:
+                            bot.send_photo(message.chat.id, photo_file)
+                else:
+                    print("No photos found for action:", action_text)
+                
+                return
+
+        bot.reply_to(message, "Невідома команда. Спробуйте ще раз.")
+    
+    except telebot.apihelper.ApiTelegramException as e:
+        if e.error_code == 429:
+            retry_after = int(e.result_json['parameters']['retry_after'])
+            print(f"Too Many Requests: Retry after {retry_after} seconds | Було сильне перевантаження на сервер, потрібно зачекати {retry_after} секунд")
         else:
-            bot.reply_to(message, "Помилка, команда неправильно прописана - перевірте її правильність. Для допомоги пропишіть /help_bot")
-            return
-        if photo_choices:
-            photo_path = random.choice(photo_choices)
-            if photo_path.endswith('.gif'):
-                bot.send_animation(message.chat.id, open(photo_path, 'rb'))
-            else:
-                bot.send_photo(message.chat.id, open(photo_path, 'rb'))
+            print(f"Telegram API Error: {e}")
+    except Exception as e:
+        print(f"Error: {e}")
+
+# =====================================================================================================================================================================
+# ЯКАСЬ ФІГНЯ ДЛЯ ОДРУЖЕННЯ
+# =====================================================================================================================================================================
 
 user_choices = {}
 
@@ -391,7 +356,7 @@ def handle_gender(message):
     commands=['обняти', 'поцілувати', 'вдарити', 'образити', 'чмок', 'шльоп', 'сильнийшльоп', 'кекс',
                 'шури-мури', 'онанізм'])
 def hug_or_kiss(message):
-    gender = get_user_gender(message.from_user.id)  # виклик функції для отримання статі користувача
+    gender = get_user_gender(message.from_user.id)
     if gender is None:
         bot.reply_to(message, 'Спочатку виберіть свою стать за допомогою команди /стать')
         return
@@ -427,15 +392,19 @@ def handle_buy_command(message):
                                       '<b>*(2, 4, 5, 6) - Видаляти повідомлення, Запрошувати корист. посиланням, Прикріплювати повідомлення, Керувати відеочатами</b>', parse_mode='html', disable_web_page_preview=True)
 
 
+# =====================================================================================================================================================================
+# ДОДАТКОВІ ФОКУСИ
+# =====================================================================================================================================================================
+
 angel = ['ангелятко', 'ангел', 'ангелику', 'ангелочок']
-insult = {'дурак', 'ідіот', 'лох', 'дибілка', 'ідіотка', 'дура', 'тварь', 'сядешь мені на хуй', 'піди нахуй', 'від сосешь мені', 'та пошел ты нахуй', 'сядь мені на хуй', 'пошла на хуй', 'ти сосешь', 'станеш раком', 'стань раком', 'дибіл', 'дебіл', 'дебілка', 'дура', 'дурна', 'гей', 'лесбіянка', 'лисбіянка', 'самий уйобний бот', 'иди нахуй', 'будеш сосать члена', 'будеш сосать', 'сосать', 'соси', 'соси член'}
+insult = {'дурак', 'ідіот', 'лох', 'дибілка', 'ідіотка', 'дура', 'тварь', 'сядешь мені на хуй', 'піди нахуй', 'від сосешь мені', 'відсосешь мені', 'та пошел ты нахуй', 'сядь мені на хуй', 'пошла на хуй', 'ти сосешь', 'станеш раком', 'стань раком', 'дибіл', 'дебіл', 'дебілка', 'дура', 'дурна', 'гей', 'лесбіянка', 'лисбіянка', 'самий уйобний бот', 'иди нахуй', 'будеш сосать члена', 'будеш сосать', 'сосать', 'соси', 'соси член'}
 
 
 @bot.message_handler(func=lambda message: any(word in message.text.lower() for word in insult) and any(word in message.text.lower() for word in ["ангел ти", "особа ти", "ангел", 'ангел ', 'Ангел ', 'Ангел', 'Ангел ти ', '']))
 def handle_insult(message):
     try:
         bot.restrict_chat_member(message.chat.id, message.from_user.id, until_date=int((datetime.now() + timedelta(minutes=1)).timestamp()))
-        user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
+        user_mention = f"@{message.from_user.username}" if message.from_user.username else sender
         bot.send_message(message.chat.id, f"мут 1 хвилину {user_mention}", reply_to_message_id=message.message_id)
         bot.reply_to(message, "Тепер подумай над своєю поведінкою")
     except Exception as e:
@@ -465,7 +434,7 @@ is_shower_time = False
 #                 message.chat.id, message.from_user.id,
 #                 until_date=int((datetime.now() + timedelta(minutes=1)).timestamp())
 #             )
-#             user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
+#             user_mention = f"@{message.from_user.username}" if message.from_user.username else sender
 #             bot.send_message(
 #                 message.chat.id, f"Мут на 1 хвилину для {user_mention}",
 #                 reply_to_message_id=message.message_id
@@ -478,6 +447,10 @@ is_shower_time = False
 #     else:
 #         bot.reply_to(message, 'Ця команда доступна лише з 19:00 до 20:00')
 
+
+# =====================================================================================================================================================================
+# ВДУШ
+# =====================================================================================================================================================================
 
 @bot.message_handler(commands=['вдуш'])
 def handle_shower_command(message):
@@ -504,7 +477,7 @@ def handle_shower_command(message):
                     message.chat.id, message.from_user.id,
                     until_date=int((datetime.now() + timedelta(minutes=1)).timestamp())
                 )
-                user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
+                user_mention = f"@{message.from_user.username}" if message.from_user.username else sender
                 bot.send_message(
                     message.chat.id, f"Мут на 1 хвилину для {user_mention}",
                     reply_to_message_id=message.message_id
@@ -515,448 +488,19 @@ def handle_shower_command(message):
             except Exception as e:
                 bot.send_message(message.chat.id, "Гей, перестань, мені не приємно!")
 
+# =====================================================================================================================================================================
+# ПЕРЕКЛАД З АНГЛ НА УКР
+# =====================================================================================================================================================================
 
-def translate_russian_to_ukrainian(word):
-    translation_dict = {
-        'ё': 'їо',
-        'ы': 'и',
-        'эту': 'цю',
-        'это': 'це',
-        'этот': 'цей',
-        'этого': 'цього',
-# А
-        'акуратно': 'окуратно',
-        'акуратна': 'окуратно',
-        'ахуел': 'офігів/здурів',
-# Б
-        'бистро': 'швидко',
-        'бизнес': 'бізнес',
-        'болтать': 'розмовляти/говорити/бовтати',
-        'больше': 'більше',
-        'большие': 'великі',
-        'больницу': 'лікарню',
-        'больница': 'лікарня',
-        'боюсь': 'боюся',
-        'бес': 'біс',
-        'бесит': 'бісить',
-        'будет': 'буде',
-        'будем': 'будемо',
-        'беспокоит': 'турбує/хвилює',
-        'бухать': 'бухати/пити',
-        'беспокоить': 'турбує/хвилює',
-        'было': 'було',
-        'будешь': 'будеш',
-        'блять': 'блінчик',
-        'были': 'були',
-# В
-        'вашем': 'вашу',
-        'вопрос': 'питання/запитання',
-        'вопросы': 'питання/запитання',
-        'взрывают': 'взривають/підривають',
-        'випитой': 'випитої',
-        'всем': 'всім',
-        'вылезло': 'вилізло',
-        'видеш': 'бачиш',
-        'врага': 'ворога',
-        'враг': 'ворог',
-        'всего': 'всього',
-        'воздух': 'повітря',
-        'выеби': 'ізнасилуй',
-        'вдруг': 'раптом',
-        'влезть': 'влізти/долучитись',
-        'всё': 'усе/все',
-        'выучил': 'вивчив',
-        'выучила': 'вивчила',
-# Г
-        'где': 'де',
-        'говоришь': 'говориш/кажеш/розмовляєш/спілкуєшся',
-        'города': 'міста',
-        'гони': 'віддавай/давай/біжи',
-        'говорил': 'говорив',
-        'говорила': 'говорила',
-        'говном': 'гімном',
-# Ґ
+translate_dict = {}
+if 'translation_dict' in commands_data:
+    translate_dict = commands_data['translation_dict'][0]
 
-# Д
-        'да': 'так/та',
-        'дать': 'дати',
-        'дал': 'дав',
-        'даров': 'здоров',
-        'дарова': 'здоров',
-        'даровка': 'здоров',
-        'дырочки': 'дирочки',
-        'дыра': 'дира/дирка',
-        'доверяю': 'довіряю',
-        'доброе': 'Доброго',
-        'деньги': 'гроші',
-        'должно': 'повинно/має',
-        'делаешь': 'робиш',
-        'девочка': 'дівчинка',
-        'девушка': 'дівчина',
-        'дела': 'справи',
-        'делать': 'робити',
-        'дом': 'дім/будинок',
-        'думаешь': 'думаєш',
-        'дурачьё': 'дурне',
-        'держе': 'тримає',
-        'доказать': 'доказати',
-        'другие': 'другі/інші',
-        'долго': 'довго',
-        'довольный': 'задоволений',
-        'довольна': 'задоволена',
-        'довольная': 'задоволена',
-# Е
-        'ему': 'йому',
-        'её': 'її',
-        'ей': 'їй',
-        'его': 'його',
-        'если': 'якщо',
-        'есть': 'є',
-        'ещё': 'ще',
-        'ето': 'це',
-        'еж': 'їжак',
-        'ем': 'їм',
-        'ежа': 'їжака',
-        'еште': 'їжте',
-        'еще': 'ще',
-        'ебальник': 'рот',
-# Є
-        'ёбырей': 'хворіб',
-
-# Ж
-        'же': 'ж',
-        'жёстко': 'жорстоко',
-        'жосткие': 'жорстокі',
-        'жду': 'чекаю',
-        'женщин': 'жінок',
-        'ждал': 'чекав',
-        'ждала': 'чекала',
-        'ждать': 'чекати',
-# З
-        'заболеть': 'захворіти',
-        'заболел': 'захворів',
-        'заболела': 'захворіла',
-        'закрой': 'закрий',
-        'зонтик': 'парасоля',
-        'зонтик': 'парасоля',
-        'здарова': 'здоров',
-        'заходить': 'заходити',
-        'значит': 'значить/це означає',
-        'замутил': 'замутив',
-        'занять': 'зайняти',
-        'закрыла': 'закрила',
-        'зассали': 'засцяли/обпісяли',
-# И
-        'и': 'і',
-        'или': 'або',
-        'итак': 'і так',
-        'им': 'їм',
-        'игра': 'гра/ігра',
-        'игру': '(і)гру',
-        'иди': 'йди/іди',
-        'изнасиловал': 'зґвалтував',
-        'изнасиловала': 'зґвалтувала',
-        'изнасиловала': 'зґвалтувала',
-        'информация': 'інформація',
-        'именно': 'саме',
-        'имба': 'топ',
-        'ичо': 'і що',
-        'историю': 'історію',
-        'из': 'із',
-# І
-        'ічо': 'і що',
-        'і чо': 'і що',
-        'Ічьо': 'і що',
-# Ї
-
-# Й
-
-# К
-        'к': 'до',
-        'как': 'як',
-        'канеш': 'звісно',
-        'каждый': 'кожен',
-        'кароче': '(одним) словом',
-        'канешно': 'звісно',
-        'конечно': 'звісно',
-        'конешно': 'звісно',
-        'канешно': 'звісно',
-        'когда': 'коли',
-        'красивый': 'красивий',
-        'какого': 'якого',
-        'какова': 'якого',
-        'кто': 'хто',
-        'купить': 'купити',
-        'кришы': 'даху',
-        'которым': 'яким',
-        'которые': 'хто/які',
-# Л
-        'ладно': 'гаразд/окей',
-        'летят': 'летять',
-        'литров': 'літрів',
-        'лошадиных': 'конячих',
-        'любые': 'любі',
-        'лета': 'літа',
-        'лето': 'літо',
-        'лиш': 'лише',
-        'лс': 'пп/оп',
-        'луганской': 'Луганської',
-        'лучше': 'краще',
-        'лезть': 'лізти',
-        'лезишь': 'лізеш',
-        'лизать': 'лизати',
-# М
-        'машины': 'машини',
-        'матов': 'матів/матюків',
-        'мать': 'мати',
-        'меня': 'мене',
-        'мнє': 'мені',
-        'мы': 'ми',
-        'мой': 'мій',
-        'мои': 'мої',
-        'мной': 'мною',
-        'мне': 'мені',
-        'молчи': 'мовчи',
-        'молчат': 'мовчать',
-        'молчал': 'мовчав',
-        'можно': 'можна',
-        'морозит': 'морозить',
-        'мрази': 'зарази',
-        'минет': 'мінет',
-        'месячные': 'місячні',
-        'миленькая': 'мила',
-        'мышки': 'мишки',
-        'место': 'місце',
-        'можешь': 'можеш',
-        'многочисленных': 'багаточилових',
-        'могу': 'можу',
-        'минуты': 'хвилини',
-        'минута': 'хвилина',
-# Н
-#       'не': 'ні', ВИКЛЮЧЕННЯ
-        'надо': 'потрібно',
-        'найти': 'знайти',
-        'найшла': 'знайшла',
-        'настроение': 'ністрій',
-        'наконец-то': 'нарешті/накінець-то',
-        'надо': 'потрібно',
-        'нечего': 'нічого',
-        'немного': 'трохи/трішки',
-        'немножко': 'трішки/трошки',
-        'нет': 'ні/немає',
-        'ничего': 'нічого',
-        'но': 'але',
-        'ночь': 'ніч',
-        'надоело': 'набридло/надоїло',
-        'ножку': 'ніжку',
-        'новых': 'нових',
-# О
-        'о': 'про',
-        'общения': 'спілкування/комунікації',
-        'общаються': 'розмовляють/спілкуються',
-        'он': 'він',
-        'она': 'вона',
-        'оно': 'воно',
-        'от': 'від/з/ось',
-        'опрос': 'питання/запитання',
-        'опросы': 'питання/запитання',
-        'отрежим': 'відріжем(-о)',
-        'одиночка': 'сам(-а)',
-        'опять': 'знову',
-        'обнять': 'обняти/обійняти',
-        'отлизал': 'відлизав',
-        'откуда': 'звідки',
-        'отличается': 'відрізняється',
-        'они': 'вони',
-        'общества': 'суспільства',
-        'отбросы': 'сміття',
-        'очистил': 'почистив',
-# П
-        'падает': 'падає',
-        'патриоткой': 'патріоткою',
-        'патриот': 'патріот',
-        'патриотом': 'патріотом',
-        'пасть': 'писок',
-        'парнем': 'хлопцем',
-        'попробуем': 'спробуємо',
-        'познакомлюсь': 'познайомлюсь',
-        'понятно': 'зрозуміло',
-        'пошлинкая': 'пошленька',
-        'пошлая': 'пошла',
-        'понял': 'зрозумів',
-        'похож': 'похожий/схожий/подібний',
-        'почему': 'чому',
-        'посадят': 'посадять',
-        'поставил': 'поставив',
-        'после': 'після',
-        'поцеловать': 'поцілувати',
-        'почти': 'майже',
-        'под': 'під',
-        'пошло': 'пішло',
-        'пошел': 'пішов',
-        'писать': 'писати',
-        'пишите': 'пишіть',
-        'привет': 'привіт',
-        'поймана': 'піймана',
-        'пойман': 'пійманий',
-        'приветик': 'привітик',
-        'привык': 'привик/звик',
-        'продать': 'продати',
-        'птичка': 'пташка',
-        'птички': 'пташки',
-        'песня': 'пісня',
-        'пиздеть': 'розмовляти',
-        'пока': 'бувай(-те)/до зустрічі',
-        'поможет': 'допоможе',
-        'поднять': 'підняти',
-        'проблемы': 'проблеми',
-        'пятницу': 'п\'ятницю',
-        'понедельник': 'понеділок',
-        'помидоров': 'помідорів',
-        'последние': 'останні',
-        'понимаю': 'розумію',
-        'правильная': 'правильна',
-        'проверку': 'перевірку',
-        'проверка': 'перевірка',
-        'перережу': 'переріжу',
-        'перерезал': 'перерізав',
-        'перерезала': 'перерізала',
-        'песню': 'пісню',
-        'последний': 'останній',
-        'подмишки': 'пахви',
-        'подмышки': 'пахви',
-        'пиздец': 'капець',
-        'приветики': 'привітики',
-        'потому что': 'тому що',
-        'петух': 'півень',
-        'пошла': 'пішла/пошла(якщо йдеться як характеристиика про дівчину)',
-        'полировать': 'полірувати',
-        'пользуешься': 'користуєшся',
-        'подхвачу': 'підхоплю',
-        'почему': 'чому (ж)',
-        'пришли': 'прийшли',
-# Р
-        'разгон': 'розгін',
-        'работает': 'працює',
-        'ребят': 'друзі',
-        'разговорная': 'розмовна',
-        'рад': 'радий',
-        'разговаривать': 'розмовляти',
-        'разговор': 'розмова',
-# С
-        'c': 'з',
-        'cо': 'зі',
-        'свой': 'свій',
-        'свете': 'світі',
-        'сейчас': 'зараз / на даний момент',
-        'сладкие': 'солодкі',
-        'сладкая': 'солоденька/солодка',
-        'сладка': 'солодко',
-        'сложный': 'важкий',
-        'сложна': 'важка/важко',
-        'спасиба': 'Дякую',
-        'спасибо': 'дякую',
-        'сделал': 'зробив',
-        'сделайте': 'зробіть',
-        'сделала': 'зробила',
-        'скучно': 'нудно',
-        'скорость': 'швидкість',
-        'снова': 'знову',
-        'серовно': 'все одно',
-        'слиш': 'слухай',
-        'сказать': 'сказати',
-        'сможешь': 'зможеш',
-        'создав': 'створив',
-        'сука': 'зараза',
-        'срок': 'термін',
-        'слабая': 'слабка',
-        'себя': 'себе',
-        'спать': 'спати',
-        'себя': 'себе',
-        'стол': 'стіл',
-        'сохранённые': 'збережені',
-        'скидывал': 'скидував',
-        'скидывала': 'скидувала',
-        'свои': 'свої',
-        'секунды': 'секунди',
-        'скинул': 'скинув',
-        'сидит': 'сидить',
-# Т
-        'такое': 'таке',
-#       'тебе': 'тобі', ВИКЛЮЧЕННЯ
-        'темы': 'теми',
-        'твоёй': 'твоїй',
-        'ты': 'ти',
-        'тебя': 'тебе',
-        'только': 'тільки/лише',
-        'тяжело': 'важко/тяжко',
-        'том': 'цьому',
-        'тракторе': 'тракторі',
-        'так себе': 'так собі',
-        'твоё': 'твоє',
-        'тобой': 'тобою',
-        'тогда': 'тоді',
-        'те': 'ті',
-        'телефоне': 'телефоні',
-        'твоих': 'твоїх',
-        'тени': 'тіні',
-        'тень': 'тінь',
-# У
-#         'уже': 'вже', ВИНЯТОК
-        'уверен': 'впевнений',
-        'уверена': 'впевнена',
-        'увидеть': 'побачити',
-        'утро': 'ранок',
-        'умею': 'вмію',
-        'убери': 'забери/прибери',
-        'убере': 'забере/прибере',
-        'украины': 'України',
-        'удачи': 'удачі',
-        'уважать': 'поважати',
-        'уважаю': 'поважаю',
-# Ф
-        'франсузком': 'французькій',
-        'фоткал': 'фотографував',
-# Х
-        'хотел': 'хотів',
-        'хотела': 'хотіла',
-        'хорошо': 'добре',
-        'харасьо': 'гаразд/окі',
-        'хочешь': 'хочеш',
-# Ц
-
-# Ч
-        'час': 'година',
-        'часов': 'годин',
-        'чево': 'чого',
-        'чего': 'чого',
-        'чиво': 'чого',
-        'чо': 'що/чого',
-        'что': 'що',
-        'чуток': 'трохи',
-        'честно': 'чесно',
-        'чтобы': 'щоб',
-        'четверг': 'четвер',
-        'чем': 'чим',
-        'человеком': 'людиною/чоловіком',
-# Ш
-        'шо': 'що',
-        'што': 'що',
-        'шуткую': 'жартую',
-# Щ
-        'щяс': 'зараз',
-        'щас': 'зараз',
-        'ща': 'зараз',
-# Ь
-
-# Ю
-
-# Я
-        'яйца': 'яйця',
-        'яйцо': 'яйце',
-    }
-    return translation_dict.get(word, word)
-
+def translate_word(word):
+    if word in translate_dict:
+        return translate_dict[word]
+    else:
+        return word
 
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
@@ -966,9 +510,9 @@ def handle_message(message):
 
     translated_words = []
     for word in words:
-        ukrainian_word = translate_russian_to_ukrainian(word)
+        ukrainian_word = translate_word(word)
         if word != ukrainian_word:
-             translated_words.append((word, ukrainian_word))
+            translated_words.append((word, ukrainian_word))
 
     if translated_words:
         reply = ""
@@ -978,7 +522,5 @@ def handle_message(message):
         for word_pair in translated_words:
             reply += f"{word_pair[1]} "
         bot.reply_to(message, reply)
-
-    communication.handle_commands(bot, message)
 
 bot.polling(none_stop=True)
