@@ -135,7 +135,7 @@ def handle_commands(message):
         elif r'\b.*' in text_after_keyword:
             bot.send_message(message.chat.id, random.choice(['Так', 'Ні', 'Мабуть', 'Можливо', 'Не думаю', 'Не думаю, але можливо']))
             answered_question = True
-        elif text_after_keyword.startswith('правда чи дія') and '?' or text_after_keyword.startswith('правда чи дія') in text_after_keyword:
+        elif text_after_keyword.startswith('правда чи дія?') or text_after_keyword.startswith('правда чи дія') in text_after_keyword:
             bot.send_message(message.chat.id, random.choice(['Правда', 'Дія']))
             answered_question = True
         else:
