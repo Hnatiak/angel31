@@ -39,40 +39,40 @@ with open('commands.json', 'r', encoding='utf-8') as file:
     commands_data = json.load(file)
     
     
-async def get_weather(city_name):
-    async with python_weather.Client(unit=python_weather.METRIC) as client:
-        weather = await client.get(city_name)
-        return weather
+# async def get_weather(city_name):
+#     async with python_weather.Client(unit=python_weather.METRIC) as client:
+#         weather = await client.get(city_name)
+#         return weather
 
-def get_weather_info(city_name):
-    if os.name == 'nt':
-        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    return asyncio.run(get_weather(city_name))
+# def get_weather_info(city_name):
+#     if os.name == 'nt':
+#         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+#     return asyncio.run(get_weather(city_name))
 
-@bot.message_handler(commands=['погода'])
-def handle_weather(message):
-    city_name = message.text[len('/погода '):].strip()
-    if not city_name:
-        bot.send_message(message.chat.id, "Будь ласка, введіть назву міста.")
-        return
+# @bot.message_handler(commands=['погода'])
+# def handle_weather(message):
+#     city_name = message.text[len('/погода '):].strip()
+#     if not city_name:
+#         bot.send_message(message.chat.id, "Будь ласка, введіть назву міста.")
+#         return
     
-    try:
-        weather = get_weather_info(city_name)
-        if weather.country:
-            weather_info = (
-                f"Місто: {weather.country}\n"
-                f"Дата: {weather.datetime}\n"
-                f"Температура: {weather.temperature}°C\n"
-                f"Вологість: {weather.humidity}°F\n"
-                f"Швидкість вітру: {weather.wind_speed}\n"
-                f"Опис: {weather.description}"
-            )
-            bot.send_message(message.chat.id, weather_info)
-        else:
-            bot.send_message(message.chat.id, "Не вдалося знайти інформацію про погоду для цього міста.")
-    except Exception as e:
-        logger.error(f"Error handling weather command: {e}")
-        bot.send_message(message.chat.id, "Сталася помилка під час отримання інформації про погоду.")
+#     try:
+#         weather = get_weather_info(city_name)
+#         if weather.country:
+#             weather_info = (
+#                 f"Місто: {weather.country}\n"
+#                 f"Дата: {weather.datetime}\n"
+#                 f"Температура: {weather.temperature}°C\n"
+#                 f"Вологість: {weather.humidity}°F\n"
+#                 f"Швидкість вітру: {weather.wind_speed}\n"
+#                 f"Опис: {weather.description}"
+#             )
+#             bot.send_message(message.chat.id, weather_info)
+#         else:
+#             bot.send_message(message.chat.id, "Не вдалося знайти інформацію про погоду для цього міста.")
+#     except Exception as e:
+#         logger.error(f"Error handling weather command: {e}")
+#         bot.send_message(message.chat.id, "Сталася помилка під час отримання інформації про погоду.")
 
 
 
