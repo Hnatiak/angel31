@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import json
+import python_weather
+import asyncio
+import os
 import types
 import telebot
 import config
@@ -34,6 +37,82 @@ game_numbers = {}
 
 with open('commands.json', 'r', encoding='utf-8') as file:
     commands_data = json.load(file)
+    
+    
+async def get_weather(city_name):
+    async with python_weather.Client(unit=python_weather.METRIC) as client:
+        weather = await client.get(city_name)
+        return weather
+
+def get_weather_info(city_name):
+    if os.name == 'nt':
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    return asyncio.run(get_weather(city_name))
+
+@bot.message_handler(commands=['погода'])
+def handle_weather(message):
+    city_name = message.text[len('/погода '):].strip()
+    if not city_name:
+        bot.send_message(message.chat.id, "Будь ласка, введіть назву міста.")
+        return
+    
+    try:
+        weather = get_weather_info(city_name)
+        if weather.country:
+            weather_info = (
+                f"Місто: {weather.country}\n"
+                f"Дата: {weather.datetime}\n"
+                f"Температура: {weather.temperature}°C\n"
+                f"Вологість: {weather.humidity}°F\n"
+                f"Швидкість вітру: {weather.wind_speed}\n"
+                f"Опис: {weather.description}"
+            )
+            bot.send_message(message.chat.id, weather_info)
+        else:
+            bot.send_message(message.chat.id, "Не вдалося знайти інформацію про погоду для цього міста.")
+    except Exception as e:
+        logger.error(f"Error handling weather command: {e}")
+        bot.send_message(message.chat.id, "Сталася помилка під час отримання інформації про погоду.")
+
+
+
+
+# async def get_weather(city_name):
+#     async with python_weather.Client(unit=python_weather.IMPERIAL) as client:
+#         weather = await client.get(city_name)
+#         return weather
+
+# def convert_f_to_c(fahrenheit):
+#     return round((fahrenheit - 32) * 5.0/9.0)
+
+# def get_weather_info(city_name):
+#     if os.name == 'nt':
+#         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+#     return asyncio.run(get_weather(city_name))
+
+# @bot.message_handler(commands=['погода'])
+# def handle_weather(message):
+#     city_name = message.text[len('/погода '):].strip()
+#     if not city_name:
+#         bot.send_message(message.chat.id, "Будь ласка, введіть назву міста.")
+#         return
+    
+#     try:
+#         weather = get_weather_info(city_name)
+#         if weather.country:
+#             temperature_celsius = convert_f_to_c(weather.temperature)
+#             weather_info = (
+#                 f"Температура: {temperature_celsius}°C\n"
+#                 f"Опис: {weather.description}"
+#             )
+#             bot.send_message(message.chat.id, weather_info)
+#         else:
+#             bot.send_message(message.chat.id, "Не вдалося знайти інформацію про погоду для цього міста.")
+#     except Exception as e:
+#         logger.error(f"Error handling weather command: {e}")
+#         bot.send_message(message.chat.id, "Сталася помилка під час отримання інформації про погоду.")
+    
+  
     
 # =====================================================================================================================================================================
 # ПОЧАТКОВІ КОМАНДИ
@@ -440,6 +519,15 @@ def handle_insult(message):
 #         time.sleep(60)
 
 # auto_shower()
+
+
+
+# =====================================================================================================================================================================
+# ПОГОДА
+# =====================================================================================================================================================================
+
+
+
 
 # =====================================================================================================================================================================
 # ПЕРЕКЛАД З АНГЛ НА УКР
