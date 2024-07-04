@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import json
-import python_weather
-import asyncio
-import os
+# import python_weather
+# import asyncio
+# import os
 import types
 import telebot
 import config
