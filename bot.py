@@ -320,6 +320,7 @@ def handle_gender(message):
 @bot.message_handler(commands=['від'])
 def handle_command_vid(message):
     words = message.text.lower().split()
+    text = message.text.split()
     if len(words) < 2:
         bot.reply_to(message, "Виберіть дію щоб виконати цю команду")
         return
@@ -330,7 +331,7 @@ def handle_command_vid(message):
         bot.reply_to(message, "Виберіть користувача щоб виконати цю команду")
         return
 
-    reason = ' '.join(words[2:]) if len(words) > 2 else ''
+    reason = ' '.join(text[2:]) if len(text) > 2 else ''
     
     try:
         for action in commands_data['actions']:
