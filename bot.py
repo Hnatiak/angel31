@@ -137,9 +137,6 @@ def handle_commands(message):
         elif re.search(r"\bскільки\b.*\bразів\b.*\bтиждень\b", text_after_keyword):
             bot.send_message(message.chat.id, 'Десь ' + str(random.randint(1, 10)) + ' разів на тиждень')
             answered_question = True
-        elif text_after_keyword in ['правда чи дія?', 'правда чи дія?']:
-            bot.send_message(message.chat.id, random.choice(['Правда', 'Дія']))
-            answered_question = True
         elif '?' in text_after_keyword:
             bot.send_message(message.chat.id, random.choice(['Так', 'Ні']))
             answered_question = True
