@@ -61,7 +61,14 @@ def process_command(message):
 
     bot.reply_to(message, "Невідома команда. Спробуйте ще раз.")
     
-@bot.message_handler(commands=['start', 'команди', 'формати-запитання', 'ігри'])  # Додаткові команди, які обробляються безпосередньо
+def day_info(message):
+    bot.send_message(message.chat.id, "Сьогоднішня дата: " + str(datetime.now().date()) + "\nЧас: " + str(datetime.now().time()))
+    
+@bot.message_handler(commands=['день'])
+def handle_day_info(message):
+    day_info(message)
+    
+@bot.message_handler(commands=['start', 'команди', 'формати-запитання', 'ігри', 'день'])
 def handle_commands(message):
     process_command(message)
     
@@ -76,6 +83,14 @@ angel = ['ангелятко', 'ангел', 'ангелику', 'ангелоч
 def handle_commands(message):
     text = message.text.lower()
     sender = message.from_user.first_name
+    
+    now = datetime.now()
+    current_day = now.strftime("%A")
+    current_date = now.strftime("%Y-%m-%d")
+    current_time = now.strftime("%H:%M:%S")
+    day_number = now.day
+    month = now.strftime("%B")
+    year = now.year
 
     for keyword in angel:
         if text.startswith(keyword):
@@ -94,6 +109,8 @@ def handle_commands(message):
                     chosen_answer = random.choice(answer)
                     if '{sender}' in chosen_answer:
                         reply = chosen_answer.format(sender=sender)
+                    elif '{day}' in chosen_answer:
+                        reply = chosen_answer.format(day=current_day, hour=current_time, day_number=day_number, month=month, year=year)
                     else:
                         reply = chosen_answer.format(bot=bot_name)
                 else:
