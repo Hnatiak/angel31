@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import json
-# import python_weather
-# import asyncio
-# import os
 import types
 import telebot
 import config
 import random
+import requests
 import logging
 from telebot import TeleBot, types
 from datetime import datetime, timedelta
@@ -382,74 +380,54 @@ def handle_insult(message):
     except Exception as e:
         bot.send_message(message.chat.id, "Мені взагаліто не приємно")
 
-
-# =====================================================================================================================================================================
-# /ВДУШ
-# ===================================================================================================================================================================== 
-# is_shower_time = False
-
-# def current_time():
-#     return time.strftime("%H:%M:%S", time.localtime())
-
-# @bot.message_handler(commands=['вдуш'])
-# def handle_shower_command(message):
-#     global is_shower_time
-
-#     current_hour = int(time.strftime("%H", time.localtime()))
-
-#     if current_hour == 19:
-#         is_shower_time = True
-#         bot.send_message(message.chat.id, 'Я відійшла в душ, тому тепер всі команди будуть не доступні (/вдуш). Я повернусь через 30 хвилин.')
-
-#         start_time = time.time()
-
-#         while time.time() - start_time <= 1800:
-#             time.sleep(1)
-
-#         bot.send_message(message.chat.id, 'Фух, все, я прийняла душ. Отже, що тепер робитимемо?')
-
-#         try:
-#             user_mention = f"@{message.from_user.username}" if message.from_user.username else message.from_user.first_name
-#             bot.send_message(message.chat.id, f"Мут на 1 хвилину для {user_mention}", reply_to_message_id=message.message_id)
-#             bot.restrict_chat_member(message.chat.id, message.from_user.id, until_date=int(time.time()) + 60)
-#             bot.reply_to(message, "НАВІЩО ТИ НАМАГАВСЯ ПІДГЛЯНУТИ ЗА МНОЮ КОЛИ Я ПРИЙМАЛА ДУШ? Тепер посиди і подумай що ти накоїв!")
-#         except Exception as e:
-#             bot.send_message(message.chat.id, "Блінчик, ну прошу, не ргоби так більше, мені це неприємно 🥺")
-
-#         is_shower_time = False
-#     else:
-#         bot.reply_to(message, 'Ця команда доступна лише о 19:00')
-
-# def auto_shower():
-#     global is_shower_time
-
-#     start_time = time.time()
-
-#     while True:
-#         current_hour = int(time.strftime("%H", time.localtime()))
-
-#         if current_hour == 19 and not is_shower_time and time.time() - start_time <= 1800:
-#             is_shower_time = True
-#             bot.send_message(chat_id, 'Доброго вечора, пішла в душ. Повернусь через 30 хвилин.')
-
-#             shower_start_time = time.time()
-
-#             while time.time() - shower_start_time <= 1800:
-#                 time.sleep(1)
-
-#             bot.send_message(chat_id, 'Все, я вже прийшла з душу душ. Тепер всі команди знову доступні. Отже з чого розпочнемо?')
-
-#             is_shower_time = False
-
-#         time.sleep(60)
-
-# auto_shower()
-
-
-
 # =====================================================================================================================================================================
 # ПОГОДА
 # =====================================================================================================================================================================
+
+OPENWEATHERMAP_API_KEY = '0faf4cc80c125af41e3c5cc64ff38cc5'
+
+def get_weather(city_name):
+    url = f'http://api.openweathermap.org/data/2.5/weather?q={city_name}&appid={OPENWEATHERMAP_API_KEY}&units=metric'
+    
+    try:
+        response = requests.get(url)
+        data = response.json()
+        
+        if response.status_code == 200:
+            temperature_celsius = data['main']['temp']
+            description = data['weather'][0]['description'].capitalize()
+            return {
+                'temperature': temperature_celsius,
+                'description': description
+            }
+        else:
+            logger.error(f"Failed to fetch weather data: {data['message']}")
+            return None
+    
+    except Exception as e:
+        logger.error(f"Error fetching weather for {city_name}: {e}")
+        return None
+
+@bot.message_handler(commands=['погода'])
+def handle_weather(message):
+    city_name = message.text[len('/погода '):].strip()
+    if not city_name:
+        bot.send_message(message.chat.id, "Будь ласка, введіть назву міста.")
+        return
+    
+    try:
+        weather = get_weather(city_name)
+        if weather:
+            weather_info = (
+                f"Температура: {weather['temperature']}°C\n"
+                f"Опис: {weather['description']}"
+            )
+            bot.send_message(message.chat.id, weather_info)
+        else:
+            bot.send_message(message.chat.id, "Не вдалося знайти інформацію про погоду для цього міста.")
+    except Exception as e:
+        logger.error(f"Error handling weather command: {e}")
+        bot.send_message(message.chat.id, "Сталася помилка під час отримання інформації про погоду.")
 
 
 
