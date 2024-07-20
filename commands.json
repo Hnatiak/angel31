@@ -63,7 +63,12 @@
       {
         "action": ["кекс", "секс"],
         "message_template": "🥵😫 {sender} трахнув(-ла) {receiver}\n{reason}",
-        "photos": ["static/se/se_one.gif", "static/se/se_two.gif"]
+        "photos": ["static/se/se_one.gif", "static/se/se_two.gif", "static/se/se_three.gif", "static/se/se_four.gif"]
+      },
+      {
+        "action": ["куні", "пососати", "сосати", "куни"],
+        "message_template": "🥵 {sender} полизав(-ла) своїй половинці {receiver}\n{reason}",
+        "photos": ["static/kuni/kuni_one.jpg", "static/kuni/kuni_two.jpg", "static/kuni/kuni_three.jpg", "static/kuni/kuni_four.jpg", "static/kuni/kuni_five.gif"]
       },
       {
         "action": ["залоскотати", "полоскотати", "лоскотати", "лоскотувати"],
@@ -79,11 +84,6 @@
         "action": ["полизати", "пососати", "відсмоктати"],
         "message_template": "🥵 {sender} пососала своїй половинці {receiver}\n{reason}",
         "photos": ["static/smok/smok_one.jpg", "static/smok/smok_two.jpg", "static/smok/smok_three.jpg", "static/smok/smok_four.jpg"]
-      },
-      {
-        "action": ["куні"],
-        "message_template": "🥵 {sender} полизав(-ла) своїй половинці {receiver}\n{reason}",
-        "photos": ["static/kuni/kuni_one.jpg", "static/kuni/kuni_two.jpg", "static/kuni/kuni_three.jpg", "static/kuni/kuni_four.jpg"]
       },
       {
         "action": ["вбити", "убити", "прибити", "знищити"],
