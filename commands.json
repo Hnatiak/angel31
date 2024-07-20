@@ -76,7 +76,7 @@
         "photos": ["static/tickling/tickling_one.gif", "static/tickling/tickling_two.gif"]
       },
       {
-        "action": ["засос"],
+        "action": ["засос", "засосати"],
         "message_template": "🥵 {sender} зацілував(-ла) свою половинку {receiver}\n{reason}",
         "photos": ["static/strong_kiss/strong_kiss_one.gif", "static/strong_kiss/strong_kiss_two.gif", "static/strong_kiss/strong_kiss_three.gif"]
       },
