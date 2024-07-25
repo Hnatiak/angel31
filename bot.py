@@ -453,35 +453,35 @@ def handle_weather(message):
 # ПЕРЕКЛАД З АНГЛ НА УКР
 # =====================================================================================================================================================================
 
-translate_dict = {}
-if 'translation_dict' in commands_data:
-    translate_dict = commands_data['translation_dict'][0]
+# translate_dict = {}
+# if 'translation_dict' in commands_data:
+#     translate_dict = commands_data['translation_dict'][0]
 
-def translate_word(word):
-    if word in translate_dict:
-        return translate_dict[word]
-    else:
-        return word
+# def translate_word(word):
+#     if word in translate_dict:
+#         return translate_dict[word]
+#     else:
+#         return word
 
-@bot.message_handler(func=lambda message: True)
-def handle_message(message):
-    player_id = message.from_user.id
-    text = message.text.lower()
-    words = re.findall(r'\b\w+\b', text)
+# @bot.message_handler(func=lambda message: True)
+# def handle_message(message):
+#     player_id = message.from_user.id
+#     text = message.text.lower()
+#     words = re.findall(r'\b\w+\b', text)
 
-    translated_words = []
-    for word in words:
-        ukrainian_word = translate_word(word)
-        if word != ukrainian_word:
-            translated_words.append((word, ukrainian_word))
+#     translated_words = []
+#     for word in words:
+#         ukrainian_word = translate_word(word)
+#         if word != ukrainian_word:
+#             translated_words.append((word, ukrainian_word))
 
-    if translated_words:
-        reply = ""
-        for word_pair in translated_words:
-            reply += f"{word_pair[0]}, "
-        reply += "немає в українській мові, правильно "
-        for word_pair in translated_words:
-            reply += f"{word_pair[1]} "
-        bot.reply_to(message, reply)
+#     if translated_words:
+#         reply = ""
+#         for word_pair in translated_words:
+#             reply += f"{word_pair[0]}, "
+#         reply += "немає в українській мові, правильно "
+#         for word_pair in translated_words:
+#             reply += f"{word_pair[1]} "
+#         bot.reply_to(message, reply)
 
 bot.polling(none_stop=True)
