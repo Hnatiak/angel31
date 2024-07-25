@@ -384,18 +384,18 @@ def handle_gender(message):
 # =====================================================================================================================================================================
 
 angel = ['ангелятко', 'ангел', 'ангелику', 'ангелочок']
-insult = {'дура', 'дурак', 'ідіот', 'лох', 'дибілка', 'ідіотка', 'тварь', 'сядешь мені на хуй', 'піди нахуй', 'від сосешь мені', 'відсосешь мені', 'та пошел ты нахуй', 'сядь мені на хуй', 'пошла на хуй', 'ти сосешь', 'станеш раком', 'стань раком', 'дибіл', 'дебіл', 'дебілка', 'дурна', 'гей', 'лесбіянка', 'лисбіянка', 'самий уйобний бот', 'иди нахуй', 'будеш сосать члена', 'будеш сосать', 'сосать', 'соси', 'соси член', 'йди нахуй', 'іді нахуй', 'йди до сраки', 'іди до сраки', 'хуй', 'пизда', 'піздец', 'пиздец', 'йди в пізду'}
+# insult = {'дура', 'дурак', 'ідіот', 'лох', 'дибілка', 'ідіотка', 'тварь', 'сядешь мені на хуй', 'піди нахуй', 'від сосешь мені', 'відсосешь мені', 'та пошел ты нахуй', 'сядь мені на хуй', 'пошла на хуй', 'ти сосешь', 'станеш раком', 'стань раком', 'дибіл', 'дебіл', 'дебілка', 'дурна', 'гей', 'лесбіянка', 'лисбіянка', 'самий уйобний бот', 'иди нахуй', 'будеш сосать члена', 'будеш сосать', 'сосать', 'соси', 'соси член', 'йди нахуй', 'іді нахуй', 'йди до сраки', 'іди до сраки', 'хуй', 'пизда', 'піздец', 'пиздец', 'йди в пізду'}
 
 
-@bot.message_handler(func=lambda message: any(word in message.text.lower() for word in insult) and any(word in message.text.lower() for word in ["ангел ти", "особа ти", "ангел", 'ангел ', 'Ангел ', 'Ангел', 'Ангел ти ', '']))
-def handle_insult(message):
-    try:
-        bot.restrict_chat_member(message.chat.id, message.from_user.id, until_date=int((datetime.now() + timedelta(minutes=1)).timestamp()))
-        user_mention = f"@{message.from_user.username}" if message.from_user.username else sender
-        bot.send_message(message.chat.id, f"мут 1 хвилину {user_mention}", reply_to_message_id=message.message_id)
-        bot.reply_to(message, "Тепер подумай над своєю поведінкою")
-    except Exception as e:
-        bot.send_message(message.chat.id, "Мені взагаліто не приємно")
+# @bot.message_handler(func=lambda message: any(word in message.text.lower() for word in insult) and any(word in message.text.lower() for word in ["ангел ти", "особа ти", "ангел", 'ангел ', 'Ангел ', 'Ангел', 'Ангел ти ', '']))
+# def handle_insult(message):
+#     try:
+#         bot.restrict_chat_member(message.chat.id, message.from_user.id, until_date=int((datetime.now() + timedelta(minutes=1)).timestamp()))
+#         user_mention = f"@{message.from_user.username}" if message.from_user.username else sender
+#         bot.send_message(message.chat.id, f"мут 1 хвилину {user_mention}", reply_to_message_id=message.message_id)
+#         bot.reply_to(message, "Тепер подумай над своєю поведінкою")
+#     except Exception as e:
+#         bot.send_message(message.chat.id, "Мені взагаліто не приємно")
 
 # =====================================================================================================================================================================
 # ПОГОДА
