@@ -108,7 +108,8 @@ def handle_commands(message):
     for command in commands_data['speak_with_bot']:
         for keyword in command['say']:
             if re.search(keyword, text_after_keyword):
-                answer = random.choice(command['answer'])
+                answer = random.choice(command['answer']) if isinstance(command['answer'], list) else command['answer']
+                
                 bot_name = bot.get_me().first_name
                 
                 reply = answer.format(
@@ -125,22 +126,6 @@ def handle_commands(message):
                     random_number=random_number,
                     bot=bot_name
                 )
-                
-                # if isinstance(answer, list):
-                #     chosen_answer = random.choice(answer)
-                #     if '{sender}' in chosen_answer:
-                #         reply = chosen_answer.format(sender=sender)
-                #     elif '{day}' in chosen_answer:
-                #         reply = chosen_answer.format(day=current_day, hour=current_time, day_number=day_number, month=month, year=year)
-                #     else:
-                #         reply = chosen_answer.format(bot=bot_name)
-                # elif '{random_number}' in answer:
-                #     reply = chosen_answer.format(random_number=random_number)
-                # else:
-                #     if '{sender}' in answer:
-                #         reply = answer.format(sender=sender)
-                #     else:
-                #         reply = answer
                 
                 bot.reply_to(message, reply)
                 answered_question = True
@@ -163,9 +148,6 @@ def handle_commands(message):
         elif text_after_keyword.startswith('вона чи я') and '?' in text_after_keyword:
             bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто з вас', 'Вона', 'Ви обоє']))
             answered_question = True
-        # elif re.search(r"\bскільки\b.*\bразів\b.*\bтиждень\b", text_after_keyword):
-        #     bot.send_message(message.chat.id, 'Десь ' + str(random.randint(1, 10)) + ' разів на тиждень')
-        #     answered_question = True
         elif '?' in text_after_keyword:
             bot.send_message(message.chat.id, random.choice(['Так', 'Ні']))
             answered_question = True
@@ -501,6 +483,5 @@ while True:
     try:
         bot.polling(none_stop=True)
     except Exception as e:
-        # bot.send_message(text, "Хвилинку, мені потрібно відпочити, я скоро вернусь")
         print(f"An error occurred: {e}")
         time.sleep(15)
