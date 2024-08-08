@@ -92,6 +92,10 @@ def handle_commands(message):
     month = now.strftime("%B")
     year = now.year
     
+    random_ten = random.randint(0, 10)
+    random_thirty = random.randint(0, 30)
+    random_hundred = random.randint(0, 100)
+    random_thousand = random.randint(0, 1000)
     random_number = random.randint(0, 100)
 
     for keyword in angel:
@@ -114,6 +118,10 @@ def handle_commands(message):
                     day_number=day_number,
                     month=month,
                     year=year,
+                    random_ten=random_ten,
+                    random_thirty=random_thirty,
+                    random_thousand=random_thousand,
+                    random_hundred=random_hundred,
                     random_number=random_number,
                     bot=bot_name
                 )
@@ -146,24 +154,6 @@ def handle_commands(message):
                 return
 
     if not answered_question:
-    #     if text_after_keyword in ["скажи наскільки він розумний?", "скажи наскільки він розумний", "напиши наскільки він розумний", "як ти думаєш наскільки він розумний", "напиши наскільки він розумний?", "як ти думаєш наскільки він розумний?", "наскільки він розумний?", "наскільки він розумний"]:
-    #         bot.send_message(message.chat.id, f"Небеса кажуть що він розумний на {random.randint(0, 100)}%")
-    #         answered_question = True
-    #     elif text_after_keyword in ["скажи наскільки вона розумна?", "скажи наскільки вона розумна", "напиши наскільки вона розумна", "як ти думаєш наскільки вона розумна", "напиши наскільки вона розумна?", "як ти думаєш наскільки вона розумна?", "наскільки вона розумна?", "наскільки вона розумна"]:
-    #         bot.send_message(message.chat.id, f"Небеса кажуть що вона розумна на {random.randint(0, 100)}%")
-    #         answered_question = True
-    #     elif text_after_keyword in ["скажи наскільки я розумний?", "скажи наскільки я розумний", "напиши наскільки я розумний", "як ти думаєш наскільки я розумний", "напиши наскільки я розумний?", "як ти думаєш наскільки я розумний?", "наскільки я розумний?", "наскільки я розумний"]:
-    #         bot.send_message(message.chat.id, f"Небеса кажуть що вона розумна на {random.randint(0, 100)}%")
-    #         answered_question = True
-    #     elif text_after_keyword in ["скажи наскільки я розумна?", "скажи наскільки я розумна", "напиши наскільки я розумна", "як ти думаєш наскільки я розумна", "напиши наскільки я розумна?", "як ти думаєш наскільки я розумна?", "наскільки я розумна?", "наскільки я розумна?"]:
-    #         bot.send_message(message.chat.id, f"Небеса кажуть що вона розумна на {random.randint(0, 100)}%")
-    #         answered_question = True
-    #     elif text_after_keyword in ["скажи наскільки він дурний?", "скажи наскільки він дурний", "напиши наскільки він дурний", "як ти думаєш наскільки він дурний", "напиши наскільки він дурний?", "на скільки він дурний", "на скільки він дурний?", "як ти думаєш наскільки він дурний?", "на скільки він дурний", "на скільки він дурний?"]:
-    #         bot.send_message(message.chat.id, f"Небеса кажуть що він дурний на {random.randint(0, 100)}%")
-    #         answered_question = True
-    #     elif text_after_keyword in ["скажи наскільки вона дурна?", "скажи наскільки вона дурна", "напиши наскільки вона дурна", "як ти думаєш наскільки вона дурна", "напиши наскільки вона дурна?", "на скільки вона дурна", "на скільки вона дурна?", "як ти думаєш наскільки вона дурна?", "на скільки вона дурна", "на скільки вона дурна?"]:
-    #         bot.send_message(message.chat.id, f"Небеса кажуть що вона дурна на {random.randint(0, 100)}%")
-    #         answered_question = True
         if text_after_keyword.startswith('хто') and '?' in text_after_keyword:
             bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто', 'Він/Вона']))
             answered_question = True
