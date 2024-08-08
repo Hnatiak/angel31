@@ -91,6 +91,8 @@ def handle_commands(message):
     day_number = now.day
     month = now.strftime("%B")
     year = now.year
+    
+    random_number = random.randint(0, 100)
 
     for keyword in angel:
         if text.startswith(keyword):
@@ -113,6 +115,8 @@ def handle_commands(message):
                         reply = chosen_answer.format(day=current_day, hour=current_time, day_number=day_number, month=month, year=year)
                     else:
                         reply = chosen_answer.format(bot=bot_name)
+                elif 'random_number' in answer:
+                    reply = chosen_answer.format(random_number=random_number)
                 else:
                     if '{sender}' in answer:
                         reply = answer.format(sender=sender)
@@ -140,7 +144,7 @@ def handle_commands(message):
         elif text_after_keyword in ["скажи наскільки я розумний?", "скажи наскільки я розумний", "напиши наскільки я розумний", "як ти думаєш наскільки я розумний", "напиши наскільки я розумний?", "як ти думаєш наскільки я розумний?", "наскільки я розумний?", "наскільки я розумний"]:
             bot.send_message(message.chat.id, f"Небеса кажуть що вона розумна на {random.randint(0, 100)}%")
             answered_question = True
-        elif text_after_keyword in ["скажи наскільки я розумна?", "скажи наскільки я розумна", "напиши наскільки я розумна", "як ти думаєш наскільки я розумна", "напиши наскільки я розумна?", "як ти думаєш наскільки я розумна?", "наскільки я розумна?", "наскільки я розумна"]:
+        elif text_after_keyword in ["скажи наскільки я розумна?", "скажи наскільки я розумна", "напиши наскільки я розумна", "як ти думаєш наскільки я розумна", "напиши наскільки я розумна?", "як ти думаєш наскільки я розумна?", "наскільки я розумна?", "наскільки я розумна?"]:
             bot.send_message(message.chat.id, f"Небеса кажуть що вона розумна на {random.randint(0, 100)}%")
             answered_question = True
         elif text_after_keyword in ["скажи наскільки він дурний?", "скажи наскільки він дурний", "напиши наскільки він дурний", "як ти думаєш наскільки він дурний", "напиши наскільки він дурний?", "на скільки він дурний", "на скільки він дурний?", "як ти думаєш наскільки він дурний?", "на скільки він дурний", "на скільки він дурний?"]:
