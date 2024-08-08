@@ -163,9 +163,9 @@ def handle_commands(message):
         elif text_after_keyword.startswith('вона чи я') and '?' in text_after_keyword:
             bot.send_message(message.chat.id, random.choice(['Ти', 'Ніхто з вас', 'Вона', 'Ви обоє']))
             answered_question = True
-        elif re.search(r"\bскільки\b.*\bразів\b.*\bтиждень\b", text_after_keyword):
-            bot.send_message(message.chat.id, 'Десь ' + str(random.randint(1, 10)) + ' разів на тиждень')
-            answered_question = True
+        # elif re.search(r"\bскільки\b.*\bразів\b.*\bтиждень\b", text_after_keyword):
+        #     bot.send_message(message.chat.id, 'Десь ' + str(random.randint(1, 10)) + ' разів на тиждень')
+        #     answered_question = True
         elif '?' in text_after_keyword:
             bot.send_message(message.chat.id, random.choice(['Так', 'Ні']))
             answered_question = True
