@@ -92,11 +92,11 @@ def handle_commands(message):
     month = now.strftime("%B")
     year = now.year
     
-    random_ten = random.randint(0, 10)
-    random_thirty = random.randint(0, 30)
-    random_hundred = random.randint(0, 100)
-    random_thousand = random.randint(0, 1000)
-    random_number = random.randint(0, 100)
+    random_ten = random.randint(1, 10)
+    random_thirty = random.randint(1, 30)
+    random_hundred = random.randint(1, 100)
+    random_thousand = random.randint(1, 1000)
+    random_number = random.randint(1, 100)
 
     for keyword in angel:
         if text.startswith(keyword):
@@ -107,7 +107,7 @@ def handle_commands(message):
 
     for command in commands_data['speak_with_bot']:
         for keyword in command['say']:
-            if keyword in text_after_keyword:
+            if re.search(keyword, text_after_keyword):
                 answer = random.choice(command['answer'])
                 bot_name = bot.get_me().first_name
                 
