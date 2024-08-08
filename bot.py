@@ -490,6 +490,7 @@ while True:
     try:
         bot.polling(none_stop=True)
     except Exception as e:
-        bot.send_message(message.chat.id, "Хвилинку, мені потрібно відпочити, я скоро вернусь")
+        if chat_id:
+            bot.send_message(chat_id, "Хвилинку, мені потрібно відпочити, я скоро вернусь")
         print(f"An error occurred: {e}")
         time.sleep(15)
