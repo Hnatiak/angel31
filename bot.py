@@ -484,4 +484,12 @@ def handle_weather(message):
 #             reply += f"{word_pair[1]} "
 #         bot.reply_to(message, reply)
 
-bot.polling(none_stop=True)
+# bot.polling(none_stop=True)
+
+while True:
+    try:
+        bot.polling(none_stop=True)
+    except Exception as e:
+        bot.send_message(message.chat.id, "Хвилинку, мені потрібно відпочити, я скоро вернусь")
+        print(f"An error occurred: {e}")
+        time.sleep(15)
